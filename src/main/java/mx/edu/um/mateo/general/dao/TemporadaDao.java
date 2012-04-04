@@ -1,15 +1,13 @@
-
 /*
->>>>>>> b2ae35d68ea8f3b79ccb88e47079de5fa184c2ca
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.dao;
-
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import mx.edu.um.mateo.general.dao.EmpresaDao;
-import mx.edu.um.mateo.general.model.*;
+import mx.edu.um.mateo.general.model.Asociado;
+import mx.edu.um.mateo.general.model.Temporada;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import mx.um.edu.mateo.Constantes;
 import org.hibernate.Criteria;
@@ -28,25 +26,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author wilbert
+ * @author gibrandemetrioo
  */
 @Repository
 @Transactional
-public class ColportorDao {
-private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
+public class TemporadaDao {
+    private static final Logger log = LoggerFactory.getLogger(TemporadaDao.class);
     @Autowired
     private SessionFactory sessionFactory;
-
-    public ColportorDao() {
-        log.info("Nueva instancia de ColportorDao");
+    
+    public TemporadaDao () {
+        log.info("Se ha creado una nueva TemporadaDao");
     }
-
-    private Session currentSession() {
+    
+    
+    
+    private Session currentSession () {
         return sessionFactory.getCurrentSession();
     }
-
+    
+    
+    
     public Map<String, Object> lista(Map<String, Object> params) {
-        log.debug("Buscando lista de colportor con params {}", params);
+        log.debug("Buscando lista de Temporada con params {}", params);
         if (params == null) {
             params = new HashMap<>();
         }
@@ -66,74 +68,82 @@ private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
         if (!params.containsKey(Constantes.CONTAINSKEY_OFFSET)) {
             params.put(Constantes.CONTAINSKEY_OFFSET, 0);
         }
-        Criteria criteria = currentSession().createCriteria(Colportor.class);
-        Criteria countCriteria = currentSession().createCriteria(Colportor.class);
-
+        
+        Criteria criteria = currentSession().createCriteria(Temporada.class);
+        Criteria countCriteria = currentSession().createCriteria(Temporada.class);
+        
         if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";
             Disjunction propiedades = Restrictions.disjunction();
             propiedades.add(Restrictions.ilike("nombre", filtro));
-            propiedades.add(Restrictions.ilike("status", filtro));
-             propiedades.add(Restrictions.ilike("clave", filtro));
+           
             criteria.add(propiedades);
             countCriteria.add(propiedades);
         }
 
         if (params.containsKey(Constantes.CONTAINSKEY_ORDER)) {
             String campo = (String) params.get(Constantes.CONTAINSKEY_ORDER);
-            if (params.get(Constantes.CONTAINSKEY_SORT).equals(Constantes.CONTAINSKEY_DESC)) {
+            if (params.get(Constantes.CONTAINSKEY_SORT).equals(Constantes.CONTAINSKEY_SORT)) {
                 criteria.addOrder(Order.desc(campo));
             } else {
                 criteria.addOrder(Order.asc(campo));
             }
+            
         }
 
         if (!params.containsKey(Constantes.CONTAINSKEY_REPORTE)) {
             criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
             criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
-        params.put(Constantes.CONTAINSKEY_COLPORTORES, criteria.list());
-
+        params.put(Constantes.CONTAINSKEY_TEMPORADAS, criteria.list());
         countCriteria.setProjection(Projections.rowCount());
         params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
 
         return params;
     }
 
-    public Colportor obtiene(Long id) {
-        log.debug("Obtiene colportor con id = {}", id);
-        Colportor colportor = (Colportor) currentSession().get(Colportor.class, id);
-        return colportor;
+    public Temporada obtiene(Long id) {
+        log.debug("Obtiene Temporada con id = {}", id);
+        Temporada temporada = (Temporada) currentSession().get(Temporada.class, id);
+        return temporada;
     }
 
-    public Colportor crea(Colportor colportor) {
-        log.debug("Creando colportor : {}", colportor);
-        currentSession().save(colportor);
+    public Temporada crea(Temporada temporada) {
+        log.debug("Creando Temporada : {}", temporada);
+        
+        currentSession().save(temporada);
         currentSession().flush();
-        return colportor;
+        return temporada;
     }
 
-    public Colportor actualiza(Colportor colportor) {
-        log.debug("Actualizando colportor {}", colportor);
+     public Temporada actualiza(Temporada temporada) {
+        log.debug("Actualizando Temporada {}", temporada);
         
         //trae el objeto de la DB 
-        Colportor nuevo = (Colportor)currentSession().get(Colportor.class, colportor.getId());
+        Temporada nueva = (Temporada)currentSession().get(Temporada.class, temporada.getId());
+        
         //actualiza el objeto
-        BeanUtils.copyProperties(colportor, nuevo);
+        BeanUtils.copyProperties(temporada, nueva);
         //lo guarda en la BD
         
-        currentSession().update(nuevo);
+        currentSession().update(nueva);
         currentSession().flush();
-        return nuevo;
+        return nueva;
     }
 
     public String elimina(Long id) throws UltimoException {
-        log.debug("Eliminando colportor con id {}", id);
-        Colportor colportor = obtiene(id);
-        currentSession().delete(colportor);
+        log.debug("Eliminando Temporada id {}", id);
+        Temporada temporada = obtiene(id);
+        Date fecha = new Date();
+        temporada.setFechaInicio(fecha);
+        temporada.setFechaFinal(fecha);
+        currentSession().delete(temporada);
         currentSession().flush();
-        String nombre = colportor.getNombre();
+        String nombre = temporada.getNombre();
         return nombre;
     }
-}
+    
+  }
+
+

@@ -3,24 +3,26 @@
     xmlns="http://jasperreports.sourceforge.net/jasperreports" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
-    name="Uniones" 
+    name="Clientes" 
     pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.7715610000000082"/>
 	<property name="ireport.x" value="16"/>
 	<property name="ireport.y" value="0"/>
-	<field name="nombre" class="java.lang.String"/>
-	<field name="status" class="java.lang.String"/>
+	<field name="nombre" class="java.sql.Timestamp"/>
+        <field name="fechaInicio" class="java.util.Date"/>
+        <field name="fechaFinal" class="java.util.Date"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="34" splitType="Stretch">
+                    
 			<staticText>
 				<reportElement x="0" y="0" width="572" height="31"/>
 				<textElement textAlignment="Left">
 					<font size="24" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Reporte de Uniones]]></text>
+				<text><![CDATA[Reporte de Temporadas]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -30,33 +32,47 @@
 	<columnHeader>
 		<band height="15" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="200" height="15"/>
+				<reportElement x="0" y="0" width="50" height="15"/>
 				<textElement/>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="200" y="0" width="300" height="15"/>
+				<reportElement x="50" y="0" width="150" height="15"/>
 				<textElement/>
-				<text><![CDATA[Status]]></text>
+				<text><![CDATA[Fecha de Inicio]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="150" height="15"/>
+				<textElement/>
+				<text><![CDATA[Fecha de Final]]></text>
+			</staticText>
+			
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="15" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="0" y="0" width="200" height="15"/>
+				<reportElement x="0" y="0" width="50" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="200" y="0" width="300" height="15"/>
+				<reportElement x="50" y="0" width="150" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fechaFinal}]]></textFieldExpression>
 			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="100" y="0" width="150" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fechaFinal}]]></textFieldExpression>
+			</textField>
+			
 		</band>
 	</detail>
 	<columnFooter>

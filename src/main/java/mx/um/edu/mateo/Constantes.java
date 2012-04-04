@@ -9,6 +9,7 @@ package mx.um.edu.mateo;
  */
 public class Constantes {
 
+
     public static final String NOMBRE= "test";
     public static final String STATUS_ACTIVO= "A";
     public static final String CLAVE= "test90";
@@ -114,11 +115,13 @@ public class Constantes {
      */
     public static final String CONTAINSKEY_ASOCIACIONES = "asociaciones";
     public static final String CONTAINSKEY_ASOCIADOS = "asociados";
+    public static final String CONTAINSKEY_TEMPORADAS = "temporadas";
     /**
      * Valores para el los addAttribute para las clases
      */
     public static final String ADDATTRIBUTE_ASOCIACION = "asociacion";
     public static final String ADDATTRIBUTE_ASOCIADO = "asociado";
+    public static final String ADDATTRIBUTE_TEMPORADA = "temporada";
     /**
      * Valores para el los path's para las clases
      */
@@ -140,8 +143,14 @@ public class Constantes {
     public static final String PATH_ASOCIADO_ACTUALIZA = "/web/asociado/actualiza";
     public static final String PATH_ASOCIADO_ELIMINA = "/web/asociado/elimina";        
 
+    public static final String PATH_TEMPORADA = "/web/temporada";
+    public static final String PATH_TEMPORADA_LISTA = "/web/temporada/lista";
+    public static final String PATH_TEMPORADA_VER = "/web/temporada/ver";
+    public static final String PATH_TEMPORADA_NUEVA = "/web/temporada/nueva";
+    public static final String PATH_TEMPORADA_EDITA = "/web/temporada/edita";
+    public static final String PATH_TEMPORADA_CREA = "/web/temporada/crea";
+    public static final String PATH_TEMPORADA_ACTUALIZA = "/web/temporada/actualiza";
+    public static final String PATH_TEMPORADA_ELIMINA = "/web/temporada/elimina";  
 }
 
-    
-    
 
