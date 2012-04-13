@@ -16,7 +16,7 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import mx.edu.um.mateo.Constantes;
+import mx.um.edu.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.DocumentoDao;
 import mx.edu.um.mateo.general.model.Documento;
 import mx.edu.um.mateo.general.model.Usuario;

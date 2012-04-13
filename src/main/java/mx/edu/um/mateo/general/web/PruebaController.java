@@ -120,8 +120,7 @@ public class PruebaController {
             TipoCliente tipoCliente = new TipoCliente(sb.toString(), sb.toString(), new BigDecimal("0.16"), null);
             tipoClienteDao.crea(tipoCliente, usuario);
             
-            Cliente cliente = new Cliente("test", "test", "test", "test", "test", new Integer(0), new Integer(0), new Integer(0), "test");
-            //Cliente cliente = new Cliente(sb.toString(), sb.toString(), "0000000000"+numero, tipoCliente, null);
+            Cliente cliente = new Cliente(sb.toString(), sb.toString(), "0000000000"+numero, tipoCliente, null);
             clienteDao.crea(cliente, usuario);
         }
         

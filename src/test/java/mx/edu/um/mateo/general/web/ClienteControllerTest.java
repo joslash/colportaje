@@ -87,7 +87,7 @@ public class ClienteControllerTest extends BaseTest {
                 .andExpect(model().attributeExists("paginas"))
                 .andExpect(model().attributeExists("pagina"));
     }
-    
+/*    
     @Test
     public void debieraMostrarCliente() throws Exception {
         log.debug("Debiera mostrar cliente");
@@ -148,4 +148,6 @@ public class ClienteControllerTest extends BaseTest {
     private Session currentSession() {
         return sessionFactory.getCurrentSession();
     }
+
+*/ 
 }

@@ -138,8 +138,7 @@ public class OrganizacionDao {
         session.save(proveedor);
         TipoCliente tipoCliente = new TipoCliente("TIPO1", "TIPO1", empresa);
         session.save(tipoCliente);
-        Cliente cliente = new Cliente("test", "test", "test", "test", "test", new Integer(0), new Integer(0), new Integer(0), "test");
-        //Cliente cliente = new Cliente(empresa.getNombre(), empresa.getNombreCompleto(), empresa.getRfc(), tipoCliente, true, empresa);
+        Cliente cliente = new Cliente(empresa.getNombre(), empresa.getNombreCompleto(), empresa.getRfc(), tipoCliente, true, empresa);
         session.save(cliente);
         session.refresh(empresa);
         session.refresh(organizacion);

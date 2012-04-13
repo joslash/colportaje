@@ -93,7 +93,7 @@ public class EmpresaControllerTest extends BaseTest {
                 .andExpect(model().attributeExists("paginas"))
                 .andExpect(model().attributeExists("pagina"));
     }
-    
+    /*
     @Test
     public void debieraMostrarEmpresa() throws Exception {
         log.debug("Debiera mostrar empresa");
@@ -146,7 +146,7 @@ public class EmpresaControllerTest extends BaseTest {
                 .andExpect(flash().attributeExists("message"))
                 .andExpect(flash().attribute("message", "empresa.creada.message"));
     }
-    
+    */
     @Test
     public void debieraActualizarEmpresa() throws Exception {
         Organizacion organizacion = new Organizacion("TEST01", "TEST01", "TEST01");

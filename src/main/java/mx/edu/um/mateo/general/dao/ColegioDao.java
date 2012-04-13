@@ -6,9 +6,9 @@ package mx.edu.um.mateo.general.dao;
 
 import java.util.HashMap;
 import java.util.Map;
-import mx.edu.um.mateo.Constantes;
-import mx.edu.um.mateo.general.model.*;
+import mx.edu.um.mateo.general.model.Colegio;
 import mx.edu.um.mateo.general.utils.UltimoException;
+import mx.um.edu.mateo.Constantes;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,7 +22,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 /**
  *
  * @author wilbert
@@ -118,7 +117,6 @@ private static final Logger log = LoggerFactory.getLogger(ColegioDao.class);
         //actualiza el objeto
         BeanUtils.copyProperties(colegio, nuevo);
         //lo guarda en la BD
-        
         currentSession().update(nuevo);
         currentSession().flush();
         return nuevo;

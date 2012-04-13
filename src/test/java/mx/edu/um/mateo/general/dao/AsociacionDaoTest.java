@@ -5,9 +5,9 @@
 package mx.edu.um.mateo.general.dao;
 import java.util.List;
 import java.util.Map;
-import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.utils.UltimoException;
+import mx.um.edu.mateo.Constantes;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import static org.junit.Assert.*;

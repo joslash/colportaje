@@ -3,13 +3,12 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.dao;
-
 import java.util.List;
 import java.util.Map;
-import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.test.BaseTest;
 import mx.edu.um.mateo.general.utils.UltimoException;
+import mx.um.edu.mateo.Constantes;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import static org.junit.Assert.*;

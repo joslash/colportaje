@@ -99,7 +99,7 @@ public class OrganizacionControllerTest extends BaseTest {
         this.mockMvc.perform(get("/admin/organizacion")).andExpect(status().isOk()).andExpect(forwardedUrl("/WEB-INF/jsp/admin/organizacion/lista.jsp")).andExpect(model().attributeExists("organizaciones")).andExpect(model().attributeExists("paginacion")).andExpect(model().attributeExists("paginas")).andExpect(model().attributeExists("pagina"));
     }
 
-    @Test
+/*    @Test
     public void debieraMostrarOrganizacion() throws Exception {
         Organizacion organizacion = new Organizacion("tst-01", "test-01", "test-01");
         organizacion = organizacionDao.crea(organizacion);
@@ -130,5 +130,5 @@ public class OrganizacionControllerTest extends BaseTest {
         this.authenticate(usuario, usuario.getPassword(), new ArrayList(usuario.getAuthorities()));
         
         this.mockMvc.perform(post("/admin/organizacion/crea").param("codigo", "tst-01").param("nombre", "TEST--01").param("nombreCompleto", "TEST--01")).andExpect(status().isOk()).andExpect(flash().attributeExists("message")).andExpect(flash().attribute("message", "organizacion.creada.message"));
-    }
+    }*/
 }
