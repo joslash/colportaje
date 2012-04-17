@@ -55,20 +55,21 @@
                             <label for="fechaInicio">
                                 <s:message code="fechaInicio.label" />
                                 <span class="required-indicator">*</span>
-
                             </label>
+                             <s:message code="fecha.formato.label" /><br>
                             <form:input path="fechaInicio" maxlength="50" required="true" />
 
                             <form:errors path="fechaInicio" cssClass="alert alert-error" />
                         </div>
                     </s:bind>
                     <s:bind path="temporada.fechaFinal">
+                        
                         <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
                             <label for="fechaFinal">
                                 <s:message code="fechaFinal.label" />
                                 <span class="required-indicator">*</span>
-
                             </label>
+                                <s:message code="fecha.formato.label" /><br>
                             <form:input path="fechaFinal" maxlength="50" required="true"  />
                             <form:errors path="fechaFinal" cssClass="alert alert-error" />
                         </div>

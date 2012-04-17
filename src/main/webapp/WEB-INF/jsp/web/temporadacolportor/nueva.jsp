@@ -46,6 +46,7 @@
                                 <s:message code="fecha.label" />
                                 <span class="required-indicator">*</span>
                             </label>
+                                <s:message code="fecha.formato.label" /><br>
                             <form:input path="fecha" maxlength="128" required="true" />
                             <form:errors path="fecha" cssClass="alert alert-error" />
                         </div>

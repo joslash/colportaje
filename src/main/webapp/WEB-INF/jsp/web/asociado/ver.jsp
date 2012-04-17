@@ -44,15 +44,15 @@
                 </div>
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="clave.label" /></div>
-                    <div class="span11">${asociado.status}</div>
+                    <div class="span11">${asociado.clave}</div>
                 </div>
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="direccion.label" /></div>
-                    <div class="span11">${asociado.nombre}</div>
+                    <div class="span11">${asociado.direccion}</div>
                 </div>
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="telefono.label" /></div>
-                    <div class="span11">${asociado.status}</div>
+                    <div class="span11">${asociado.telefono}</div>
                 </div>
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="status.label" /></div>
