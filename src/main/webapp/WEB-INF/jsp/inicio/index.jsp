@@ -24,6 +24,7 @@
                 <li><a href="<c:url value='/web/asociacion' />"><s:message code="asociacion.label" /></a></li>
                 <li><a href="<c:url value='/web/asociado' />"><s:message code="asociado.label" /></a></li>
                 <li><a href="<c:url value='/web/temporada' />"><s:message code="temporada.label" /></a></li>
+                <li><a href="<c:url value='/web/temporadacolportor' />"><s:message code="temporadacolportor.label" /></a></li>
 
             </ul>
         </nav>

@@ -71,7 +71,7 @@ public class TemporadaColportorController {
             @RequestParam(required = false) String order,
             @RequestParam(required = false) String sort,
             Model modelo) {
-        log.debug("Mostrando lista de Temporada");
+        log.debug("Mostrando lista de Temporada Colportor");
         
         Map<String, Object> params = new HashMap<>();
         Long colportorId = (Long) request.getSession().getAttribute("colportorId");
@@ -153,16 +153,16 @@ public class TemporadaColportorController {
     @RequestMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
         log.debug("Mostrando Temporada Colportor {}", id);
-        TemporadaColportor temporadaColportores = temporadaColportorDao.obtiene(id);
-        modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR, temporadaColportores);
+        TemporadaColportor temporadaColportor = temporadaColportorDao.obtiene(id);
+        modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR, temporadaColportor);
         return Constantes.PATH_TEMPORADACOLPORTOR_VER;
     }
 
     @RequestMapping("/nueva")
     public String nueva(Model modelo) {
         log.debug("Nueva Temporada Colportor");
-        TemporadaColportor temporadaColportores = new TemporadaColportor();
-        modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR, temporadaColportores);
+        TemporadaColportor temporadaColportor = new TemporadaColportor();
+        modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR, temporadaColportor);
         return Constantes.PATH_TEMPORADACOLPORTOR_NUEVA;
     }
     @Transactional
@@ -193,7 +193,7 @@ public class TemporadaColportorController {
         }
 
         redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "temporadaColportor.creada.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{temporadaColportor.getObjetivo()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{temporadaColportor.getStatus()});
 
         return "redirect:"+ Constantes.PATH_TEMPORADACOLPORTOR_VER + "/" + temporadaColportor.getId();
     }

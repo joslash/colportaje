@@ -37,15 +37,15 @@ public class TemporadaColportor implements Serializable{
     @NotBlank
     @Column(nullable = false, length = 300)
     private String observacion;
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Colportor colportor;
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Asociacion asociacion;
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Asociado asociado;
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Temporada temporada;
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Union union;
 
     public TemporadaColportor() {
