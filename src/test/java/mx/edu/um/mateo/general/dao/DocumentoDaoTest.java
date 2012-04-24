@@ -46,7 +46,7 @@ public class DocumentoDaoTest extends BaseTest {
         log.debug("Debiera mostrar lista de documento");
 
         for (int i = 0; i < 20; i++) {
-            Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, Constantes.FECHA, Constantes.IMPORTE, Constantes.OBSERVACIONES);
+            Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,Constantes.IMPORTE, Constantes.OBSERVACIONES);
             currentSession().save(documento);
             assertNotNull(documento);
         }
@@ -65,7 +65,7 @@ public class DocumentoDaoTest extends BaseTest {
         log.debug("Debiera obtener documento");
 
         String folio = "test";
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, Constantes.FECHA, Constantes.IMPORTE, Constantes.OBSERVACIONES);
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,  Constantes.IMPORTE, Constantes.OBSERVACIONES);
         currentSession().save(documento);
         assertNotNull(documento.getId());
         Long id = documento.getId();
@@ -81,7 +81,7 @@ public class DocumentoDaoTest extends BaseTest {
     public void deberiaCrearDocumento() {
         log.debug("Deberia crear Documento");
 
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, Constantes.FECHA, Constantes.IMPORTE, Constantes.OBSERVACIONES);
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,  Constantes.IMPORTE, Constantes.OBSERVACIONES);
         assertNotNull(documento);
 
         Documento documento2 = instance.crea(documento);
@@ -95,7 +95,7 @@ public class DocumentoDaoTest extends BaseTest {
     public void deberiaActualizarDocumento() {
         log.debug("Deberia actualizar Documento");
 
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, Constantes.FECHA, Constantes.IMPORTE, Constantes.OBSERVACIONES);
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,  Constantes.IMPORTE, Constantes.OBSERVACIONES);
         assertNotNull(documento);
         currentSession().save(documento);
 
@@ -114,7 +114,7 @@ public class DocumentoDaoTest extends BaseTest {
         log.debug("Debiera eliminar Documento");
 
         String fol = "test";
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, Constantes.FECHA, Constantes.IMPORTE, Constantes.OBSERVACIONES);
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, Constantes.IMPORTE, Constantes.OBSERVACIONES);
         currentSession().save(documento);
         assertNotNull(documento);
 

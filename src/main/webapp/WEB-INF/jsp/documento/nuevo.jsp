@@ -40,8 +40,14 @@
                                 <s:message code="tipoDeDocumento.label" />
                                 <span class="required-indicator">*</span>
                             </label>
-                            <form:input path="tipoDeDocumento" maxlength="15" required="true" />
-                            <form:errors path="tipoDeDocumento" cssClass="alert alert-error" />
+                     <form:select path="tipoDeDocumento">
+                                    <form:option value="Deposito_Caja" label="Deposito_Caja" />
+                                    <form:option value="Deposito_Banco" label="Deposito_Banco" />
+                                     <form:option value="Diezmo" label="Diezmo" />
+                                    <form:option value="Factura" label="Factura" />
+                                     <form:option value="Boletin" label="Boletín" />
+                                    <form:option value="Informe" label="Informe" />
+                                </form:select>
                         </div>
                     </s:bind>
                         <s:bind path="documento.folio">

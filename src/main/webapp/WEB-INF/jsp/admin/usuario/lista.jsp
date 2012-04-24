@@ -46,6 +46,7 @@
             <table id="lista" class="table table-striped">
                 <thead>
                     <tr>
+
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="username" />
                         </jsp:include>
@@ -59,6 +60,7 @@
                             <jsp:param name="columna" value="asociacion" />
                         </jsp:include>
                     </tr>
+
                 </thead>
                 <tbody>
                     <c:forEach items="${usuarios}" var="usuario" varStatus="status">
@@ -66,8 +68,10 @@
                             <td><a href="<c:url value='/admin/usuario/ver/${usuario.id}' />">${usuario.username}</a></td>
                             <td>${usuario.nombre}</td>
                             <td>${usuario.apellido}</td>
+
                             <td>${usuario.asociacion.getNombre()}</td>
                         </tr>
+
                     </c:forEach>
                 </tbody>
             </table>

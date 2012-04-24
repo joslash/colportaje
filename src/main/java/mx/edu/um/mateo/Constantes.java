@@ -4,6 +4,9 @@
  */
 package mx.edu.um.mateo;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  *
  * @author gibrandemetrioo
@@ -21,9 +24,17 @@ public class Constantes {
     public static final String TELEFONO = "0000000000000";
     public static final String TIPO_DOCUMENTO = "A";
     public static final String FOLIO = "test";
-    public static final String FECHA = "test";
-    public static final String IMPORTE = "1test";
+    public static final String FECHA = "dd/MM/yyyy";
+    public static final BigDecimal IMPORTE = new BigDecimal("0.0");
     public static final String OBSERVACIONES = "test teste";
+    
+ 
+     public static final String DEPOSITO_CAJA ="Deposito_Caja";
+      public static final String DEPOSITO_BANCO ="Deposito_Banco";
+     public static final String DIEZMO ="Diezmo";
+     public static final String FACTURA ="Factura";
+     public static final String BOLETIN ="Boletín" ;
+     public static final String INFORME ="Informe" ;
     
     /**
      * Valores para el constructor de Locale

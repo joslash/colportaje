@@ -31,7 +31,9 @@
                 </div>
             </c:if>
 
+
             <c:url var="eliminaUrl" value="../elimina" />
+
             <form:form commandName="asociacion" action="${eliminaUrl}" >
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />
 
@@ -41,7 +43,9 @@
                 </div>
 
                 <p class="well">
+
                     <a href="<c:url value='../edita/${asociacion.id}' />" class="btn btn-primary"><i class="icon-edit icon-white"></i> <s:message code="editar.button" /></a>
+
                 <form:hidden path="id" />
                 <c:if test='${asociacion.status == "A"}'>
                     <input type="submit" name="elimina" value="<s:message code='eliminar.button'/>" class="btn btn-danger icon-remove" style="margin-bottom: 2px;" onclick="return confirm('<s:message code="confirma.elimina.message" />');" />

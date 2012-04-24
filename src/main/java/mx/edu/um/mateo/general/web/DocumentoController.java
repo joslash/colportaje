@@ -6,10 +6,9 @@ package mx.edu.um.mateo.general.web;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
@@ -167,7 +166,7 @@ public class DocumentoController {
     
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
-    public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Documento documentos, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) {
+    public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Documento documentos, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
         for (String folio : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", folio, request.getParameterMap().get(folio));
         }
@@ -175,8 +174,32 @@ public class DocumentoController {
             log.debug("Hubo algun error en la forma, regresando");
             return Constantes.PATH_DOCUMENTO_NUEVO;
         }
+        if (documentos.getTipoDeDocumento() == "0") {
+                documentos.setTipoDeDocumento(Constantes.DEPOSITO_CAJA);
+            } else if (documentos.getTipoDeDocumento() == "1"){
+                documentos.setTipoDeDocumento(Constantes.DEPOSITO_BANCO);
+            }  else if (documentos.getTipoDeDocumento() == "2"){
+                documentos.setTipoDeDocumento(Constantes.DIEZMO);
+            }  else if (documentos.getTipoDeDocumento() == "3"){
+                documentos.setTipoDeDocumento(Constantes.FACTURA);
+             }  else if (documentos.getTipoDeDocumento() == "4"){
+                documentos.setTipoDeDocumento(Constantes.BOLETIN);
+            } else if (documentos.getTipoDeDocumento() == "5"){
+                documentos.setTipoDeDocumento(Constantes.INFORME);
+            }
+        
         
         try {
+                SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
+            documentos.setFecha(sdf.parse(request.getParameter("fecha")));
+        }catch(ConstraintViolationException e) {
+            log.error("Fecha", e);
+            return Constantes.PATH_DOCUMENTO_NUEVO;
+        }
+        
+        try {
+            log.debug("Documento Fecha"+documentos.getFecha());
+            
             documentos = DocumentoDao.crea(documentos);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear el documento", e);
@@ -199,16 +222,39 @@ public class DocumentoController {
     
     @Transactional
     @RequestMapping(value = "/actualiza", method = RequestMethod.POST)
-    public String actualiza(HttpServletRequest request, @Valid Documento documentos, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) {
+    public String actualiza(HttpServletRequest request, @Valid Documento documentos, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
         if (bindingResult.hasErrors()) {
             log.error("Hubo algun error en la forma, regresando");
             return Constantes.PATH_DOCUMENTO_EDITA;
         }
+         if (documentos.getTipoDeDocumento() == "0") {
+                documentos.setTipoDeDocumento(Constantes.DEPOSITO_CAJA);
+            } else if (documentos.getTipoDeDocumento() == "1"){
+                documentos.setTipoDeDocumento(Constantes.DEPOSITO_BANCO);
+            }  else if (documentos.getTipoDeDocumento() == "2"){
+                documentos.setTipoDeDocumento(Constantes.DIEZMO);
+            }  else if (documentos.getTipoDeDocumento() == "3"){
+                documentos.setTipoDeDocumento(Constantes.FACTURA);
+             }  else if (documentos.getTipoDeDocumento() == "4"){
+                documentos.setTipoDeDocumento(Constantes.BOLETIN);
+            } else if (documentos.getTipoDeDocumento() == "5"){
+                documentos.setTipoDeDocumento(Constantes.INFORME);
+            }
+         
         try {
+                SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
+            documentos.setFecha(sdf.parse(request.getParameter("fecha")));
+        }catch(ConstraintViolationException e) {
+            log.error("Fecha", e);
+            return Constantes.PATH_DOCUMENTO_EDITA;
+        }
+        
+        try {
+            log.debug("Documento Fecha"+documentos.getFecha());
             documentos = DocumentoDao.actualiza(documentos);
         } catch (ConstraintViolationException e) {
-            log.error("No se pudo crear la documento", e);
-            return Constantes.PATH_DOCUMENTO_NUEVO;
+            log.error("No se pudo actualizar el documento", e);
+            return Constantes.PATH_DOCUMENTO_EDITA;
         }
         
         redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "documento.actualizado.message");

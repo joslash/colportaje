@@ -4,6 +4,8 @@
  */
 package mx.edu.um.mateo.general.model;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -26,37 +28,36 @@ public class Documento implements Serializable{
     @NotNull
     @Column(nullable = false, length = 30)
     private String folio;
-    @Column( length = 10)
-    private String fecha;
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false, name = "fecha")
+    private Date fecha;
     @Column(length = 20)
-    private String importe;
+    private BigDecimal importe;
     @Column(length = 100)
     private String observaciones;
-   
    
   
     
     public Documento(){
     }
-    public Documento(String tipoDeDocumento,String folio,String fecha,String importe,String observaciones){
+    public Documento(String tipoDeDocumento,String folio,BigDecimal importe,String observaciones){
         this.tipoDeDocumento=tipoDeDocumento;
         this.folio=folio;
-        this.fecha=fecha;
+        this.fecha = new Date();
         this.importe=importe;
         this.observaciones=observaciones;
           
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
-  
-   public String getFolio() {
+    public String getFolio() {
         return folio;
     }
 
@@ -72,11 +73,11 @@ public class Documento implements Serializable{
         this.id = id;
     }
 
-    public String getImporte() {
+    public BigDecimal getImporte() {
         return importe;
     }
 
-    public void setImporte(String importe) {
+    public void setImporte(BigDecimal importe) {
         this.importe = importe;
     }
 
@@ -96,7 +97,6 @@ public class Documento implements Serializable{
         this.tipoDeDocumento = tipoDeDocumento;
     }
 
-  
     public Integer getVersion() {
         return version;
     }
@@ -104,8 +104,6 @@ public class Documento implements Serializable{
     public void setVersion(Integer version) {
         this.version = version;
     }
-
-    
 
     @Override
     public boolean equals(Object obj) {
@@ -122,9 +120,6 @@ public class Documento implements Serializable{
         if (!Objects.equals(this.folio, other.folio)) {
             return false;
         }
-        if (!Objects.equals(this.fecha, other.fecha)) {
-            return false;
-        }
         if (!Objects.equals(this.importe, other.importe)) {
             return false;
         }
@@ -137,17 +132,16 @@ public class Documento implements Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 19 * hash + Objects.hashCode(this.tipoDeDocumento);
-        hash = 19 * hash + Objects.hashCode(this.folio);
-        hash = 19 * hash + Objects.hashCode(this.fecha);
-        hash = 19 * hash + Objects.hashCode(this.importe);
-        hash = 19 * hash + Objects.hashCode(this.observaciones);
+        hash = 97 * hash + Objects.hashCode(this.tipoDeDocumento);
+        hash = 97 * hash + Objects.hashCode(this.folio);
+        hash = 97 * hash + Objects.hashCode(this.importe);
+        hash = 97 * hash + Objects.hashCode(this.observaciones);
         return hash;
     }
 
     @Override
     public String toString() {
-        return "Documento{" + "tipoDeDocumento=" + tipoDeDocumento + ", folio=" + folio + ", fecha=" + fecha + ", importe=" + importe + ", observaciones=" + observaciones + '}';
+        return "Documento{" + "tipoDeDocumento=" + tipoDeDocumento + ", folio=" + folio + ", importe=" + importe + ", observaciones=" + observaciones + '}';
     }
-  
+        
 }

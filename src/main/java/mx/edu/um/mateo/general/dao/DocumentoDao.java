@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.dao;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
@@ -126,6 +127,8 @@ public class DocumentoDao {
     public String elimina(Long id) throws UltimoException {
         log.debug("Eliminando documento con id {}", id);
         Documento documento = obtiene(id);
+        Date fecha = new Date();
+        documento.setFecha(fecha);
         currentSession().delete(documento);
         currentSession().flush();
         String folio = documento.getFolio();
