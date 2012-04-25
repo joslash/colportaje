@@ -33,7 +33,7 @@
                         </c:forEach>
                     </div>
                 </form:errors>
-
+                
                 <fieldset>
                     <s:bind path="temporadaColportor.temporada">
                         <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
@@ -79,9 +79,8 @@
                             <label for="status">
                                 <s:message code="status.label" />
                                 <span class="required-indicator">*</span>
-
                                 <form:input path="status" maxlength="2" required="true" />
-                                <form:errors path="status" cssClass="alert alert-error" />
+                            <form:errors path="status" cssClass="alert alert-error" />
                         </div>
                     </s:bind>
                     <s:bind path="temporadaColportor.objetivo">
@@ -103,7 +102,6 @@
                                 <form:errors path="observaciones" cssClass="alert alert-error" type="texttarea"/>
                         </div>
                     </s:bind>
-
                 </fieldset>
 
 

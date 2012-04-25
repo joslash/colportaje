@@ -34,7 +34,26 @@
             <c:url var="eliminaUrl" value="/temporadaColportor/elimina" />
             <form:form commandName="temporadaColportor" action="${eliminaUrl}" >
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />
-
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <h4><s:message code="colportor.label" /></h4>
+                    <h3>${temporadaColportor.colportor.nombre}</h3>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <h4><s:message code="asociado.label" /></h4>
+                    <h3>${temporadaColportor.asociado.nombre}</h3>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <h4><s:message code="temporada.label" /></h4>
+                    <h3>${temporadaColportor.temporada.nombre}</h3>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <h4><s:message code="union.label" /></h4>
+                    <h3>${temporadaColportor.union.nombre}</h3>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <h4><s:message code="asociacion.label" /></h4>
+                    <h3>${temporadaColportor.asociacion.nombre}</h3>
+                </div>
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="fecha.label" /></div>
                     <div class="span11">${temporadaColportor.fecha}</div>
@@ -51,12 +70,10 @@
                     <div class="span1"><s:message code="observaciones.label" /></div>
                     <div class="span11">${temporadaColportor.observaciones}</div>
                 </div>
-               
-
                 <p class="well">
                     <a href="<c:url value='/temporadaColportor/edita/${temporadaColportor.id}' />" class="btn btn-primary"><i class="icon-edit icon-white"></i> <s:message code="editar.button" /></a>
-                <form:hidden path="id" />
-                <input type="submit" name="elimina" value="<s:message code='eliminar.button'/>" class="btn btn-danger icon-remove" style="margin-bottom: 2px;" onclick="return confirm('<s:message code="confirma.elimina.message" />');" />
+                    <form:hidden path="id" />
+                    <input type="submit" name="elimina" value="<s:message code='eliminar.button'/>" class="btn btn-danger icon-remove" style="margin-bottom: 2px;" onclick="return confirm('<s:message code="confirma.elimina.message" />');" />
                 </p>
             </form:form>
         </div>

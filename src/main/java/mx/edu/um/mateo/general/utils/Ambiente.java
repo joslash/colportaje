@@ -52,6 +52,7 @@ public class Ambiente {
             request.getSession().setAttribute("unionId", usuario.getAsociacion().getUnion().getId());
             request.getSession().setAttribute("asociacionId", usuario.getAsociacion().getId());
         }
+        
     }
 
     public Usuario obtieneUsuario() {

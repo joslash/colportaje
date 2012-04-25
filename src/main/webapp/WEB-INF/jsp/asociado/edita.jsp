@@ -53,7 +53,7 @@
                                 <s:message code="clave.label" />
                                 <span class="required-indicator">*</span>
                             </label>
-                            <form:input path="clave" maxlength="2" required="true" />
+                            <form:input path="clave" maxlength="64" required="true" />
                             <form:errors path="clave" cssClass="alert alert-error" />
                         </div>
                     </s:bind>
@@ -63,7 +63,7 @@
                                 <s:message code="telefono.label" />
                                 <span class="required-indicator">*</span>
                             </label>
-                            <form:input path="telefono" maxlength="2" required="true" />
+                            <form:input path="telefono" maxlength="64" required="true" />
                             <form:errors path="telefono" cssClass="alert alert-error" />
                         </div>
                     </s:bind>
@@ -73,7 +73,7 @@
                                 <s:message code="direccion.label" />
                                 <span class="required-indicator">*</span>
                             </label>
-                            <form:input path="direccion" maxlength="2" required="true" />
+                            <form:input path="direccion" maxlength="64" required="true" />
                             <form:errors path="direccion" cssClass="alert alert-error" />
                         </div>
                     </s:bind>

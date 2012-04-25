@@ -73,6 +73,8 @@ public class Usuario implements Serializable, UserDetails {
     private Set<Rol> roles = new HashSet<>();
     @ManyToOne(optional = false)
     private Asociacion asociacion;
+    
+    
 
     public Usuario() {
     }
@@ -84,6 +86,7 @@ public class Usuario implements Serializable, UserDetails {
         this.apellido = apellido;
     }
 
+    
     public Long getId() {
         return id;
     }
