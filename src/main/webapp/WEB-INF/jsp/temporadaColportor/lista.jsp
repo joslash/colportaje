@@ -79,6 +79,10 @@
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="colportor" />
                         </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="colegio" />
+                        </jsp:include>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -93,6 +97,7 @@
                             <td>${temporadacolportor.temporada.getNombre()}</td>
                             <td>${temporadacolportor.asociado.getNombre()}</td>
                             <td>${temporadacolportor.colportor.getNombre()}</td>
+                            <td>${temporadacolportor.colegio.getNombre()}</td>
                         </tr>
                     </c:forEach>
                 </tbody>

@@ -44,16 +44,19 @@ public class TemporadaColportor implements Serializable{
     private Temporada temporada;
     @ManyToOne
     private Union union;
+    @ManyToOne
+    private Colegio colegio;
 
     public TemporadaColportor() {
     }
     
-    public TemporadaColportor(Colportor colportor,Asociacion asociacion,Asociado asociado,Temporada temporada,Union union){
+    public TemporadaColportor(Colportor colportor,Asociacion asociacion,Asociado asociado,Temporada temporada,Union union, Colegio colegio){
         this.colportor = colportor;
         this.asociacion = asociacion;
         this.asociado = asociado;
         this.temporada = temporada;
         this.union = union;
+        this.colegio = colegio;
         
     }
     public TemporadaColportor(String status,String objetivo, String observaciones){
@@ -63,7 +66,7 @@ public class TemporadaColportor implements Serializable{
         Date f = new Date();
         this.fecha = f;
     }
-
+    
     public Asociacion getAsociacion() {
         return asociacion;
     }
@@ -151,6 +154,15 @@ public class TemporadaColportor implements Serializable{
     public void setVersion(Integer version) {
         this.version = version;
     }
+
+    public Colegio getColegio() {
+        return colegio;
+    }
+
+    public void setColegio(Colegio colegio) {
+        this.colegio = colegio;
+    }
+    
 
     @Override
     public boolean equals(Object obj) {

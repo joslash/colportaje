@@ -70,7 +70,11 @@ public class TemporadaDao {
         
         Criteria criteria = currentSession().createCriteria(Temporada.class);
         Criteria countCriteria = currentSession().createCriteria(Temporada.class);
-        
+        //filtar
+//        if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
+//            criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
+//            countCriteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
+//        }
         if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";

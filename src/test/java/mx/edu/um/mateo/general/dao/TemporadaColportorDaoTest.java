@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.*;
+import mx.edu.um.mateo.general.test.BaseTest;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,7 +27,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:mateo.xml", "classpath:security.xml"})
 @Transactional
-public class TemporadaColportorDaoTest {
+public class TemporadaColportorDaoTest extends BaseTest {
     private static final Logger log = LoggerFactory.getLogger(TemporadaColportorDao.class);
     @Autowired
     private TemporadaColportorDao instance;
@@ -49,6 +50,8 @@ public class TemporadaColportorDaoTest {
         currentSession().save(test3);
         Temporada test4 = new Temporada ("test");
         currentSession().save(test4);
+        Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
         for (int i = 0; i < 20; i++) {
            TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO+i,"TEST","TEST");
             temporadacolportor.setColportor(test);
@@ -56,6 +59,7 @@ public class TemporadaColportorDaoTest {
             temporadacolportor.setAsociado(test3);
             temporadacolportor.setTemporada(test4);
             temporadacolportor.setUnion(union);
+            temporadacolportor.setColegio(colegio);
             currentSession().save(temporadacolportor);
             assertNotNull(temporadacolportor);
         }
@@ -81,12 +85,15 @@ public class TemporadaColportorDaoTest {
         currentSession().save(test3);
         Temporada test4 = new Temporada ("test5");
         currentSession().save(test4);
+        Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
         TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"test","test");
         temporadacolportor.setColportor(test);
         temporadacolportor.setAsociacion(test2);
         temporadacolportor.setAsociado(test3);
         temporadacolportor.setTemporada(test4);
         temporadacolportor.setUnion(union);
+        temporadacolportor.setColegio(colegio);
         currentSession().save(temporadacolportor);
         assertNotNull(temporadacolportor.getId());
         Long id = temporadacolportor.getId();
@@ -111,12 +118,15 @@ public class TemporadaColportorDaoTest {
         currentSession().save(test3);
         Temporada test4 = new Temporada ("test5");
         currentSession().save(test4);
+        Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
         TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"test","test");
         temporadacolportor.setColportor(test);
         temporadacolportor.setAsociacion(test2);
         temporadacolportor.setAsociado(test3);
         temporadacolportor.setTemporada(test4);
         temporadacolportor.setUnion(union);
+        temporadacolportor.setColegio(colegio);
         assertNotNull(temporadacolportor);
 
         TemporadaColportor temporadacolportor2 = instance.crea(temporadacolportor);
@@ -140,12 +150,15 @@ public class TemporadaColportorDaoTest {
         currentSession().save(test3);
         Temporada test4 = new Temporada ("test5");
         currentSession().save(test4);
+        Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
         TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"test","test");
         temporadacolportor.setColportor(test);
         temporadacolportor.setAsociacion(test2);
         temporadacolportor.setAsociado(test3);
         temporadacolportor.setTemporada(test4);
         temporadacolportor.setUnion(union);
+        temporadacolportor.setColegio(colegio);
         assertNotNull(temporadacolportor);
         currentSession().save(temporadacolportor);
 
@@ -173,6 +186,8 @@ public class TemporadaColportorDaoTest {
         currentSession().save(test3);
         Temporada test4 = new Temporada ("test5");
         currentSession().save(test4);
+        Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
         String nom = Constantes.STATUS_ACTIVO;
         TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"test","test");
         temporadacolportor.setColportor(test);
@@ -180,6 +195,7 @@ public class TemporadaColportorDaoTest {
         temporadacolportor.setAsociado(test3);
         temporadacolportor.setTemporada(test4);
         temporadacolportor.setUnion(union);
+        temporadacolportor.setColegio(colegio);
         currentSession().save(temporadacolportor);
         assertNotNull(temporadacolportor);
 

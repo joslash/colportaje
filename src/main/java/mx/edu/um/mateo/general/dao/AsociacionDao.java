@@ -66,7 +66,7 @@ public class AsociacionDao {
         }
         Criteria criteria = currentSession().createCriteria(Asociacion.class);
         Criteria countCriteria = currentSession().createCriteria(Asociacion.class);
-
+        
         if (params.containsKey("union")) {
             criteria.createCriteria("union").add(Restrictions.idEq(params.get("union")));
             countCriteria.createCriteria("union").add(Restrictions.idEq(params.get("union")));

@@ -5,10 +5,13 @@
 package mx.edu.um.mateo.general.web;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.mail.Session;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.TemporadaDao;
 import mx.edu.um.mateo.general.model.Temporada;
+import mx.edu.um.mateo.general.test.BaseTest;
 import mx.edu.um.mateo.general.test.GenericWebXmlContextLoader;
+import org.hibernate.SessionFactory;
 import static org.junit.Assert.assertNotNull;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -35,14 +38,14 @@ import org.springframework.web.context.WebApplicationContext;
     "classpath:dispatcher-servlet.xml"
 })
 @Transactional
-public class TemporadaControllerTest {
+public class TemporadaControllerTest extends BaseTest{
     private static final Logger log = LoggerFactory.getLogger(TemporadaControllerTest.class);
     @Autowired
     private WebApplicationContext wac;
     private MockMvc mockMvc;
     @Autowired
     private TemporadaDao temporadaDao;
-
+    
     @BeforeClass
     public static void setUpClass() throws Exception {
     }

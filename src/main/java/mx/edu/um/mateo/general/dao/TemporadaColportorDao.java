@@ -65,23 +65,6 @@ public class TemporadaColportorDao {
         }
         Criteria criteria = currentSession().createCriteria(TemporadaColportor.class);
         Criteria countCriteria = currentSession().createCriteria(TemporadaColportor.class);
-//        if (params.containsKey("colportor")) {
-//            criteria.createCriteria("colporto").add(Restrictions.idEq(params.get("colportor")));
-//            countCriteria.createCriteria("colporto").add(Restrictions.idEq(params.get("colporto")));
-//        }
-//        if (params.containsKey("asociado")) {
-//            criteria.createCriteria("asociado").add(Restrictions.idEq(params.get("asociado")));
-//            countCriteria.createCriteria("asociado").add(Restrictions.idEq(params.get("asociado")));
-//        }
-//        if (params.containsKey("temporada")) {
-//            criteria.createCriteria("temporada").add(Restrictions.idEq(params.get("temporada")));
-//            countCriteria.createCriteria("temporada").add(Restrictions.idEq(params.get("temporada")));
-//        }
-//        if (params.containsKey("union")) {
-//            criteria.createCriteria("union").add(Restrictions.idEq(params.get("union")));
-//            countCriteria.createCriteria("union").add(Restrictions.idEq(params.get("union")));
-//        }
-
         if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";

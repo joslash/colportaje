@@ -16,10 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
-import mx.edu.um.mateo.general.dao.AsociadoDao;
-import mx.edu.um.mateo.general.dao.ColportorDao;
-import mx.edu.um.mateo.general.dao.TemporadaColportorDao;
-import mx.edu.um.mateo.general.dao.TemporadaDao;
+import mx.edu.um.mateo.general.dao.*;
 import mx.edu.um.mateo.general.model.*;
 import mx.edu.um.mateo.general.utils.Ambiente;
 import net.sf.jasperreports.engine.*;
@@ -66,8 +63,9 @@ public class TemporadaColportorController {
     @Autowired
     private ColportorDao colportorDao;
     @Autowired
+    private ColegioDao colegioDao;
+    @Autowired
     private Ambiente ambiente;
-    
     @RequestMapping
     public String lista(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(required = false) String filtro,
@@ -79,7 +77,6 @@ public class TemporadaColportorController {
             Usuario usuario,
             Model modelo) {
         log.debug("Mostrando lista de Temporada Colportor");
-        
         Map<String, Object> params = new HashMap<>();
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
@@ -151,7 +148,7 @@ public class TemporadaColportorController {
     }
 
     @RequestMapping("/nueva")
-    public String nueva(Model modelo) {
+    public String nueva(Model modelo,HttpServletRequest request) {
         log.debug("Nueva Temporada Colportor");
         TemporadaColportor temporadaColportor = new TemporadaColportor();
         Map<String, Object> temporadas = temporadaDao.lista(null);
@@ -160,6 +157,9 @@ public class TemporadaColportorController {
         modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, asociados.get(Constantes.CONTAINSKEY_ASOCIADOS));
         Map<String, Object> colportores = colportorDao.lista(null);
         modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, colportores.get(Constantes.CONTAINSKEY_COLPORTORES));
+        
+        Map<String, Object> colegios = colegioDao.lista(null);
+        modelo.addAttribute(Constantes.CONTAINSKEY_COLEGIOS, colegios.get(Constantes.CONTAINSKEY_COLEGIOS));
         modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR, temporadaColportor);
         return Constantes.PATH_TEMPORADACOLPORTOR_NUEVA;
     }
@@ -198,6 +198,9 @@ public class TemporadaColportorController {
             Colportor colportor = colportorDao.obtiene(temporadaColportor.getColportor().getId());
             log.info("colportor>>>>>>>>>" + colportor);
             temporadaColportor.setColportor(colportor);
+            Colegio colegio = colegioDao.obtiene(temporadaColportor.getColegio().getId());
+            log.info("colportor>>>>>>>>>" + colegio);
+            temporadaColportor.setColegio(colegio);
             log.debug("temporadaColportor >>>>>>>>>>>><<"+temporadaColportor);
             temporadaColportor = temporadaColportorDao.crea(temporadaColportor);
         } catch (ConstraintViolationException e) {
@@ -221,6 +224,9 @@ public class TemporadaColportorController {
         modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, asociados.get(Constantes.CONTAINSKEY_ASOCIADOS));
         Map<String, Object> colportores = colportorDao.lista(null);
         modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, colportores.get(Constantes.CONTAINSKEY_COLPORTORES));
+        Map<String, Object> colegios = colegioDao.lista(null);
+        modelo.addAttribute(Constantes.CONTAINSKEY_COLEGIOS, colegios.get(Constantes.CONTAINSKEY_COLEGIOS));
+        
         modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR, temporadaColportor);
         modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR, temporadaColportor);
         return Constantes.PATH_TEMPORADACOLPORTOR_EDITA;
@@ -252,6 +258,9 @@ public class TemporadaColportorController {
             temporadaColportor.setAsociado(asociado);
             Colportor colportor = colportorDao.obtiene(temporadaColportor.getColportor().getId());
             temporadaColportor.setColportor(colportor);
+            
+            Colegio colegio = colegioDao.obtiene(temporadaColportor.getColegio().getId());
+            temporadaColportor.setColegio(colegio);
             temporadaColportor = temporadaColportorDao.actualiza(temporadaColportor);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear al Asociacion", e);

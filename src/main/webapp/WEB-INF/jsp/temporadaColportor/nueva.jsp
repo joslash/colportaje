@@ -62,6 +62,15 @@
                                 <form:errors path="colportor" cssClass="alert alert-error" />
                         </div>
                     </s:bind>
+                    <s:bind path="temporadaColportor.colegio">
+                        <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
+                                <label for="colegio">
+                                <s:message code="colegio.label" />
+                                <span class="required-indicator">*</span>
+                                <form:select id="colegioId" path="colegio.id" items="${colegios}" itemLabel="nombre" itemValue="id" />
+                                <form:errors path="colegio" cssClass="alert alert-error" />
+                        </div>
+                    </s:bind>
 
                     <s:bind path="temporadaColportor.fecha">
                         <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">

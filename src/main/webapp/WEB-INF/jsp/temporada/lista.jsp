@@ -61,9 +61,6 @@
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="fechaFinal" />
                         </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="nombre" />
-                        </jsp:include>
                     </tr>
                 </thead>
                 <tbody>

@@ -55,6 +55,10 @@
                     <h3>${temporadaColportor.asociacion.nombre}</h3>
                 </div>
                 <div class="row-fluid" style="padding-bottom: 10px;">
+                    <h4><s:message code="colegio.label" /></h4>
+                    <h3>${temporadaColportor.colegio.nombre}</h3>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="fecha.label" /></div>
                     <div class="span11">${temporadaColportor.fecha}</div>
                 </div>
