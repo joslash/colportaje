@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.model;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
@@ -17,53 +18,51 @@ import org.hibernate.validator.constraints.Email;
  * @author wilbert
  */
 @Entity
-@Table(name="colportores")
-public class Colportor implements Serializable{
+@Table(name = "colportores")
+public class Colportor implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Version
     private Integer version;
     @NotNull
-    @Column(nullable = false, length = 64)
-    private String nombre;
-    @NotNull
     @Column(nullable = false, length = 2, name = "status")
     private String status;
     @NotNull
     @Column(unique = true, nullable = false, length = 64)
     private String clave;
-    @Column(length = 500)
-    private String direccion;
-    @Email
-    @Column(length = 128)
-    private String correo;
     @Column(length = 25)
     private String telefono;
-  /*DE AQUI  
-    private Set<TipoColportor> tipoColportor = new HashSet<TipoColportor>();  
-  
-@ElementCollection 
-@Enumerated(EnumType.STRING)  
-public Set<TipoColportor> getTipoColportors() {  
-    return tipoColportor;  
-}      
-  
-public void setTipoColportors(Set<TipoColportor> tipoColportor) {  
-    this.tipoColportor = tipoColportor;  
-}  
- */      
+    @NotNull
+    @Column(length = 200)
+    private String calle;
+    @NotNull
+    @Column(length = 200)
+    private String colonia;
+    @NotNull
+    @Column(length = 200)
+    private String municipio;
+    /*
+     * DE AQUI private Set<TipoColportor> tipoColportor = new
+     * HashSet<TipoColportor>();      *
+     * @ElementCollection @Enumerated(EnumType.STRING) public Set<TipoColportor>
+     * getTipoColportors() { return tipoColportor; }      *
+     * public void setTipoColportors(Set<TipoColportor> tipoColportor) {
+     * this.tipoColportor = tipoColportor; }
+     */
+
     public Colportor() {
     }
-      
-      public Colportor(String nombre, String status, String clave,String direccion,String correo, String telefono){
-          this.nombre = nombre;
-          this.status = status;
-          this.clave  = clave;
-          this.direccion = direccion;
-          this.correo = correo;
-          this.telefono = telefono;
-      }
+
+    public Colportor(String status, String clave,String telefono, String calle, String colonia, String municipio) {
+            this.status = status;
+            this.clave = clave;
+            this.telefono = telefono;
+            this.calle = calle;
+            this.colonia = colonia;
+            this.municipio = municipio;
+    }
 
     public String getClave() {
         return clave;
@@ -73,22 +72,6 @@ public void setTipoColportors(Set<TipoColportor> tipoColportor) {
         this.clave = clave;
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
     public Long getId() {
         return id;
     }
@@ -96,15 +79,6 @@ public void setTipoColportors(Set<TipoColportor> tipoColportor) {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -129,7 +103,29 @@ public void setTipoColportors(Set<TipoColportor> tipoColportor) {
         this.version = version;
     }
 
-   
+    public String getCalle() {
+        return calle;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    public String getColonia() {
+        return colonia;
+    }
+
+    public void setColonia(String colonia) {
+        this.colonia = colonia;
+    }
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -140,7 +136,7 @@ public void setTipoColportors(Set<TipoColportor> tipoColportor) {
             return false;
         }
         final Colportor other = (Colportor) obj;
-        if (!Objects.equals(this.nombre, other.nombre)) {
+        if (!Objects.equals(this.status, other.status)) {
             return false;
         }
         return true;
@@ -148,17 +144,17 @@ public void setTipoColportors(Set<TipoColportor> tipoColportor) {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.nombre);
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.status);
         return hash;
     }
 
     @Override
     public String toString() {
-        return "Colportor{" + "nombre=" + nombre + ", status=" + status + ", clave=" + clave + ", direccion=" + direccion + ", correo=" + correo + ", telefono=" + telefono + '}';
+        return "Colportor{" + "status=" + status + ", clave=" + clave + ", telefono=" + telefono + ", calle=" + calle + ", colonia=" + colonia + ", municipio=" + municipio + '}';
     }
 
-
-
-      
+    
+    
+    
 }

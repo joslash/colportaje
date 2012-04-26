@@ -60,7 +60,7 @@
                                 <label for="colportor">
                                 <s:message code="colportor.label" />
                                 <span class="required-indicator">*</span>
-                                <form:select id="colportorId" path="colportor.id" items="${colportores}" itemLabel="nombre" itemValue="id" />
+                                <form:select id="colportorId" path="colportor.id" items="${colportores}" itemLabel="calle" itemValue="id" />
                                 <form:errors path="colportor" cssClass="alert alert-error" />
                         </div>
                     </s:bind>

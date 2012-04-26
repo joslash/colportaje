@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:mateo.xml", "classpath:security.xml"})
 @Transactional
-public class ColportorDaoTest extends BaseTest{
+public class ColportorDaoTest {
 
     private static final Logger log = LoggerFactory.getLogger(ColportorDaoTest.class);
     @Autowired
@@ -49,7 +49,7 @@ public class ColportorDaoTest extends BaseTest{
         log.debug("Debiera mostrar lista de colportor");
 
         for (int i = 0; i < 20; i++) {
-            Colportor colportor = new Colportor(Constantes.NOMBRE+i, Constantes.STATUS_ACTIVO, Constantes.CLAVE+i,Constantes.DIRECCION,Constantes.CORREO,Constantes.TELEFONO);
+            Colportor colportor = new Colportor( Constantes.STATUS_ACTIVO, Constantes.CLAVE+i,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
             currentSession().save(colportor);
             assertNotNull(colportor);
         }
@@ -67,15 +67,15 @@ public class ColportorDaoTest extends BaseTest{
     public void debieraObtenerColportor() {
         log.debug("Debiera obtener colportor");
 
-        String nombre = "test";
-        Colportor colportor = new Colportor(Constantes.NOMBRE, Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.DIRECCION,Constantes.CORREO,Constantes.TELEFONO);
+        String colonia = Constantes.COLONIA;
+        Colportor colportor = new Colportor( Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         currentSession().save(colportor);
         assertNotNull(colportor.getId());
         Long id = colportor.getId();
 
         Colportor result = instance.obtiene(id);
         assertNotNull(result);
-        assertEquals(nombre, result.getNombre());
+        assertEquals(colonia, result.getColonia());
 
         assertEquals(result, colportor);
     }
@@ -84,7 +84,7 @@ public class ColportorDaoTest extends BaseTest{
     public void deberiaCrearColportor() {
         log.debug("Deberia crear Colportor");
 
-        Colportor colportor = new Colportor(Constantes.NOMBRE, Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.DIRECCION,Constantes.CORREO,Constantes.TELEFONO);
+        Colportor colportor = new Colportor(Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         assertNotNull(colportor);
 
         Colportor colportor2 = instance.crea(colportor);
@@ -98,16 +98,16 @@ public class ColportorDaoTest extends BaseTest{
     public void deberiaActualizarColportor() {
         log.debug("Deberia actualizar Colportor");
 
-        Colportor colportor = new Colportor(Constantes.NOMBRE, Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.DIRECCION,Constantes.CORREO,Constantes.TELEFONO);
+        Colportor colportor = new Colportor(Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         assertNotNull(colportor);
         currentSession().save(colportor);
 
-        String nombre = "test1";
-        colportor.setNombre(nombre);
+        String colonia = Constantes.COLONIA;
+        colportor.setColonia(colonia);
 
         Colportor colportor2 = instance.actualiza(colportor);
         assertNotNull(colportor2);
-        assertEquals(nombre, colportor.getNombre());
+        assertEquals(colonia, colportor.getColonia());
 
         assertEquals(colportor, colportor2);
     }
@@ -116,8 +116,8 @@ public class ColportorDaoTest extends BaseTest{
     public void deberiaEliminarColportor() throws UltimoException {
         log.debug("Debiera eliminar Colportor");
 
-        String nom = "test";
-        Colportor colportor = new Colportor(Constantes.NOMBRE, Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.DIRECCION,Constantes.CORREO,Constantes.TELEFONO);
+        String nom = Constantes.STATUS_ACTIVO;
+        Colportor colportor = new Colportor(Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         currentSession().save(colportor);
         assertNotNull(colportor);
 

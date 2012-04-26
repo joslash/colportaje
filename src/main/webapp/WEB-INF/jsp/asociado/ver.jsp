@@ -36,16 +36,8 @@
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />
 
                 <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="nombre.label" /></div>
-                    <div class="span11">${asociado.nombre}</div>
-                </div>
-                <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="clave.label" /></div>
                     <div class="span11">${asociado.clave}</div>
-                </div>
-                <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="direccion.label" /></div>
-                    <div class="span11">${asociado.direccion}</div>
                 </div>
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="telefono.label" /></div>
@@ -54,6 +46,18 @@
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="status.label" /></div>
                     <div class="span11">${asociado.status}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="calle.label" /></div>
+                    <div class="span11">${asociado.calle}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="colonia.label" /></div>
+                    <div class="span11">${asociado.colonia}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="municipio.label" /></div>
+                    <div class="span11">${asociado.municipio}</div>
                 </div>
               
 

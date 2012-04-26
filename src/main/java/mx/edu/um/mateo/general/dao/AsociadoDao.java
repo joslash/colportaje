@@ -76,9 +76,7 @@ public class AsociadoDao {
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";
             Disjunction propiedades = Restrictions.disjunction();
-            propiedades.add(Restrictions.ilike("nombre", filtro));
             propiedades.add(Restrictions.ilike("clave", filtro));
-            propiedades.add(Restrictions.ilike("direccion", filtro));
             propiedades.add(Restrictions.ilike("telefono", filtro));
             propiedades.add(Restrictions.ilike("status", filtro));
            
@@ -138,7 +136,7 @@ public class AsociadoDao {
         Asociado asociado = obtiene(id);
         currentSession().delete(asociado);
         currentSession().flush();
-        String nombre = asociado.getNombre();
+        String nombre = asociado.getColonia();
         return nombre;
     }
     

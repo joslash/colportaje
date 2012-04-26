@@ -1,5 +1,5 @@
-
 package mx.edu.um.mateo.general.dao;
+
 import java.util.HashMap;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
@@ -26,7 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class ColportorDao {
-private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
+
+    private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -66,9 +67,8 @@ private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";
             Disjunction propiedades = Restrictions.disjunction();
-            propiedades.add(Restrictions.ilike("nombre", filtro));
             propiedades.add(Restrictions.ilike("status", filtro));
-             propiedades.add(Restrictions.ilike("clave", filtro));
+            propiedades.add(Restrictions.ilike("clave", filtro));
             criteria.add(propiedades);
             countCriteria.add(propiedades);
         }
@@ -109,13 +109,13 @@ private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
 
     public Colportor actualiza(Colportor colportor) {
         log.debug("Actualizando colportor {}", colportor);
-        
+
         //trae el objeto de la DB 
-        Colportor nuevo = (Colportor)currentSession().get(Colportor.class, colportor.getId());
+        Colportor nuevo = (Colportor) currentSession().get(Colportor.class, colportor.getId());
         //actualiza el objeto
         BeanUtils.copyProperties(colportor, nuevo);
         //lo guarda en la BD
-        
+
         currentSession().update(nuevo);
         currentSession().flush();
         return nuevo;
@@ -126,7 +126,7 @@ private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
         Colportor colportor = obtiene(id);
         currentSession().delete(colportor);
         currentSession().flush();
-        String nombre = colportor.getNombre();
+        String nombre = colportor.getStatus();
         return nombre;
     }
 }

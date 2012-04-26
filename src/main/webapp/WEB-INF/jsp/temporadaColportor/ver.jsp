@@ -36,7 +36,7 @@
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <h4><s:message code="colportor.label" /></h4>
-                    <h3>${temporadaColportor.colportor.nombre}</h3>
+                    <h3>${temporadaColportor.colportor.calle}</h3>
                 </div>
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <h4><s:message code="asociado.label" /></h4>

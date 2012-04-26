@@ -52,17 +52,9 @@
             <table id="lista" class="table">
                 <thead>
                     <tr>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="nombre" />
-                        </jsp:include>
+                        
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="clave" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="direccion" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="nombre" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="telefono" />
@@ -71,19 +63,25 @@
                             <jsp:param name="columna" value="status" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="correo" />
+                            <jsp:param name="columna" value="calle" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="colonia" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="municipio" />
                         </jsp:include>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach items="${asociados}" var="asociado" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/asociado/ver/${asociado.id}' />">${asociado.nombre}</a></td>
-                            <td>${asociado.clave}</td>
-                            <td>${asociado.direccion}</td>
+                            <td><a href="<c:url value='/asociado/ver/${asociado.id}' />">${asociado.clave}</a></td>
                             <td>${asociado.telefono}</td>
                             <td>${asociado.status}</td>
-                            <td>${asociado.correo}</td>
+                            <td>${asociado.calle}</td>
+                            <td>${asociado.colonia}</td>
+                            <td>${asociado.municipio}</td>
                         </tr>
                     </c:forEach>
                 </tbody>

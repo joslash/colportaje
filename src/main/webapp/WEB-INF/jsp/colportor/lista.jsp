@@ -54,19 +54,19 @@
                 <thead>
                     <tr>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="nombre" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="status" />
                         </jsp:include> 
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="clave" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="direccion" />
+                            <jsp:param name="columna" value="calle" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="correo" />
+                            <jsp:param name="columna" value="colonia" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="municipio" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="telefono" />
@@ -76,11 +76,11 @@
                 <tbody>
                     <c:forEach items="${colportores}" var="colportor" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/colportor/ver/${colportor.id}' />">${colportor.nombre}</a></td>
-                            <td>${colportor.status}</td>
+                            <td><a href="<c:url value='/colportor/ver/${colportor.id}' />">${colportor.status}</a></td>
                             <td>${colportor.clave}</td>
-                            <td>${colportor.direccion}</td>
-                            <td>${colportor.correo}</td>
+                            <td>${colportor.calle}</td>
+                            <td>${colportor.colonia}</td>
+                            <td>${colportor.municipio}</td>
                             <td>${colportor.telefono}</td>
                         </tr>
                     </c:forEach>

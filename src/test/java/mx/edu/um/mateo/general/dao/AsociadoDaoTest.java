@@ -45,7 +45,7 @@ public class AsociadoDaoTest {
     public void debieraMostrarListaDeAsociado() {
         log.debug("Debiera mostrar lista de Asociado");
         for (int i = 0; i < 20; i++) {
-           Asociado asociado = new Asociado("test"+i,"test"+i,"test"+i,"test"+i, Constantes.STATUS_ACTIVO);
+           Asociado asociado = new Asociado("test"+i,"test"+i,"test"+i, Constantes.STATUS_ACTIVO,Constantes.COLONIA+i,Constantes.MUNICIPIO+i,Constantes.CALLE+i);
             currentSession().save(asociado);
             assertNotNull(asociado);
         }
@@ -60,15 +60,15 @@ public class AsociadoDaoTest {
     public void debieraObtenerAsociado() {
         log.debug("Debiera obtener asociado");
 
-        String nombre = "test";
-        Asociado asociado = new Asociado("test","test","test","test",Constantes.STATUS_ACTIVO);
+        String nombre = Constantes.MUNICIPIO;
+        Asociado asociado = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         currentSession().save(asociado);
         assertNotNull(asociado.getId());
         Long id = asociado.getId();
 
         Asociado result = instance.obtiene(id);
         assertNotNull(result);
-        assertEquals(nombre, result.getNombre());
+        assertEquals(nombre, result.getColonia());
 
         assertEquals(result, asociado);
     }
@@ -77,7 +77,7 @@ public class AsociadoDaoTest {
     public void deberiaCrearAsociado() {
         log.debug("Deberia crear asociado");
 
-        Asociado asociado = new Asociado("test","test","test","test", Constantes.STATUS_ACTIVO);
+        Asociado asociado = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         assertNotNull(asociado);
 
         Asociado asociado2 = instance.crea(asociado);
@@ -91,16 +91,16 @@ public class AsociadoDaoTest {
     public void deberiaActualizarAsociado() {
         log.debug("Deberia actualizar asociado");
 
-        Asociado asociado = new Asociado("test","test","test","test", Constantes.STATUS_ACTIVO);
+        Asociado asociado = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         assertNotNull(asociado);
         currentSession().save(asociado);
 
         String nombre = "test1";
-        asociado.setNombre(nombre);
+        asociado.setColonia(nombre);
 
         Asociado asociado2 = instance.actualiza(asociado);
         assertNotNull(asociado2);
-        assertEquals(nombre, asociado.getNombre());
+        assertEquals(nombre, asociado.getColonia());
 
         assertEquals(asociado, asociado2);
     }
@@ -109,8 +109,8 @@ public class AsociadoDaoTest {
     public void deberiaEliminarAsociado() throws UltimoException {
         log.debug("Debiera eliminar Asociado");
 
-        String nom = "test";
-        Asociado asociado = new Asociado("test","test","test","test", Constantes.STATUS_ACTIVO);
+        String nom = Constantes.MUNICIPIO;
+        Asociado asociado = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         currentSession().save(asociado);
         assertNotNull(asociado);
 

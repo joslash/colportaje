@@ -96,7 +96,7 @@
                             <td>${temporadacolportor.asociacion.getNombre()}</td>
                             <td>${temporadacolportor.temporada.getNombre()}</td>
                             <td>${temporadacolportor.asociado.getNombre()}</td>
-                            <td>${temporadacolportor.colportor.getNombre()}</td>
+                            <td>${temporadacolportor.colportor.getCalle()}</td>
                             <td>${temporadacolportor.colegio.getNombre()}</td>
                         </tr>
                     </c:forEach>

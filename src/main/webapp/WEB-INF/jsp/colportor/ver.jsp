@@ -35,12 +35,6 @@
             <c:url var="eliminaUrl" value="../elimina" />
             <form:form commandName="colportor" action="${eliminaUrl}" >
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />
-              
-                <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="nombre.label" /></div>
-                    <div class="span11">${colportor.nombre}</div>
-                </div>
-
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="status.label" /></div>
                     <div class="span11">${colportor.status}</div>
@@ -50,17 +44,18 @@
                     <div class="span1"><s:message code="clave.label" /></div>
                     <div class="span11">${colportor.clave}</div>
                 </div>
-                
-                 <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="direccion.label" /></div>
-                    <div class="span11">${colportor.direccion}</div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="calle.label" /></div>
+                    <div class="span11">${colportor.calle}</div>
                 </div>
-                
-                 <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="correo.label" /></div>
-                    <div class="span11">${colportor.correo}</div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="colonia.label" /></div>
+                    <div class="span11">${colportor.colonia}</div>
                 </div>
-                
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="municipio.label" /></div>
+                    <div class="span11">${colportor.municipio}</div>
+                </div>
                  <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="telefono.label" /></div>
                     <div class="span11">${colportor.telefono}</div>
