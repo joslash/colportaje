@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-       <title><s:message code="documento.lista.label" /></title>
+        <title><s:message code="documento.lista.label" /></title>
     </head>
     <body>
         <jsp:include page="../menu.jsp" >
@@ -31,6 +31,7 @@
                 <input name="filtro" type="text" class="input-medium search-query" value="${param.filtro}">
                 <button type="submit" class="btn"><s:message code="buscar.label" /></button>
             </p>
+
             <c:if test="${not empty message}">
                 <div class="alert alert-block alert-success fade in" role="status">
                     <a class="close" data-dismiss="alert">×</a>
@@ -40,16 +41,28 @@
             <c:if test="${documento != null}">
                 <s:bind path="documento.*">
                     <c:if test="${not empty status.errorMessages}">
-                    <div class="alert alert-block alert-error fade in" role="status">
-                        <a class="close" data-dismiss="alert">×</a>
-                        <c:forEach var="error" items="${status.errorMessages}">
-                            <c:out value="${error}" escapeXml="false"/><br />
-                        </c:forEach>
-                    </div>
+                        <div class="alert alert-block alert-error fade in" role="status">
+                            <a class="close" data-dismiss="alert">×</a>
+                            <c:forEach var="error" items="${status.errorMessages}">
+                                <c:out value="${error}" escapeXml="false"/><br />
+                            </c:forEach>
+                        </div>
                     </c:if>
                 </s:bind>
             </c:if>
-            
+
+            <table id="totales" class="table">
+                <tbody>
+                    <tr> 
+                        <td><b>Compras $ </b>${Total_Boletin}</td>
+                        <td><b>Objetivo $ </b>${Objetivo}</td>
+                        <td><b>Pct. Alcanzado </b>${Alcanzado} %</td>
+                        <td><b>Diezmos $ </b>${Total_Diezmos}</td>
+                        <td><b>Fidelidad </b>${Fidelidad} %</td>
+                        <td><b>Depositos $</b> ${Total_Depositos}</td>
+                    </tr>
+                </tbody>
+            </table>
             <table id="lista" class="table">
                 <thead>
                     <tr>
@@ -60,15 +73,15 @@
                             <jsp:param name="columna" value="folio" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="nombre" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="fecha" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="importe" />
                         </jsp:include>
-                     </tr>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="observaciones" />
+                        </jsp:include>
+                    </tr>
                 </thead>
                 <tbody>
                     <c:forEach items="${documentos}" var="documento" varStatus="status">
@@ -77,14 +90,15 @@
                             <td>${documento.folio}</td>
                             <td>${documento.fecha}</td>
                             <td>${documento.importe}</td>
-                            </tr>
+                            <td>${documento.observaciones}</td>
+                        </tr>
                     </c:forEach>
                 </tbody>
             </table>
             <jsp:include page="/WEB-INF/jsp/paginacion.jsp" />
         </form>        
-        <content>
-            <script src="<c:url value='/js/lista.js' />"></script>
-        </content>
-    </body>
+    <content>
+        <script src="<c:url value='/js/lista.js' />"></script>
+    </content>
+</body>
 </html>

@@ -6,6 +6,8 @@ package mx.edu.um.mateo.general.web;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -125,7 +127,68 @@ public class DocumentoController {
         }
         params = DocumentoDao.lista(params);
         modelo.addAttribute(Constantes.CONTAINSKEY_DOCUMENTOS, params.get(Constantes.CONTAINSKEY_DOCUMENTOS));
+	
+        List<Documento> lista = (List) params.get(Constantes.CONTAINSKEY_DOCUMENTOS); 
+        Iterator <Documento> iter = lista.iterator();
+        Documento doc=null;
+           BigDecimal totalBoletin=new BigDecimal("0");
+           BigDecimal totalDiezmos=new BigDecimal("0");
+           BigDecimal totalDepositos=new BigDecimal("0");
+           BigDecimal objetivo=new BigDecimal("11250");
+           BigDecimal fidelidad=new BigDecimal("0");
+           BigDecimal alcanzado=new BigDecimal("0");
+           
+            
+           
+        while (iter.hasNext()) {
+            doc=iter.next();
+            switch (doc.getTipoDeDocumento()){
+                case Constantes.BOLETIN:{
+                    totalBoletin=totalBoletin.add(doc.getImporte());
+                    break;
+                 
+                }
+                               
+                case Constantes.DIEZMO:{
+                    totalDiezmos=totalDiezmos.add(doc.getImporte());
+                    break;
+                }
+          
+                case Constantes.DEPOSITO_CAJA:{
+                    totalDepositos=totalDepositos.add(doc.getImporte());
+                    break;
+                }
+                    
+               case Constantes.DEPOSITO_BANCO:{
+                    totalDepositos=totalDepositos.add(doc.getImporte());
+                    break;
+                }
+              case Constantes.NOTA_DE_COMPRA:{
+                    totalDepositos=totalDepositos.add(doc.getImporte());
+                    break;
+                 
+                }        
+            
+            }
+            
+        }
+        
+  
+ modelo.addAttribute(Constantes.TOTALBOLETIN,totalBoletin);
+ modelo.addAttribute(Constantes.TOTALDIEZMOS,totalDiezmos);
+ modelo.addAttribute(Constantes.TOTALDEPOSITOS,totalDepositos);
+ modelo.addAttribute(Constantes.OBJETIVO,objetivo);
+ if(objetivo.compareTo(new BigDecimal("0"))>0){
+     alcanzado=totalBoletin.divide(objetivo,6,RoundingMode.HALF_EVEN).multiply(new BigDecimal("100"));
+  }
+ if(totalBoletin.compareTo(new BigDecimal("0"))>0){
+     fidelidad=totalDiezmos.divide(totalBoletin.movePointLeft(1),6,RoundingMode.HALF_EVEN).multiply(new BigDecimal("100"));
+  }
+modelo.addAttribute(Constantes.ALCANZADO,alcanzado);
+modelo.addAttribute(Constantes.FIDELIDAD,fidelidad);
 
+        
+        
         // inicia paginado
         Long cantidad = (Long) params.get(Constantes.CONTAINSKEY_CANTIDAD);
         Integer max = (Integer) params.get(Constantes.CONTAINSKEY_MAX);
@@ -174,19 +237,26 @@ public class DocumentoController {
             log.debug("Hubo algun error en la forma, regresando");
             return Constantes.PATH_DOCUMENTO_NUEVO;
         }
-        if (documentos.getTipoDeDocumento() == "0") {
+        switch (documentos.getTipoDeDocumento()) {
+            case "0":
                 documentos.setTipoDeDocumento(Constantes.DEPOSITO_CAJA);
-            } else if (documentos.getTipoDeDocumento() == "1"){
+                break;
+                case "1":
                 documentos.setTipoDeDocumento(Constantes.DEPOSITO_BANCO);
-            }  else if (documentos.getTipoDeDocumento() == "2"){
+                break;
+            case "2":
                 documentos.setTipoDeDocumento(Constantes.DIEZMO);
-            }  else if (documentos.getTipoDeDocumento() == "3"){
-                documentos.setTipoDeDocumento(Constantes.FACTURA);
-             }  else if (documentos.getTipoDeDocumento() == "4"){
+                break;
+            case "3":
+                documentos.setTipoDeDocumento(Constantes.NOTA_DE_COMPRA);
+                break;
+            case "4":
                 documentos.setTipoDeDocumento(Constantes.BOLETIN);
-            } else if (documentos.getTipoDeDocumento() == "5"){
+                break;
+            case "5":
                 documentos.setTipoDeDocumento(Constantes.INFORME);
-            }
+                break;
+        }
         
         
         try {
@@ -227,19 +297,26 @@ public class DocumentoController {
             log.error("Hubo algun error en la forma, regresando");
             return Constantes.PATH_DOCUMENTO_EDITA;
         }
-         if (documentos.getTipoDeDocumento() == "0") {
+        switch (documentos.getTipoDeDocumento()) {
+            case "0":
                 documentos.setTipoDeDocumento(Constantes.DEPOSITO_CAJA);
-            } else if (documentos.getTipoDeDocumento() == "1"){
+                break;
+            case "1":
                 documentos.setTipoDeDocumento(Constantes.DEPOSITO_BANCO);
-            }  else if (documentos.getTipoDeDocumento() == "2"){
+                break;
+            case "2":
                 documentos.setTipoDeDocumento(Constantes.DIEZMO);
-            }  else if (documentos.getTipoDeDocumento() == "3"){
-                documentos.setTipoDeDocumento(Constantes.FACTURA);
-             }  else if (documentos.getTipoDeDocumento() == "4"){
+                break;
+            case "3":
+                documentos.setTipoDeDocumento(Constantes.NOTA_DE_COMPRA);
+                break;
+            case "4":
                 documentos.setTipoDeDocumento(Constantes.BOLETIN);
-            } else if (documentos.getTipoDeDocumento() == "5"){
+                break;
+            case "5":
                 documentos.setTipoDeDocumento(Constantes.INFORME);
-            }
+                break;
+        }
          
         try {
                 SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);

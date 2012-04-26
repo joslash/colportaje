@@ -30,11 +30,19 @@ public class Constantes {
     
  
      public static final String DEPOSITO_CAJA ="Deposito_Caja";
-      public static final String DEPOSITO_BANCO ="Deposito_Banco";
+     public static final String DEPOSITO_BANCO ="Deposito_Banco";
      public static final String DIEZMO ="Diezmo";
-     public static final String FACTURA ="Factura";
+     public static final String NOTA_DE_COMPRA ="Nota_De_Compra";
      public static final String BOLETIN ="Boletín" ;
      public static final String INFORME ="Informe" ;
+     
+    public static final String TOTALBOLETIN = "Total_Boletin";
+    public static final String TOTALDIEZMOS = "Total_Diezmos";
+    public static final String TOTALDEPOSITOS = "Total_Depositos";
+    
+    public static final String ALCANZADO = "Alcanzado";
+    public static final String OBJETIVO = "Objetivo";
+     public static final String FIDELIDAD = "Fidelidad";
     
     /**
      * Valores para el constructor de Locale

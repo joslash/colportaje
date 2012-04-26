@@ -40,13 +40,13 @@
                                 <s:message code="tipoDeDocumento.label" />
                                 <span class="required-indicator">*</span>
                             </label>
-                     <form:select path="tipoDeDocumento">
-                                    <form:option value="Deposito_Caja" label="Deposito_Caja" />
-                                    <form:option value="Deposito_Banco" label="Deposito_Banco" />
-                                     <form:option value="Diezmo" label="Diezmo" />
-                                    <form:option value="Factura" label="Factura" />
-                                     <form:option value="Boletin" label="Boletín" />
-                                    <form:option value="Informe" label="Informe" />
+                     <form:select path="TipoDeDocumento">
+                                    <form:option value="0" label="Deposito_Caja" />
+                                    <form:option value="1" label="Deposito_Banco" />
+                                     <form:option value="2" label="Diezmo" />
+                                    <form:option value="3" label="Nota_De_Compra" />
+                                     <form:option value="4" label="Boletín" />
+                                    <form:option value="5" label="Informe" />
                                 </form:select>
                         </div>
                     </s:bind>
@@ -90,7 +90,7 @@
                                 <s:message code="observaciones.label" />
                               
                             </label>
-                            <form:input path="observaciones" maxlength="100" required="false" />
+                            <form:textarea path="observaciones" maxlength="400" required="false" />
                             <form:errors path="observaciones" cssClass="alert alert-error" />
                         </div>
                     </s:bind>
