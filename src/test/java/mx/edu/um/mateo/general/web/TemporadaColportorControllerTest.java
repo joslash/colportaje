@@ -88,7 +88,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         currentSession().save(union);
         Asociacion test2 = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
         currentSession().save(test2);
-        Asociado test3 = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+        Asociado test3 = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         currentSession().save(test3);
         Temporada test4 = new Temporada ("test");
         currentSession().save(test4);
@@ -124,7 +124,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         currentSession().save(union);
         Asociacion test2 = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
         currentSession().save(test2);
-        Asociado test3 = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+        Asociado test3 = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         currentSession().save(test3);
         Temporada test4 = new Temporada("test");
         currentSession().save(test4);
@@ -155,8 +155,6 @@ public class TemporadaColportorControllerTest extends BaseTest {
         currentSession().save(union);
         Asociacion test2 = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
         currentSession().save(test2);
-        Asociado test3 = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
-        currentSession().save(test3);
         Temporada test4 = new Temporada("test");
         currentSession().save(test4);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
@@ -179,7 +177,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         
         Colportor colportor = new Colportor(Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         currentSession().save(colportor);
-        Asociado asociado = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+        Asociado asociado = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         currentSession().save(asociado);
         Temporada temporada = new Temporada("test");
         currentSession().save(temporada);
@@ -209,7 +207,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         currentSession().save(union);
         Asociacion test2 = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
         currentSession().save(test2);
-        Asociado test3 = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+        Asociado test3 = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         currentSession().save(test3);
         Temporada test4 = new Temporada("test");
         currentSession().save(test4);
@@ -266,7 +264,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         currentSession().save(union);
         Asociacion test2 = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
         currentSession().save(test2);
-        Asociado test3 = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+        Asociado test3 = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         currentSession().save(test3);
         Temporada test4 = new Temporada("test");
         currentSession().save(test4);

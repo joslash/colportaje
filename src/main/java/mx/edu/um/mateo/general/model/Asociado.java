@@ -30,7 +30,7 @@ public  class Asociado  implements Serializable{
     @Version
     private Integer version;
     @NotBlank
-    @Column(nullable = false, length = 65)
+    @Column(nullable = false, length = 65 ,unique=true)
     private String clave;
     @Column(length = 25)
     private String telefono;
@@ -52,7 +52,7 @@ public  class Asociado  implements Serializable{
     public Asociado() {
     }
 
-    public Asociado(String nombre, String clave,  String telefono, String status,String calle,String colonia,String municipio) {
+    public Asociado( String clave,  String telefono, String status,String calle,String colonia,String municipio) {
         this.clave = clave;
         this.telefono = telefono;
         this.status = status;

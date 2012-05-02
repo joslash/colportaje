@@ -64,7 +64,7 @@ public class AsociadoControllerTest extends BaseTest{
         log.debug("Debiera monstrar lista asociado");
         
         for (int i = 0; i < 20; i++) {
-            Asociado asociado = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+           Asociado asociado = new Asociado(Constantes.CLAVE+i,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
             asociadoDao.crea(asociado);
             assertNotNull(asociado);
         }
@@ -80,7 +80,7 @@ public class AsociadoControllerTest extends BaseTest{
     @Test
     public void debieraMostrarAsociado() throws Exception {
         log.debug("Debiera mostrar  asociado");
-        Asociado asociado = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+        Asociado asociado = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         asociado = asociadoDao.crea(asociado);
         assertNotNull(asociado);
 
@@ -109,7 +109,7 @@ public class AsociadoControllerTest extends BaseTest{
     @Test
     public void debieraActualizarAsociado() throws Exception {
         log.debug("Debiera actualizar  asociado");
-        Asociado asociado = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+        Asociado asociado = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         asociado = asociadoDao.crea(asociado);
         assertNotNull(asociado);
 
@@ -129,7 +129,7 @@ public class AsociadoControllerTest extends BaseTest{
     @Test
     public void debieraEliminarAsociacion() throws Exception {
         log.debug("Debiera eliminar  asociado");
-        Asociado asociado = new Asociado("test","test","test", Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+        Asociado asociado = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
         asociadoDao.crea(asociado);
         assertNotNull(asociado);
 
