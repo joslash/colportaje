@@ -5,13 +5,11 @@
 package mx.edu.um.mateo.general.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Date;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Email;
+
 
 /**
  *
@@ -26,23 +24,30 @@ public class Colportor implements Serializable {
     private Long id;
     @Version
     private Integer version;
+  
+    @NotNull
+    @Column(nullable = false, length = 15)
+    private String tipoDeColportor;
+    @Column(length = 20)
+    private String matricula;
     @NotNull
     @Column(nullable = false, length = 2, name = "status")
     private String status;
     @NotNull
-    @Column(unique = true, nullable = false, length = 64)
+    @Column(unique = true, nullable = false, length = 65)
     private String clave;
-    @Column(length = 25)
-    private String telefono;
-    @NotNull
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false, name = "fecha")
+    private Date fechaDeNacimiento;
     @Column(length = 200)
     private String calle;
-    @NotNull
     @Column(length = 200)
     private String colonia;
-    @NotNull
     @Column(length = 200)
     private String municipio;
+    @Column(length = 15)
+    private String telefono;
+   
     /*
      * DE AQUI private Set<TipoColportor> tipoColportor = new
      * HashSet<TipoColportor>();      *
@@ -55,13 +60,25 @@ public class Colportor implements Serializable {
     public Colportor() {
     }
 
-    public Colportor(String status, String clave,String telefono, String calle, String colonia, String municipio) {
-            this.status = status;
-            this.clave = clave;
-            this.telefono = telefono;
-            this.calle = calle;
-            this.colonia = colonia;
-            this.municipio = municipio;
+    public Colportor(String tipoDeColportor,String matricula,String status, String clave, String calle, String colonia, String municipio,String telefono) {
+        this.tipoDeColportor=tipoDeColportor;
+        this.matricula=matricula;
+        this.status = status;
+        this.clave = clave;
+        this.fechaDeNacimiento = new Date();
+        this.calle = calle;
+        this.colonia = colonia;
+        this.municipio = municipio;
+        this.telefono = telefono;
+    
+    }
+
+    public String getCalle() {
+        return calle;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
     }
 
     public String getClave() {
@@ -72,6 +89,22 @@ public class Colportor implements Serializable {
         this.clave = clave;
     }
 
+    public String getColonia() {
+        return colonia;
+    }
+
+    public void setColonia(String colonia) {
+        this.colonia = colonia;
+    }
+
+    public Date getFechaDeNacimiento() {
+        return fechaDeNacimiento;
+    }
+
+    public void setFechaDeNacimiento(Date fechaDeNacimiento) {
+        this.fechaDeNacimiento = fechaDeNacimiento;
+    }
+
     public Long getId() {
         return id;
     }
@@ -79,6 +112,23 @@ public class Colportor implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -95,36 +145,20 @@ public class Colportor implements Serializable {
         this.telefono = telefono;
     }
 
+    public String getTipoDeColportor() {
+        return tipoDeColportor;
+    }
+
+    public void setTipoDeColportor(String tipoDeColportor) {
+        this.tipoDeColportor = tipoDeColportor;
+    }
+
     public Integer getVersion() {
         return version;
     }
 
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public String getCalle() {
-        return calle;
-    }
-
-    public void setCalle(String calle) {
-        this.calle = calle;
-    }
-
-    public String getColonia() {
-        return colonia;
-    }
-
-    public void setColonia(String colonia) {
-        this.colonia = colonia;
-    }
-
-    public String getMunicipio() {
-        return municipio;
-    }
-
-    public void setMunicipio(String municipio) {
-        this.municipio = municipio;
     }
 
     @Override
@@ -136,7 +170,28 @@ public class Colportor implements Serializable {
             return false;
         }
         final Colportor other = (Colportor) obj;
+        if (!Objects.equals(this.tipoDeColportor, other.tipoDeColportor)) {
+            return false;
+        }
+        if (!Objects.equals(this.matricula, other.matricula)) {
+            return false;
+        }
         if (!Objects.equals(this.status, other.status)) {
+            return false;
+        }
+        if (!Objects.equals(this.clave, other.clave)) {
+            return false;
+        }
+        if (!Objects.equals(this.calle, other.calle)) {
+            return false;
+        }
+        if (!Objects.equals(this.colonia, other.colonia)) {
+            return false;
+        }
+        if (!Objects.equals(this.municipio, other.municipio)) {
+            return false;
+        }
+        if (!Objects.equals(this.telefono, other.telefono)) {
             return false;
         }
         return true;
@@ -144,17 +199,26 @@ public class Colportor implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 5;
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.tipoDeColportor);
+        hash = 41 * hash + Objects.hashCode(this.matricula);
         hash = 41 * hash + Objects.hashCode(this.status);
+        hash = 41 * hash + Objects.hashCode(this.clave);
+        hash = 41 * hash + Objects.hashCode(this.calle);
+        hash = 41 * hash + Objects.hashCode(this.colonia);
+        hash = 41 * hash + Objects.hashCode(this.municipio);
+        hash = 41 * hash + Objects.hashCode(this.telefono);
         return hash;
     }
 
     @Override
     public String toString() {
-        return "Colportor{" + "status=" + status + ", clave=" + clave + ", telefono=" + telefono + ", calle=" + calle + ", colonia=" + colonia + ", municipio=" + municipio + '}';
+        return "Colportor{" + "tipoDeColportor=" + tipoDeColportor + ", matricula=" + matricula + ", status=" + status + ", clave=" + clave + ", calle=" + calle + ", colonia=" + colonia + ", municipio=" + municipio + ", telefono=" + telefono + '}';
     }
 
     
+
+   
     
     
 }

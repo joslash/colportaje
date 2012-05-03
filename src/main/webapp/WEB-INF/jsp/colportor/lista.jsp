@@ -20,7 +20,7 @@
         <h1><s:message code="colportor.lista.label" /></h1>
         <hr/>
 
-        <form name="filtraLista" class="form-search" method="post" action="<c:url value='/web/colportor' />">
+        <form name="filtraLista" class="form-search" method="post" action="<c:url value='/colportor' />">
             <input type="hidden" name="pagina" id="pagina" value="${pagina}" />
             <input type="hidden" name="tipo" id="tipo" value="" />
             <input type="hidden" name="correo" id="correo" value="" />
@@ -53,11 +53,21 @@
             <table id="lista" class="table">
                 <thead>
                     <tr>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                       
+                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="tipoDeColportor" />
+                        </jsp:include>
+                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="matricula" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >                            
                             <jsp:param name="columna" value="status" />
                         </jsp:include> 
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="clave" />
+                        </jsp:include>
+                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="fechaDeNacimiento" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="calle" />
@@ -76,8 +86,11 @@
                 <tbody>
                     <c:forEach items="${colportores}" var="colportor" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/colportor/ver/${colportor.id}' />">${colportor.status}</a></td>
+                            <td><a href="<c:url value='/colportor/ver/${colportor.id}' />">${colportor.tipoDeColportor}</a></td>
+                             <td>${colportor.matricula}</td>
+                            <td>${colportor.status}</td>
                             <td>${colportor.clave}</td>
+                             <td>${colportor.fechaDeNacimiento}</td>
                             <td>${colportor.calle}</td>
                             <td>${colportor.colonia}</td>
                             <td>${colportor.municipio}</td>

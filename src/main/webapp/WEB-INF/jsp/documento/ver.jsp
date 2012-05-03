@@ -40,15 +40,15 @@
                     <div class="span1"><s:message code="tipoDeDocumento.label" /></div>
                     <div class="span11">${documento.tipoDeDocumento}</div>
                 </div>
-
-                <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="folio.label" /></div>
-                    <div class="span11">${documento.folio}</div>
-                </div>
                 
                  <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="fecha.label" /></div>
                     <div class="span11">${documento.fecha}</div>
+                </div>
+
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="folio.label" /></div>
+                    <div class="span11">${documento.folio}</div>
                 </div>
                 
                  <div class="row-fluid" style="padding-bottom: 10px;">

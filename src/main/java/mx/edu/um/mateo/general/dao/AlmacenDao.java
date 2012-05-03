@@ -1,10 +1,13 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package mx.edu.um.mateo.general.dao;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
-import mx.edu.um.mateo.general.model.Colportor;
+import mx.edu.um.mateo.general.model.Almacen;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -19,21 +22,19 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 /**
  *
  * @author wilbert
  */
 @Repository
 @Transactional
-public class ColportorDao {
-
-    private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
+public class AlmacenDao {
+private static final Logger log = LoggerFactory.getLogger(AlmacenDao.class);
     @Autowired
     private SessionFactory sessionFactory;
 
-    public ColportorDao() {
-        log.info("Nueva instancia de ColportorDao");
+    public AlmacenDao() {
+        log.info("Nueva instancia de AlmacenDao");
     }
 
     private Session currentSession() {
@@ -41,7 +42,7 @@ public class ColportorDao {
     }
 
     public Map<String, Object> lista(Map<String, Object> params) {
-        log.debug("Buscando lista de colportor con params {}", params);
+        log.debug("Buscando lista de almacen con params {}", params);
         if (params == null) {
             params = new HashMap<>();
         }
@@ -61,15 +62,15 @@ public class ColportorDao {
         if (!params.containsKey(Constantes.CONTAINSKEY_OFFSET)) {
             params.put(Constantes.CONTAINSKEY_OFFSET, 0);
         }
-        Criteria criteria = currentSession().createCriteria(Colportor.class);
-        Criteria countCriteria = currentSession().createCriteria(Colportor.class);
+        Criteria criteria = currentSession().createCriteria(Almacen.class);
+        Criteria countCriteria = currentSession().createCriteria(Almacen.class);
 
         if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";
             Disjunction propiedades = Restrictions.disjunction();
-            propiedades.add(Restrictions.ilike("status", filtro));
             propiedades.add(Restrictions.ilike("clave", filtro));
+            propiedades.add(Restrictions.ilike("nombre", filtro));
             criteria.add(propiedades);
             countCriteria.add(propiedades);
         }
@@ -87,7 +88,7 @@ public class ColportorDao {
             criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
             criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
-        params.put(Constantes.CONTAINSKEY_COLPORTORES, criteria.list());
+        params.put(Constantes.CONTAINSKEY_ALMACENES, criteria.list());
 
         countCriteria.setProjection(Projections.rowCount());
         params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
@@ -95,41 +96,38 @@ public class ColportorDao {
         return params;
     }
 
-    public Colportor obtiene(Long id) {
-        log.debug("Obtiene colportor con id = {}", id);
-        Colportor colportor = (Colportor) currentSession().get(Colportor.class, id);
-        return colportor;
+    public Almacen obtiene(Long id) {
+        log.debug("Obtiene almacen con id = {}", id);
+        Almacen almacen = (Almacen) currentSession().get(Almacen.class, id);
+        return almacen;
     }
 
-    public Colportor crea(Colportor colportor) {
-        log.debug("Creando colportor : {}", colportor);
-        currentSession().save(colportor);
+    public Almacen crea(Almacen almacen) {
+        log.debug("Creando almacen : {}", almacen);
+        currentSession().save(almacen);
         currentSession().flush();
-        return colportor;
+        return almacen;
     }
 
-    public Colportor actualiza(Colportor colportor) {
-        log.debug("Actualizando colportor {}", colportor);
-
+    public Almacen actualiza(Almacen almacen) {
+        log.debug("Actualizando almacen {}", almacen);
+        
         //trae el objeto de la DB 
-        Colportor nuevo = (Colportor) currentSession().get(Colportor.class, colportor.getId());
+        Almacen nuevo = (Almacen)currentSession().get(Almacen.class, almacen.getId());
         //actualiza el objeto
-        BeanUtils.copyProperties(colportor, nuevo);
+        BeanUtils.copyProperties(almacen, nuevo);
         //lo guarda en la BD
-
         currentSession().update(nuevo);
         currentSession().flush();
         return nuevo;
     }
 
     public String elimina(Long id) throws UltimoException {
-        log.debug("Eliminando colportor con id {}", id);
-        Colportor colportor = obtiene(id);
-        Date fechaDeNacimiento = new Date();
-        colportor.setFechaDeNacimiento(fechaDeNacimiento);
-        currentSession().delete(colportor);
+        log.debug("Eliminando almacen con id {}", id);
+        Almacen almacen = obtiene(id);
+        currentSession().delete(almacen);
         currentSession().flush();
-        String nombre = colportor.getStatus();
-        return nombre;
+        String clave = almacen.getClave();
+        return clave;
     }
 }

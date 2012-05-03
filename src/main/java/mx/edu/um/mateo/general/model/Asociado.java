@@ -32,7 +32,7 @@ public  class Asociado  implements Serializable{
     @NotBlank
     @Column(nullable = false, length = 65 ,unique=true)
     private String clave;
-    @Column(length = 25)
+    @Column(length = 15)
     private String telefono;
     @NotNull
     @Column(nullable = false, length = 23, name ="status")

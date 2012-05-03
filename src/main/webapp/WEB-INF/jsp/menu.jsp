@@ -8,6 +8,7 @@
         <li<c:if test="${param.menu eq 'colportor'}"> class="active"</c:if>><a href="<c:url value='/colportor' />"><s:message code="colportor.label" /></a></li>
         <li<c:if test="${param.menu eq 'colegio'}"> class="active"</c:if>><a href="<c:url value='/colegio' />"><s:message code="colegio.label" /></a></li>
         <li<c:if test="${param.menu eq 'documento'}"> class="active"</c:if>><a href="<c:url value='/documento' />"><s:message code="documento.label" /></a></li>
+        <li<c:if test="${param.menu eq 'almacen'}"> class="active"</c:if>><a href="<c:url value='/almacen' />"><s:message code="almacen.label" /></a></li>
         <li<c:if test="${param.menu eq 'asociado'}"> class="active"</c:if>><a href="<c:url value='/asociado' />"><s:message code="asociado.label" /></a></li>
         <li<c:if test="${param.menu eq 'temporada'}"> class="active"</c:if>><a href="<c:url value='/temporada' />"><s:message code="temporada.label" /></a></li>
         <li<c:if test="${param.menu eq 'temporadaColportor'}"> class="active"</c:if>><a href="<c:url value='/temporadaColportor' />"><s:message code="temporadaColportor.label" /></a></li>

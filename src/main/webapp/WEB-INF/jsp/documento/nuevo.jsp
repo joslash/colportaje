@@ -50,6 +50,16 @@
                                 </form:select>
                         </div>
                     </s:bind>
+                         <s:bind path="documento.fecha">
+                        <div class="control-group <c:if test='${not empty folio.errorMessages}'>error</c:if>">
+                            <label for="fecha">
+                                <s:message code="fecha.label" />
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <form:input path="fecha" maxlength="10" required="true" />
+                            <form:errors path="fecha" cssClass="alert alert-error" />
+                        </div>
+                    </s:bind>
                         <s:bind path="documento.folio">
                         <div class="control-group <c:if test='${not empty folio.errorMessages}'>error</c:if>">
                             <label for="folio">
@@ -61,24 +71,13 @@
                         </div>
                     </s:bind>
                     
-                       <s:bind path="documento.fecha">
-                        <div class="control-group <c:if test='${not empty folio.errorMessages}'>error</c:if>">
-                            <label for="fecha">
-                                <s:message code="fecha.label" />
-                                <span class="required-indicator">*</span>
-                            </label>
-                            <form:input path="fecha" maxlength="10" required="true" />
-                            <form:errors path="fecha" cssClass="alert alert-error" />
-                        </div>
-                    </s:bind>
-                    
                       <s:bind path="documento.importe">
                         <div class="control-group <c:if test='${not empty folio.errorMessages}'>error</c:if>">
                             <label for="importe">
                                 <s:message code="importe.label" />
-                                
+                                  <span class="required-indicator">*</span>
                             </label>
-                            <form:input path="importe" maxlength="20" required="false" />
+                            <form:input path="importe" maxlength="20" required="true" />
                             <form:errors path="importe" cssClass="alert alert-error" />
                         </div>
                     </s:bind>
@@ -90,7 +89,7 @@
                                 <s:message code="observaciones.label" />
                               
                             </label>
-                            <form:textarea path="observaciones" maxlength="400" required="false" />
+                            <form:textarea path="observaciones" maxlength="100" />
                             <form:errors path="observaciones" cssClass="alert alert-error" />
                         </div>
                     </s:bind>

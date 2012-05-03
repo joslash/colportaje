@@ -7,8 +7,6 @@ package mx.edu.um.mateo.general.web;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
-import mx.edu.um.mateo.general.dao.ColportorDao;
-import mx.edu.um.mateo.general.model.Colportor;
+import mx.edu.um.mateo.general.dao.AlmacenDao;
+import mx.edu.um.mateo.general.dao.AsociacionDao;
+import mx.edu.um.mateo.general.dao.AsociadoDao;
+import mx.edu.um.mateo.general.model.Almacen;
+import mx.edu.um.mateo.general.model.Asociacion;
+import mx.edu.um.mateo.general.model.Asociado;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.Ambiente;
 import net.sf.jasperreports.engine.*;
@@ -47,32 +49,26 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 /**
  *
  * @author wilbert
  */
 @Controller
-@RequestMapping(Constantes.PATH_COLPORTOR)
-public class ColportorController {
+@RequestMapping(Constantes.PATH_ALMACEN)
+public class AlmacenController {
     
-    private static final Logger log = LoggerFactory.getLogger(ColportorController.class);
+    private static final Logger log = LoggerFactory.getLogger(AlmacenController.class);
     @Autowired
-    private ColportorDao ColportorDao;
+    private AlmacenDao AlmacenDao;
+    @Autowired
+    private AsociacionDao asociacionDao;
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
     private ResourceBundleMessageSource messageSource;
     @Autowired
     private Ambiente ambiente;
- /*DE AQUI   
-    @InitBinder
- public void initBinder(WebDataBinder binder) {
-   
-  binder.registerCustomEditor(TipoColportor.class,
-    new EnumEditor(TipoColportor.class));
- }
-    */
+    
     @RequestMapping
     public String lista(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(required = false) String filtro,
@@ -84,11 +80,11 @@ public class ColportorController {
             Usuario usuario,
             Errors errors,
             Model modelo) {
-        log.debug("Mostrando lista de colportores");
+        log.debug("Mostrando lista de almacenes");
         Map<String, Object> params = new HashMap<>();
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
-        }
+}
         if (pagina != null) {
             params.put(Constantes.CONTAINSKEY_PAGINA, pagina);
             modelo.addAttribute(Constantes.CONTAINSKEY_PAGINA, pagina);
@@ -103,9 +99,9 @@ public class ColportorController {
         
         if (StringUtils.isNotBlank(tipo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
-            params = ColportorDao.lista(params);
+            params = AlmacenDao.lista(params);
             try {
-                generaReporte(tipo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), response);
+                generaReporte(tipo, (List<Almacen>) params.get(Constantes.CONTAINSKEY_ALMACENES), response);
                 return null;
             } catch (JRException | IOException e) {
                 log.error("No se pudo generar el reporte", e);
@@ -116,19 +112,19 @@ public class ColportorController {
         
         if (StringUtils.isNotBlank(correo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
-            params = ColportorDao.lista(params);
+            params = AlmacenDao.lista(params);
             
             params.remove(Constantes.CONTAINSKEY_REPORTE);
             try {
-                enviaCorreo(correo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), request);
+                enviaCorreo(correo, (List<Almacen>) params.get(Constantes.CONTAINSKEY_ALMACENES), request);
                 modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
-                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
+                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("almacen.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
             } catch (JRException | MessagingException e) {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
-        params = ColportorDao.lista(params);
-        modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, params.get(Constantes.CONTAINSKEY_COLPORTORES));
+        params = AlmacenDao.lista(params);
+        modelo.addAttribute(Constantes.CONTAINSKEY_ALMACENES, params.get(Constantes.CONTAINSKEY_ALMACENES));
 
         // inicia paginado
         Long cantidad = (Long) params.get(Constantes.CONTAINSKEY_CANTIDAD);
@@ -139,167 +135,136 @@ public class ColportorController {
         do {
             paginas.add(i);
         } while (i++ < cantidadDePaginas);
-        List<Colportor> colportores = (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES);
+        List<Almacen> almacenes = (List<Almacen>) params.get(Constantes.CONTAINSKEY_ALMACENES);
         Long primero = ((pagina - 1) * max) + 1;
-        Long ultimo = primero + (colportores.size() - 1);
+        Long ultimo = primero + (almacenes.size() - 1);
         String[] paginacion = new String[]{primero.toString(), ultimo.toString(), cantidad.toString()};
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINACION, paginacion);
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
         // termina paginado
 
-        return Constantes.PATH_COLPORTOR_LISTA;
+        return Constantes.PATH_ALMACEN_LISTA;
     }
-         
+    
     @RequestMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
-        log.debug("Mostrando colportor {}", id);
-        Colportor colportores = ColportorDao.obtiene(id);
+        log.debug("Mostrando almacen {}", id);
+        Almacen almacenes = AlmacenDao.obtiene(id);
         
-        modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
+        modelo.addAttribute(Constantes.ADDATTRIBUTE_ALMACEN, almacenes);
         
-        return Constantes.PATH_COLPORTOR_VER;
+        return Constantes.PATH_ALMACEN_VER;
     }
     
     @RequestMapping("/nuevo")
     public String nuevo(Model modelo) {
-        log.debug("Nuevo colportor");
-        Colportor colportores = new Colportor();
-        modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
-        return Constantes.PATH_COLPORTOR_NUEVO;
+        log.debug("Nuevo almacen");
+        Almacen almacenes = new Almacen();
+        modelo.addAttribute(Constantes.ADDATTRIBUTE_ALMACEN, almacenes);
+        Map<String, Object> asociacion = asociacionDao.lista(null);
+        modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIACIONES, asociacion.get(Constantes.CONTAINSKEY_ASOCIACIONES));
+        return Constantes.PATH_ALMACEN_NUEVO;
     }
     
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
-    public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Colportor colportores, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
+    public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Almacen almacenes, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) {
         for (String nombre : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
         }
         if (bindingResult.hasErrors()) {
             log.debug("Hubo algun error en la forma, regresando");
-            return Constantes.PATH_COLPORTOR_NUEVO;
-        }
-        switch (colportores.getTipoDeColportor()) {
-            case "0":
-                colportores.setTipoDeColportor(Constantes.TIEMPO_COMPLETO);
-                break;
-                case "1":
-                colportores.setTipoDeColportor(Constantes.TIEMPO_PARCIAL);
-                break;
-            case "2":
-                colportores.setTipoDeColportor(Constantes.ESTUDIANTE);
-                break;
-          
-        }
-         
-        try {
-                SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
-            colportores.setFechaDeNacimiento(sdf.parse(request.getParameter("fechaDeNacimiento")));
-        }catch(ConstraintViolationException e) {
-            log.error("FechaDeNacimiento", e);
-            return Constantes.PATH_COLPORTOR_NUEVO;
+            return Constantes.PATH_ALMACEN_NUEVO;
         }
         
         try {
-            log.debug("Colportor FechaDeNacimiento"+colportores.getFechaDeNacimiento());
-            colportores = ColportorDao.crea(colportores);
+             Asociacion asociacion = asociacionDao.obtiene(almacenes.getAsociacion().getId());
+            log.info("asociacion>>>>>>>>>" + asociacion);
+           almacenes.setAsociacion(asociacion);
+            
+            almacenes = AlmacenDao.crea(almacenes);
         } catch (ConstraintViolationException e) {
-
-            log.error("No se pudo crear la colportor", e);
-
-            return Constantes.PATH_COLPORTOR_NUEVO;
+            log.error("No se pudo crear la almacen", e);
+            return Constantes.PATH_ALMACEN_NUEVO;
         }
         
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getColonia()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "almacen.creado.message");
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{almacenes.getNombre()});
         
-        return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
+        return "redirect:" + Constantes.PATH_ALMACEN_VER + "/" + almacenes.getId();
     }
     
     @RequestMapping("/edita/{id}")
     public String edita(@PathVariable Long id, Model modelo) {
-        log.debug("Editar colportor {}", id);
-        Colportor colportores = ColportorDao.obtiene(id);
-        modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
-        return Constantes.PATH_COLPORTOR_EDITA;
+        log.debug("Editar almacen {}", id);
+        Almacen almacenes = AlmacenDao.obtiene(id);
+        modelo.addAttribute(Constantes.ADDATTRIBUTE_ALMACEN, almacenes);
+        
+        Map<String, Object> asociacion = asociacionDao.lista(null);
+        modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIACIONES, asociacion.get(Constantes.CONTAINSKEY_ASOCIACIONES));
+        
+        
+        return Constantes.PATH_ALMACEN_EDITA;
     }
     
     @Transactional
     @RequestMapping(value = "/actualiza", method = RequestMethod.POST)
-    public String actualiza(HttpServletRequest request, @Valid Colportor colportores, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
+    public String actualiza(HttpServletRequest request, @Valid Almacen almacenes, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.error("Hubo algun error en la forma, regresando");
-            return Constantes.PATH_COLPORTOR_EDITA;
-        }
-            switch (colportores.getTipoDeColportor()) {
-            case "0":
-                colportores.setTipoDeColportor(Constantes.TIEMPO_COMPLETO);
-                break;
-                case "1":
-                colportores.setTipoDeColportor(Constantes.TIEMPO_PARCIAL);
-                break;
-            case "2":
-                colportores.setTipoDeColportor(Constantes.ESTUDIANTE);
-                break;
-          
+            return Constantes.PATH_ALMACEN_EDITA;
         }
         try {
-                SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
-            colportores.setFechaDeNacimiento(sdf.parse(request.getParameter("fechaDeNacimiento")));
-        }catch(ConstraintViolationException e) {
-            log.error("FechaDeNacimiento", e);
-            return Constantes.PATH_COLPORTOR_NUEVO;
-        }
-        
-        try {
-            log.debug("Colportor FechaDeNacimiento"+colportores.getFechaDeNacimiento());
-            colportores = ColportorDao.actualiza(colportores);
+               Asociacion asociacion = asociacionDao.obtiene(almacenes.getAsociacion().getId());
+            almacenes.setAsociacion(asociacion);
+            almacenes = AlmacenDao.actualiza(almacenes);
         } catch (ConstraintViolationException e) {
-            log.error("No se pudo crear la colportor", e);
-            return Constantes.PATH_COLPORTOR_NUEVO;
+            log.error("No se pudo actualizar el almacen", e);
+            return Constantes.PATH_ALMACEN_NUEVO;
         }
         
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.actualizado.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getColonia()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "almacen.actualizado.message");
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{almacenes.getNombre()});
         
-        return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
+        return "redirect:" + Constantes.PATH_ALMACEN_VER + "/" + almacenes.getId();
     }
     
     @Transactional
     @RequestMapping(value = "/elimina", method = RequestMethod.POST)
-    public String elimina(HttpServletRequest request, @RequestParam Long id, Model modelo, @ModelAttribute Colportor colportores, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        log.debug("Elimina colportor");
+    public String elimina(HttpServletRequest request, @RequestParam Long id, Model modelo, @ModelAttribute Almacen almacenes, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        log.debug("Elimina almacen");
         try {
-            String nombre = ColportorDao.elimina(id);
+            String nombre = AlmacenDao.elimina(id);
             
-            redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.eliminado.message");
+            redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "almacen.eliminado.message");
             redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{nombre});
         } catch (Exception e) {
-            log.error("No se pudo eliminar el colportor " + id, e);
-            bindingResult.addError(new ObjectError(Constantes.ADDATTRIBUTE_COLPORTOR, new String[]{"colportor.no.eliminado.message"}, null, null));
-            return Constantes.PATH_COLPORTOR_VER;
+            log.error("No se pudo eliminar el almacen " + id, e);
+            bindingResult.addError(new ObjectError(Constantes.ADDATTRIBUTE_ALMACEN, new String[]{"almacen.no.eliminado.message"}, null, null));
+            return Constantes.PATH_ALMACEN_VER;
         }
         
-        return "redirect:" + Constantes.PATH_COLPORTOR;
+        return "redirect:" + Constantes.PATH_ALMACEN;
     }
     
-    private void generaReporte(String tipo, List<Colportor> colportores, HttpServletResponse response) throws JRException, IOException {
+    private void generaReporte(String tipo, List<Almacen> almacenes, HttpServletResponse response) throws JRException, IOException {
         log.debug("Generando reporte {}", tipo);
         byte[] archivo = null;
         switch (tipo) {
             case "PDF":
-                archivo = generaPdf(colportores);
+                archivo = generaPdf(almacenes);
                 response.setContentType("application/pdf");
-                response.addHeader("Content-Disposition", "attachment; filename=Colportores.pdf");
+                response.addHeader("Content-Disposition", "attachment; filename=Almacenes.pdf");
                 break;
             case "CSV":
-                archivo = generaCsv(colportores);
+                archivo = generaCsv(almacenes);
                 response.setContentType("text/csv");
-                response.addHeader("Content-Disposition", "attachment; filename=Colportores.csv");
+                response.addHeader("Content-Disposition", "attachment; filename=Almacenes.csv");
                 break;
             case "XLS":
-                archivo = generaXls(colportores);
+                archivo = generaXls(almacenes);
                 response.setContentType("application/vnd.ms-excel");
-                response.addHeader("Content-Disposition", "attachment; filename=Colportores.xls");
+                response.addHeader("Content-Disposition", "attachment; filename=Almacenes.xls");
         }
         if (archivo != null) {
             response.setContentLength(archivo.length);
@@ -311,51 +276,51 @@ public class ColportorController {
         
     }
     
-    private void enviaCorreo(String tipo, List<Colportor> colportores, HttpServletRequest request) throws JRException, MessagingException {
+    private void enviaCorreo(String tipo, List<Almacen> almacenes, HttpServletRequest request) throws JRException, MessagingException {
         log.debug("Enviando correo {}", tipo);
         byte[] archivo = null;
         String tipoContenido = null;
         switch (tipo) {
             case "PDF":
-                archivo = generaPdf(colportores);
+                archivo = generaPdf(almacenes);
                 tipoContenido = "application/pdf";
                 break;
             case "CSV":
-                archivo = generaCsv(colportores);
+                archivo = generaCsv(almacenes);
                 tipoContenido = "text/csv";
                 break;
             case "XLS":
-                archivo = generaXls(colportores);
+                archivo = generaXls(almacenes);
                 tipoContenido = "application/vnd.ms-excel";
         }
         
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(ambiente.obtieneUsuario().getUsername());
-        String titulo = messageSource.getMessage("colportor.lista.label", null, request.getLocale());
+        String titulo = messageSource.getMessage("almacen.lista.label", null, request.getLocale());
         helper.setSubject(messageSource.getMessage("envia.correo.titulo.message", new String[]{titulo}, request.getLocale()));
         helper.setText(messageSource.getMessage("envia.correo.contenido.message", new String[]{titulo}, request.getLocale()), true);
         helper.addAttachment(titulo + "." + tipo, new ByteArrayDataSource(archivo, tipoContenido));
         mailSender.send(message);
     }
     
-    private byte[] generaPdf(List colportores) throws JRException {
+    private byte[] generaPdf(List almacenes) throws JRException {
         Map<String, Object> params = new HashMap<>();
-        JasperDesign jd = JRXmlLoader.load(this.getClass().getResourceAsStream("/mx/edu/um/mateo/general/reportes/colportores.jrxml"));
+        JasperDesign jd = JRXmlLoader.load(this.getClass().getResourceAsStream("/mx/edu/um/mateo/general/reportes/almacenes.jrxml"));
         JasperReport jasperReport = JasperCompileManager.compileReport(jd);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(colportores));
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(almacenes));
         byte[] archivo = JasperExportManager.exportReportToPdf(jasperPrint);
         
         return archivo;
     }
     
-    private byte[] generaCsv(List colportores) throws JRException {
+    private byte[] generaCsv(List almacenes) throws JRException {
         Map<String, Object> params = new HashMap<>();
         JRCsvExporter exporter = new JRCsvExporter();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        JasperDesign jd = JRXmlLoader.load(this.getClass().getResourceAsStream("/mx/edu/um/mateo/general/reportes/colportores.jrxml"));
+        JasperDesign jd = JRXmlLoader.load(this.getClass().getResourceAsStream("/mx/edu/um/mateo/general/reportes/almacenes.jrxml"));
         JasperReport jasperReport = JasperCompileManager.compileReport(jd);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(colportores));
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(almacenes));
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
         exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, byteArrayOutputStream);
         exporter.exportReport();
@@ -364,13 +329,13 @@ public class ColportorController {
         return archivo;
     }
     
-    private byte[] generaXls(List colportores) throws JRException {
+    private byte[] generaXls(List almacenes) throws JRException {
         Map<String, Object> params = new HashMap<>();
         JRXlsExporter exporter = new JRXlsExporter();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        JasperDesign jd = JRXmlLoader.load(this.getClass().getResourceAsStream("/mx/edu/um/mateo/general/reportes/colportores.jrxml"));
+        JasperDesign jd = JRXmlLoader.load(this.getClass().getResourceAsStream("/mx/edu/um/mateo/general/reportes/almacenes.jrxml"));
         JasperReport jasperReport = JasperCompileManager.compileReport(jd);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(colportores));
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(almacenes));
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
         exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, byteArrayOutputStream);
         exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);

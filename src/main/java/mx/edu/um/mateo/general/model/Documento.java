@@ -31,6 +31,7 @@ public class Documento implements Serializable{
     @Temporal(TemporalType.DATE)
     @Column(nullable = false, name = "fecha")
     private Date fecha;
+    @NotNull
     @Column(length = 20)
     private BigDecimal importe;
     @Column(length = 100)

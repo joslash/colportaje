@@ -46,12 +46,12 @@ public class ColegioDaoTest extends BaseTest {
      */
     @Test
     public void deberiaMostrarListaDeColegio() {
-        log.debug("Debiera mostrar lista de union");
+        log.debug("Debiera mostrar lista de colegio");
 
         for (int i = 0; i < 20; i++) {
-            Colegio union = new Colegio(Constantes.NOMBRE+i, Constantes.STATUS_ACTIVO);
-            currentSession().save(union);
-            assertNotNull(union);
+            Colegio colegio = new Colegio(Constantes.NOMBRE+i, Constantes.STATUS_ACTIVO);
+            currentSession().save(colegio);
+            assertNotNull(colegio);
         }
 
         Map<String, Object> params = null;
@@ -64,50 +64,50 @@ public class ColegioDaoTest extends BaseTest {
     }
      @Test
     public void debieraObtenerColegio() {
-        log.debug("Debiera obtener union");
+        log.debug("Debiera obtener colegio");
 
         String nombre = "test";
-        Colegio union = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
-        currentSession().save(union);
-        assertNotNull(union.getId());
-        Long id = union.getId();
+        Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
+        assertNotNull(colegio.getId());
+        Long id = colegio.getId();
 
         Colegio result = instance.obtiene(id);
         assertNotNull(result);
         assertEquals(nombre, result.getNombre());
 
-        assertEquals(result, union);
+        assertEquals(result, colegio);
     }
      @Test
     public void deberiaCrearColegio() {
         log.debug("Deberia crear Colegio");
 
-        Colegio union = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
-        assertNotNull(union);
+        Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
+        assertNotNull(colegio);
 
-        Colegio union2 = instance.crea(union);
-        assertNotNull(union2);
-        assertNotNull(union2.getId());
+        Colegio colegio2 = instance.crea(colegio);
+        assertNotNull(colegio2);
+        assertNotNull(colegio2.getId());
 
-        assertEquals(union, union2);
+        assertEquals(colegio, colegio2);
     }
 
     @Test
     public void deberiaActualizarColegio() {
         log.debug("Deberia actualizar Colegio");
 
-        Colegio union = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
-        assertNotNull(union);
-        currentSession().save(union);
+        Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
+        assertNotNull(colegio);
+        currentSession().save(colegio);
 
         String nombre = "test1";
-        union.setNombre(nombre);
+        colegio.setNombre(nombre);
 
-        Colegio union2 = instance.actualiza(union);
-        assertNotNull(union2);
-        assertEquals(nombre, union.getNombre());
+        Colegio colegio2 = instance.actualiza(colegio);
+        assertNotNull(colegio2);
+        assertEquals(nombre, colegio.getNombre());
 
-        assertEquals(union, union2);
+        assertEquals(colegio, colegio2);
     }
 
     @Test
@@ -115,14 +115,14 @@ public class ColegioDaoTest extends BaseTest {
         log.debug("Debiera eliminar Colegio");
 
         String nom = "test";
-        Colegio union = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
-        currentSession().save(union);
-        assertNotNull(union);
+        Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
+        assertNotNull(colegio);
 
-        String nombre = instance.elimina(union.getId());
+        String nombre = instance.elimina(colegio.getId());
         assertEquals(nom, nombre);
 
-        Colegio prueba = instance.obtiene(union.getId());
+        Colegio prueba = instance.obtiene(colegio.getId());
         assertNull(prueba);
     }
     

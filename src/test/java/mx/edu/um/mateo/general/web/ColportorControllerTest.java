@@ -66,7 +66,7 @@ public class ColportorControllerTest {
         log.debug("Debiera monstrar lista de colportores");
         
         for (int i = 0; i < 20; i++) {
-            Colportor colportor = new Colportor( Constantes.STATUS_ACTIVO,Constantes.CLAVE+i,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
+            Colportor colportor = new Colportor(Constantes.TIPO_COLPORTOR,Constantes.MATRICULA, Constantes.STATUS_ACTIVO,Constantes.CLAVE+i,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
             colportorDao.crea(colportor);
             assertNotNull(colportor);
         }
@@ -83,7 +83,7 @@ public class ColportorControllerTest {
    @Test
     public void debieraMostrarColportor() throws Exception {
         log.debug("Debiera mostrar colportor");
-        Colportor colportor = new Colportor( Constantes.STATUS_ACTIVO,Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
+        Colportor colportor = new Colportor(Constantes.TIPO_COLPORTOR,Constantes.MATRICULA, Constantes.STATUS_ACTIVO,Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         colportor = colportorDao.crea(colportor);
         assertNotNull(colportor);
 
@@ -99,13 +99,15 @@ public class ColportorControllerTest {
         log.debug("Debiera crear colportor");
 
         this.mockMvc.perform(post(Constantes.PATH_COLPORTOR_CREA)
+                .param("tipoDeColportor", Constantes.TIPO_COLPORTOR)
+                .param("matricula",Constantes.MATRICULA)
                 .param("status", Constantes.STATUS_ACTIVO)
                 .param("clave",Constantes.CLAVE)
-                .param("correo",Constantes.CORREO)
-                .param("telefono",Constantes.TELEFONO)
+                .param("fechaDeNacimiento", "05/05/2010")
                 .param("calle",Constantes.CALLE)
                 .param("colonia",Constantes.COLONIA)
-                .param("municipio",Constantes.MUNICIPIO))
+                .param("municipio",Constantes.MUNICIPIO)
+                .param("telefono",Constantes.TELEFONO))
                 .andExpect(status().isOk())
                 .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
                 .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message"));
@@ -116,19 +118,22 @@ public class ColportorControllerTest {
     @Test
     public void debieraActualizarColportor() throws Exception {
         log.debug("Debiera actualizar colportor");
-        Colportor colportor = new Colportor(Constantes.STATUS_ACTIVO,Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
+        Colportor colportor = new Colportor(Constantes.TIPO_COLPORTOR,Constantes.MATRICULA,Constantes.STATUS_ACTIVO,Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         colportor = colportorDao.crea(colportor);
         assertNotNull(colportor);
 
         this.mockMvc.perform(post(Constantes.PATH_COLPORTOR_ACTUALIZA)
                 .param("id",colportor.getId().toString())
                 .param("version", colportor.getVersion().toString())
+                .param("tipoDeColportor", colportor.getTipoDeColportor())
+                .param("matricula",colportor.getMatricula())
                 .param("status", colportor.getStatus())
                 .param("clave", colportor.getClave())
-                .param("telefono", colportor.getTelefono())
+                .param("fechaDeNacimiento", "05/05/2010")
                 .param("calle",colportor.getCalle())
                 .param("colonia",colportor.getColonia())
-                .param("municipio",colportor.getMunicipio()))
+                .param("municipio",colportor.getMunicipio())
+                .param("telefono", colportor.getTelefono()))
                 .andExpect(status().isOk())
                 .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
                 .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.actualizado.message"));
@@ -139,7 +144,7 @@ public class ColportorControllerTest {
     @Test
     public void debieraEliminarColportor() throws Exception {
         log.debug("Debiera eliminar colportor");
-        Colportor colportor = new Colportor(Constantes.STATUS_ACTIVO,Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
+        Colportor colportor = new Colportor(Constantes.TIPO_COLPORTOR,Constantes.MATRICULA,Constantes.STATUS_ACTIVO,Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         colportorDao.crea(colportor);
         assertNotNull(colportor);
 

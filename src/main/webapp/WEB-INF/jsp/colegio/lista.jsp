@@ -20,7 +20,7 @@
         <h1><s:message code="colegio.lista.label" /></h1>
         <hr/>
 
-        <form name="filtraLista" class="form-search" method="post" action="<c:url value='/web/colegio' />">
+        <form name="filtraLista" class="form-search" method="post" action="<c:url value='/colegio' />">
             <input type="hidden" name="pagina" id="pagina" value="${pagina}" />
             <input type="hidden" name="tipo" id="tipo" value="" />
             <input type="hidden" name="correo" id="correo" value="" />

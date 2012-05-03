@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Colportor;
-import mx.edu.um.mateo.general.test.BaseTest;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -49,7 +48,7 @@ public class ColportorDaoTest {
         log.debug("Debiera mostrar lista de colportor");
 
         for (int i = 0; i < 20; i++) {
-            Colportor colportor = new Colportor( Constantes.STATUS_ACTIVO, Constantes.CLAVE+i,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
+            Colportor colportor = new Colportor(Constantes.TIPO_COLPORTOR,Constantes.MATRICULA,Constantes.STATUS_ACTIVO, Constantes.CLAVE+i,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
             currentSession().save(colportor);
             assertNotNull(colportor);
         }
@@ -67,8 +66,9 @@ public class ColportorDaoTest {
     public void debieraObtenerColportor() {
         log.debug("Debiera obtener colportor");
 
+
         String colonia = Constantes.COLONIA;
-        Colportor colportor = new Colportor( Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
+        Colportor colportor = new Colportor(Constantes.TIPO_COLPORTOR,Constantes.MATRICULA,Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         currentSession().save(colportor);
         assertNotNull(colportor.getId());
         Long id = colportor.getId();
@@ -84,7 +84,7 @@ public class ColportorDaoTest {
     public void deberiaCrearColportor() {
         log.debug("Deberia crear Colportor");
 
-        Colportor colportor = new Colportor(Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
+        Colportor colportor = new Colportor(Constantes.TIPO_COLPORTOR,Constantes.MATRICULA,Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         assertNotNull(colportor);
 
         Colportor colportor2 = instance.crea(colportor);
@@ -98,7 +98,7 @@ public class ColportorDaoTest {
     public void deberiaActualizarColportor() {
         log.debug("Deberia actualizar Colportor");
 
-        Colportor colportor = new Colportor(Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
+        Colportor colportor = new Colportor(Constantes.TIPO_COLPORTOR,Constantes.MATRICULA,Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         assertNotNull(colportor);
         currentSession().save(colportor);
 
@@ -115,9 +115,8 @@ public class ColportorDaoTest {
     @Test
     public void deberiaEliminarColportor() throws UltimoException {
         log.debug("Debiera eliminar Colportor");
-
         String nom = Constantes.STATUS_ACTIVO;
-        Colportor colportor = new Colportor(Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
+        Colportor colportor = new Colportor(Constantes.TIPO_COLPORTOR,Constantes.MATRICULA,Constantes.STATUS_ACTIVO, Constantes.CLAVE,Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,Constantes.MUNICIPIO);
         currentSession().save(colportor);
         assertNotNull(colportor);
 

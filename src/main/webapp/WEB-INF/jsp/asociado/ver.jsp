@@ -34,19 +34,15 @@
             <c:url var="eliminaUrl" value="/asociado/elimina" />
             <form:form commandName="asociado" action="${eliminaUrl}" >
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />
-
+                 <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="status.label" /></div>
+                    <div class="span11">${asociado.status}</div>
+                </div>
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="clave.label" /></div>
                     <div class="span11">${asociado.clave}</div>
                 </div>
-                <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="telefono.label" /></div>
-                    <div class="span11">${asociado.telefono}</div>
-                </div>
-                <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="status.label" /></div>
-                    <div class="span11">${asociado.status}</div>
-                </div>
+                          
                 <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="calle.label" /></div>
                     <div class="span11">${asociado.calle}</div>
@@ -59,7 +55,10 @@
                     <div class="span1"><s:message code="municipio.label" /></div>
                     <div class="span11">${asociado.municipio}</div>
                 </div>
-              
+                   <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="telefono.label" /></div>
+                    <div class="span11">${asociado.telefono}</div>
+                </div>
 
                 <p class="well">
                     <a href="<c:url value='/asociado/edita/${asociado.id}' />" class="btn btn-primary"><i class="icon-edit icon-white"></i> <s:message code="editar.button" /></a>
