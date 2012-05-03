@@ -13,5 +13,6 @@
         <li<c:if test="${param.menu eq 'temporadaColportor'}"> class="active"</c:if>><a href="<c:url value='/temporadaColportor' />"><s:message code="temporadaColportor.label" /></a></li>
         <li<c:if test="${param.menu eq 'pais'}"> class="active"</c:if>><a href="<c:url value='/pais' />"><s:message code="pais.label" /></a></li>
         <li<c:if test="${param.menu eq 'estado'}"> class="active"</c:if>><a href="<c:url value='/estado' />"><s:message code="estado.label" /></a></li>
+        <li<c:if test="${param.menu eq 'ciudad'}"> class="active"</c:if>><a href="<c:url value='/ciudad' />"><s:message code="ciudad.label" /></a></li>
     </ul>
 </nav>

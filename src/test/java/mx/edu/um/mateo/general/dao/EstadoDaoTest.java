@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Estado;
+import mx.edu.um.mateo.general.model.Pais;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -65,8 +66,11 @@ public class EstadoDaoTest {
     @Test
     public void deberiaMostrarListaDeEstado() {
         log.debug("Debiera mostrar lista de Estados");
+        Pais pais = new Pais (Constantes.NOMBRE);
+        currentSession().save(pais);
         for (int i = 0; i < 20; i++) {
             Estado estado = new Estado(Constantes.NOMBRE + i);
+            estado.setPais(pais);
             currentSession().save(estado);
             assertNotNull(estado);
         }
@@ -85,7 +89,10 @@ public class EstadoDaoTest {
     public void debieraObtenerEstado() {
         log.debug("Debiera obtener Estados");
         String nombre = "test";
+        Pais pais = new Pais (Constantes.NOMBRE);
+        currentSession().save(pais);
         Estado estado = new Estado(Constantes.NOMBRE);
+        estado.setPais(pais);
         currentSession().save(estado);
         assertNotNull(estado.getId());
         Long id = estado.getId();
@@ -101,7 +108,10 @@ public class EstadoDaoTest {
     @Test
     public void deberiaCrearEstado() {
         log.debug("Deberia crear Estado");
+        Pais pais = new Pais (Constantes.NOMBRE);
+        currentSession().save(pais);
         Estado estado = new Estado(Constantes.NOMBRE);
+        estado.setPais(pais);
         assertNotNull(estado);
         Estado estado2 = instance.crea(estado);
         assertNotNull(estado2);
@@ -115,7 +125,10 @@ public class EstadoDaoTest {
     @Test
     public void deberiaActualizarEstado() {
         log.debug("Deberia actualizar Estados");
+        Pais pais = new Pais (Constantes.NOMBRE);
+        currentSession().save(pais);
         Estado estado = new Estado("test");
+        estado.setPais(pais);
         assertNotNull(estado);
         currentSession().save(estado);
         String nombre = "test1";
@@ -133,7 +146,10 @@ public class EstadoDaoTest {
     public void deberiaEliminarEstado() throws UltimoException {
         log.debug("Debiera eliminar Estado");
         String nom = "test";
+        Pais pais = new Pais (Constantes.NOMBRE);
+        currentSession().save(pais);
         Estado estado = new Estado(Constantes.NOMBRE);
+        estado.setPais(pais);
         currentSession().save(estado);
         assertNotNull(estado);
         String nombre = instance.elimina(estado.getId());

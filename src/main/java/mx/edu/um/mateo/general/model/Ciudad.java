@@ -5,8 +5,6 @@
 package mx.edu.um.mateo.general.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 import org.hibernate.validator.constraints.NotBlank;
@@ -16,8 +14,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author gibrandemetrioo
  */
 @Entity
-@Table(name = "estados")
-public class Estado implements Serializable {
+@Table(name = "ciudades")
+public class Ciudad implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,17 +24,11 @@ public class Estado implements Serializable {
     @NotBlank
     @Column(length= 128)
     private String nombre;
-    @ManyToOne
-    private Pais pais;
     
-    
-    public Estado (){
+    public Ciudad (){
         
     }
-    public Estado (Pais pais){
-        this.pais = pais;
-    }
-    public Estado (String nombre){
+    public Ciudad (String nombre){
         this.nombre = nombre;
     }
 
@@ -64,14 +56,6 @@ public class Estado implements Serializable {
         this.version = version;
     }
 
-    public Pais getPais() {
-        return pais;
-    }
-
-    public void setPais(Pais pais) {
-        this.pais = pais;
-    }
-    
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -80,7 +64,7 @@ public class Estado implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Estado other = (Estado) obj;
+        final Ciudad other = (Ciudad) obj;
         if (!Objects.equals(this.nombre, other.nombre)) {
             return false;
         }
@@ -90,14 +74,13 @@ public class Estado implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 19 * hash + Objects.hashCode(this.nombre);
+        hash = 73 * hash + Objects.hashCode(this.nombre);
         return hash;
     }
 
     @Override
     public String toString() {
-        return "Estado{" + "nombre=" + nombre + '}';
+        return "Ciudad{" + "nombre=" + nombre + '}';
     }
-    
     
 }

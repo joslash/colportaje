@@ -9,24 +9,24 @@
 <%@taglib prefix="s" uri="http://www.springframework.org/tags" %><!DOCTYPE html>
 <html>
     <head>
-        <title><s:message code="estado.lista.label" /></title>
+        <title><s:message code="ciudad.lista.label" /></title>
     </head>
     <body>
         <jsp:include page="../menu.jsp" >
-            <jsp:param name="menu" value="estado" />
+            <jsp:param name="menu" value="ciudad" />
         </jsp:include>
 
-        <h1><s:message code="estado.lista.label" /></h1>
+        <h1><s:message code="ciudad.lista.label" /></h1>
         <hr/>
 
-        <form name="filtraLista" class="form-search" method="post" action="<c:url value='/estado' />">
+        <form name="filtraLista" class="form-search" method="post" action="<c:url value='/ciudad' />">
             <input type="hidden" name="pagina" id="pagina" value="${pagina}" />
             <input type="hidden" name="tipo" id="tipo" value="" />
             <input type="hidden" name="correo" id="correo" value="" />
             <input type="hidden" name="order" id="order" value="${param.order}" />
             <input type="hidden" name="sort" id="sort" value="${param.sort}" />
             <p class="well">
-                <a class="btn btn-primary" href="<s:url value='/estado/nueva'/>"><i class="icon-user icon-white"></i> <s:message code='estado.nueva.label' /></a>
+                <a class="btn btn-primary" href="<s:url value='/ciudad/nueva'/>"><i class="icon-user icon-white"></i> <s:message code='ciudad.nueva.label' /></a>
                 <input name="filtro" type="text" class="input-medium search-query" value="${param.filtro}">
                 <button type="submit" class="btn"><s:message code="buscar.label" /></button>
             </p>
@@ -36,8 +36,8 @@
                     <s:message code="${message}" arguments="${messageAttrs}" />
                 </div>
             </c:if>
-            <c:if test="${estado != null}">
-                <s:bind path="estado.*">
+            <c:if test="${ciudad != null}">
+                <s:bind path="ciudad.*">
                     <c:if test="${not empty status.errorMessages}">
                     <div class="alert alert-block alert-error fade in" role="status">
                         <a class="close" data-dismiss="alert">×</a>
@@ -52,18 +52,14 @@
                 <thead>
                     <tr>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="pais" />
-                        </jsp:include>
-                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="estado" />
+                            <jsp:param name="columna" value="nombre" />
                         </jsp:include>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="${estados}" var="estado" varStatus="status">
+                    <c:forEach items="${ciudades}" var="ciudad" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/estado/ver/${estado.id}' />">${estado.pais.nombre}</a></td>
-                            <td>${estado.nombre}</td>
+                            <td><a href="<c:url value='/ciudad/ver/${ciudad.id}' />">${ciudad.nombre}</a></td>
                         </tr>
                     </c:forEach>
                 </tbody>

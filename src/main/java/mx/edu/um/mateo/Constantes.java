@@ -115,6 +115,7 @@ public class Constantes {
     public static final String CONTAINSKEY_TEMPORADACOLPORTORES = "temporadaColportores";
     public static final String CONTAINSKEY_PAISES = "paises";
     public static final String CONTAINSKEY_ESTADOS = "estados";
+    public static final String CONTAINSKEY_CIUDADES = "ciudades";
     /**
      * Valores para el los addAttribute para las clases
      */
@@ -128,6 +129,7 @@ public class Constantes {
     public static final String ADDATTRIBUTE_TEMPORADACOLPORTOR = "temporadaColportor";
     public static final String ADDATTRIBUTE_PAIS = "pais";
     public static final String ADDATTRIBUTE_ESTADO = "estado";
+    public static final String ADDATTRIBUTE_CIUDAD = "ciudad";
     /**
      * Valores para el los path's para las clases
      */
@@ -211,4 +213,12 @@ public class Constantes {
     public static final String PATH_ESTADO_CREA = "/estado/crea";
     public static final String PATH_ESTADO_ACTUALIZA = "/estado/actualiza";
     public static final String PATH_ESTADO_ELIMINA = "/estado/elimina";
+    public static final String PATH_CIUDAD = "/ciudad";
+    public static final String PATH_CIUDAD_LISTA = "ciudad/lista";
+    public static final String PATH_CIUDAD_VER = "/ciudad/ver";
+    public static final String PATH_CIUDAD_NUEVA = "/ciudad/nueva";
+    public static final String PATH_CIUDAD_EDITA = "/ciudad/edita";
+    public static final String PATH_CIUDAD_CREA = "/ciudad/crea";
+    public static final String PATH_CIUDAD_ACTUALIZA = "/ciudad/actualiza";
+    public static final String PATH_CIUDAD_ELIMINA = "/ciudad/elimina";
 }
