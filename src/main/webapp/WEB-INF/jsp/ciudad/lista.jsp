@@ -52,14 +52,22 @@
                 <thead>
                     <tr>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="nombre" />
+                            <jsp:param name="columna" value="pais" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="estado" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="ciudad" />
                         </jsp:include>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach items="${ciudades}" var="ciudad" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/ciudad/ver/${ciudad.id}' />">${ciudad.nombre}</a></td>
+                            <td><a href="<c:url value='/ciudad/ver/${ciudad.id}' />">${ciudad.estado.getPais().getNombre()}</a></td>
+                            <td>${ciudad.nombre}</td>
+                            <td>${ciudad.estado.nombre}</td>
                         </tr>
                     </c:forEach>
                 </tbody>

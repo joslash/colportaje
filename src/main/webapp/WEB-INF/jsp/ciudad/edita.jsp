@@ -36,10 +36,19 @@
                 <form:hidden path="id" />
                 <form:hidden path="version" />
                 <fieldset>
+                    <s:bind path="ciudad.estado">
+                        <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
+                                <label for="estado">
+                                <s:message code="estado.label" />
+                                <span class="required-indicator">*</span>
+                                <form:select id="estadoId" path="estado.id" items="${paises}" itemLabel="nombre" itemValue="id" />
+                                <form:errors path="estado" cssClass="alert alert-error" />
+                        </div>
+                    </s:bind>
                     <s:bind path="ciudad.nombre">
                         <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
                             <label for="nombre">
-                                <s:message code="nombre.label" />
+                                <s:message code="ciudad.label" />
                                 <span class="required-indicator">*</span>
                             </label>
                             <form:input path="nombre" maxlength="128" required="true" />

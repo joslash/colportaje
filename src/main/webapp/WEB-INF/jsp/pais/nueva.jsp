@@ -38,7 +38,7 @@
                     <s:bind path="pais.nombre">
                         <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
                                 <label for="nombre">
-                                <s:message code="nombre.label" />
+                                <s:message code="pais.label" />
                                 <span class="required-indicator">*</span>
                             </label>
                             <form:input path="nombre" maxlength="128" required="true" />

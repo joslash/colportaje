@@ -21,8 +21,10 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.CiudadDao;
+import mx.edu.um.mateo.general.dao.EstadoDao;
 import mx.edu.um.mateo.general.dao.UsuarioDao;
 import mx.edu.um.mateo.general.model.Ciudad;
+import mx.edu.um.mateo.general.model.Estado;
 import mx.edu.um.mateo.general.utils.Ambiente;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -57,6 +59,8 @@ public class CiudadController {
     private static final Logger log = (Logger) LoggerFactory.getLogger(CiudadController.class);
     @Autowired
     private CiudadDao ciudadDao;
+    @Autowired
+    private EstadoDao estadoDao;
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
@@ -144,6 +148,9 @@ public class CiudadController {
     public String nueva(Model modelo) {
         log.debug("Nueva Ciudad");
         Ciudad ciudad = new Ciudad();
+        
+        Map<String, Object> estados = estadoDao.lista(null);
+        modelo.addAttribute(Constantes.CONTAINSKEY_ESTADOS, estados.get(Constantes.CONTAINSKEY_ESTADOS));
         modelo.addAttribute(Constantes.ADDATTRIBUTE_CIUDAD, ciudad);
         return Constantes.PATH_CIUDAD_NUEVA;
     }
@@ -158,6 +165,8 @@ public class CiudadController {
             return Constantes.PATH_CIUDAD_NUEVA;
         }
         try {
+            Estado estado = estadoDao.obtiene(ciudad.getEstado().getId());
+            ciudad.setEstado(estado);
             ciudad = ciudadDao.crea(ciudad);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear el Ciudad", e);
@@ -170,6 +179,8 @@ public class CiudadController {
     @RequestMapping("/edita/{id}")
     public String edita(@PathVariable Long id, Model modelo) {
         log.debug("Edita Ciudad {}", id);
+        Map<String, Object> estados = estadoDao.lista(null);
+        modelo.addAttribute(Constantes.CONTAINSKEY_ESTADOS, estados.get(Constantes.CONTAINSKEY_ESTADOS));
         Ciudad ciudad = ciudadDao.obtiene(id);
         modelo.addAttribute(Constantes.ADDATTRIBUTE_CIUDAD, ciudad);
         return Constantes.PATH_CIUDAD_EDITA;
@@ -182,6 +193,8 @@ public class CiudadController {
             return Constantes.PATH_CIUDAD_EDITA;
         }
         try {
+            Estado estado = estadoDao.obtiene(ciudad.getEstado().getId());
+            ciudad.setEstado(estado);
             ciudad = ciudadDao.actualiza(ciudad);
         } catch (org.hibernate.exception.ConstraintViolationException e) {
             log.error("No se pudo crear el Ciudad", e);

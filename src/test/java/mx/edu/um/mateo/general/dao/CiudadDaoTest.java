@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Ciudad;
+import mx.edu.um.mateo.general.model.Estado;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -62,8 +63,11 @@ public class CiudadDaoTest {
     @Test
     public void deberiaMostrarListaDeCiudad() {
         log.debug("Debiera mostrar lista de Ciudads");
+        Estado estado = new Estado (Constantes.NOMBRE);
+        currentSession().save(estado);
         for (int i = 0; i < 20; i++) {
             Ciudad ciudad = new Ciudad(Constantes.NOMBRE + i);
+            ciudad.setEstado(estado);
             currentSession().save(ciudad);
             assertNotNull(ciudad);
         }
@@ -81,8 +85,11 @@ public class CiudadDaoTest {
     @Test
     public void debieraObtenerCiudad() {
         log.debug("Debiera obtener Ciudads");
+        Estado estado = new Estado (Constantes.NOMBRE);
+        currentSession().save(estado);
         String nombre = "test";
         Ciudad ciudad = new Ciudad(Constantes.NOMBRE);
+        ciudad.setEstado(estado);
         currentSession().save(ciudad);
         assertNotNull(ciudad.getId());
         Long id = ciudad.getId();
@@ -98,7 +105,10 @@ public class CiudadDaoTest {
     @Test
     public void deberiaCrearCiudad() {
         log.debug("Deberia crear Ciudad");
+        Estado estado = new Estado (Constantes.NOMBRE);
+        currentSession().save(estado);
         Ciudad ciudad = new Ciudad(Constantes.NOMBRE);
+        ciudad.setEstado(estado);
         assertNotNull(ciudad);
         Ciudad ciudad2 = instance.crea(ciudad);
         assertNotNull(ciudad2);
@@ -112,8 +122,11 @@ public class CiudadDaoTest {
     @Test
     public void deberiaActualizarCiudad() {
         log.debug("Deberia actualizar Ciudads");
+        Estado estado = new Estado (Constantes.NOMBRE);
+        currentSession().save(estado);
         Ciudad ciudad = new Ciudad("test");
         assertNotNull(ciudad);
+        ciudad.setEstado(estado);
         currentSession().save(ciudad);
         String nombre = "test1";
         ciudad.setNombre(nombre);
@@ -129,8 +142,11 @@ public class CiudadDaoTest {
     @Test
     public void deberiaEliminarCiudad() throws UltimoException {
         log.debug("Debiera eliminar Ciudad");
+        Estado estado = new Estado (Constantes.NOMBRE);
+        currentSession().save(estado);
         String nom = "test";
         Ciudad ciudad = new Ciudad(Constantes.NOMBRE);
+        ciudad.setEstado(estado);
         currentSession().save(ciudad);
         assertNotNull(ciudad);
         String nombre = instance.elimina(ciudad.getId());

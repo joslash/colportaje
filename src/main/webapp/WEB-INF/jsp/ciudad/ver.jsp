@@ -34,9 +34,12 @@
             <c:url var="eliminaUrl" value="/ciudad/elimina" />
             <form:form commandName="ciudad" action="${eliminaUrl}" >
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />
-
                 <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="nombre.label" /></div>
+                    <div class="span1"><s:message code="estado.label" /></div>
+                    <div class="span11">${ciudad.estado.nombre}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="ciudad.label" /></div>
                     <div class="span11">${ciudad.nombre}</div>
                 </div>
                 <p class="well">

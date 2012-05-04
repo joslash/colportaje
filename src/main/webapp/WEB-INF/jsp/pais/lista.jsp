@@ -52,7 +52,7 @@
                 <thead>
                     <tr>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="nombre" />
+                            <jsp:param name="columna" value="pais" />
                         </jsp:include>
                     </tr>
                 </thead>

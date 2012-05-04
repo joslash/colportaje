@@ -36,7 +36,7 @@
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />
 
                 <div class="row-fluid" style="padding-bottom: 10px;">
-                    <div class="span1"><s:message code="nombre.label" /></div>
+                    <div class="span1"><s:message code="pais.label" /></div>
                     <div class="span11">${pais.nombre}</div>
                 </div>
                 <p class="well">

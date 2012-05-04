@@ -24,9 +24,13 @@ public class Ciudad implements Serializable{
     @NotBlank
     @Column(length= 128)
     private String nombre;
-    
+    @ManyToOne
+    private Estado estado;
     public Ciudad (){
         
+    }
+    public Ciudad (Estado estado){
+        this.estado = estado;
     }
     public Ciudad (String nombre){
         this.nombre = nombre;
@@ -55,6 +59,15 @@ public class Ciudad implements Serializable{
     public void setVersion(Integer version) {
         this.version = version;
     }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+    
 
     @Override
     public boolean equals(Object obj) {
