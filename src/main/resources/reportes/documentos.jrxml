@@ -38,14 +38,14 @@
 				<text><![CDATA[Tipo De Documento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="40" height="15"/>
-				<textElement/>
-				<text><![CDATA[Folio]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="140" y="0" width="60" height="15"/>
 				<textElement/>
 				<text><![CDATA[Fecha]]></text>
+			</staticText>
+                        <staticText>
+				<reportElement x="100" y="0" width="40" height="15"/>
+				<textElement/>
+				<text><![CDATA[Folio]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="200" y="0" width="100" height="15"/>
@@ -70,18 +70,18 @@
 				<textFieldExpression><![CDATA[$F{tipoDeDocumento}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="100" y="0" width="100" height="15"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{folio}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
 				<reportElement x="140" y="0" width="60" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+                        <textField isStretchWithOverflow="true">
+				<reportElement x="100" y="0" width="100" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{folio}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="200" y="0" width="100" height="15"/>
