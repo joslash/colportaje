@@ -11,22 +11,18 @@
 <%@page import = "javax.naming.NamingException"%>
 
 <%!
-Connection conn_aron;
+Connection conexion;
 %>
 <%
         try {
-
 		Context initContext = new InitialContext();
 		Context envContext  = (Context)initContext.lookup("java:/comp/env");
-		DataSource ds = (DataSource)envContext.lookup("jdbc/conn_aron");
-		conn_aron = ds.getConnection();
-
-
+		DataSource ds = (DataSource)envContext.lookup("jdbc/conexion");
+		conexion = ds.getConnection();
 	} catch (NamingException e) {
 		//no existe un datasource
-	        Class.forName("oracle.jdbc.driver.OracleDriver");
-	        conn_aron = DriverManager.getConnection("jdbc:oracle:thin:@rigel.um.edu.mx:1521:ora1","aron",".");
+	        Class.forName("org.postgresql.Driver");
+	        conexion = DriverManager.getConnection("jdbc:postgresql://172.16.11.19:5432/colportaje","tomcat","tomcat00");
         }
-
 //	conn.setAutoCommit(false);
 %>

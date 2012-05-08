@@ -1,16 +1,17 @@
 <%-- 
-    Document   : traspasocostos
+    Document   : traspasocolegios
     Created on : 8/05/2012, 10:47:58 AM
     Author     : nujev
 --%>
 
-<%@ page language = "java" import = "java.sql.*, java.text.*, java.util.*" session = "true"%> <%@ page contentType="text/html" errorPage = "../../handleError.jsp"%> <%@ include file="../../conecta.jsp" %> <%@ include file="../../conecta_aron.jsp" %> <% PreparedStatement pstmt2 = null;
-    String COMANDO = "SELECT ID_CONT, ID_NIVEL, NOMBRE, ";
-    COMANDO += "CASE CONTADOR WHEN 0 THEN 'S' ELSE 'N' END AS STATUS ";
-    COMANDO += "FROM ARON.CONT_NIVEL ";
-    COMANDO += "ORDER BY ID_NIVEL ";
-    PreparedStatement pstmt = conn_aron.prepareStatement(COMANDO);
+<%@ page language = "java" import = "java.sql.*, java.text.*, java.util.*" session = "true"%>
+<%@ include file="conexion.jsp" %>
+<% PreparedStatement pstmt2 = null;
+    String COMANDO = "SELECT * FROM COLEGIOS ";
+    COMANDO += "ORDER BY ID";
+    PreparedStatement pstmt = conexion.prepareStatement(COMANDO);
     ResultSet rset = pstmt.executeQuery();
+    /*
     while (rset.next()) {
         COMANDO = "INSERT INTO MATEO.CONT_CCOSTO ";
         COMANDO += "(ID_EJERCICIO, ID_CCOSTO, NOMBRE, DETALLE) ";
@@ -24,5 +25,15 @@
         pstmt2.execute();
         pstmt2.close();
     }
+    */
     rset.close();
-    pstmt.close();%>
+    pstmt.close();
+%>
+<html>
+    <head>
+        <title>Transpaso de Colegios</title>
+    </head>
+    <body>
+        <h1>Transpaso de colegios exitoso</h1>
+    </body>
+</html>
