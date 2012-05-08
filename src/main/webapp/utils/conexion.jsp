@@ -22,7 +22,7 @@ Connection conexion;
 	} catch (NamingException e) {
 		//no existe un datasource
 	        Class.forName("org.postgresql.Driver");
-	        conexion = DriverManager.getConnection("jdbc:postgresql://172.16.11.19:5432/colportaje","tomcat","tomcat00");
+	        conexion = DriverManager.getConnection("jdbc:postgresql://172.16.11.19:5432/colportores","tomcat","tomcat00");
         }
 //	conn.setAutoCommit(false);
 %>

@@ -7,7 +7,7 @@
 <%@ page language = "java" import = "java.sql.*, java.text.*, java.util.*" session = "true"%>
 <%@ include file="conexion.jsp" %>
 <% PreparedStatement pstmt2 = null;
-    String COMANDO = "SELECT * FROM COLEGIOS ";
+    String COMANDO = "SELECT * FROM colegios ";
     COMANDO += "ORDER BY ID";
     PreparedStatement pstmt = conexion.prepareStatement(COMANDO);
     ResultSet rset = pstmt.executeQuery();
