@@ -123,7 +123,7 @@ public class UnionDao {
     public Union crea(Union union, Usuario usuario) {
         Session session = currentSession();
         session.save(union);
-        Asociacion asociacion = new Asociacion("Noreste", Constantes.STATUS_ACTIVO, union);
+        Asociacion asociacion = new Asociacion("Asociacion del Noreste", Constantes.STATUS_ACTIVO, union);
         if (usuario != null) {
             usuario.setAsociacion(asociacion);
         }
