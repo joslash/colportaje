@@ -6,28 +6,32 @@
 
 <%@ page language = "java" import = "java.sql.*, java.text.*, java.util.*" session = "true"%>
 <%@ include file="conexion.jsp" %>
+<%@ include file="conexionreal.jsp" %>
 <% PreparedStatement pstmt2 = null;
-    String COMANDO = "SELECT * FROM colegios ";
+    String COMANDO = "SELECT * FROM colegio ";
     COMANDO += "ORDER BY ID";
-    PreparedStatement pstmt = conexion.prepareStatement(COMANDO);
+    PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
     ResultSet rset = pstmt.executeQuery();
-    /*
+    
     while (rset.next()) {
-        COMANDO = "INSERT INTO MATEO.CONT_CCOSTO ";
-        COMANDO += "(ID_EJERCICIO, ID_CCOSTO, NOMBRE, DETALLE) ";
+        out.println(rset.getString("nombre"));
+        COMANDO = "INSERT INTO colegios ";
+        COMANDO += "(id, nombre, status, version) ";
         COMANDO += "VALUES ";
         COMANDO += "(?, ?, ?, ?) ";
-        pstmt2 = conn.prepareStatement(COMANDO);
-        pstmt2.setString(1, rset.getString("ID_Cont"));
-        pstmt2.setString(2, rset.getString("ID_Nivel"));
-        pstmt2.setString(3, rset.getString("Nombre").toUpperCase());
-        pstmt2.setString(4, rset.getString("Status"));
+        pstmt2 = conexion.prepareStatement(COMANDO);
+        pstmt2.setInt(1, rset.getInt("id"));
+        pstmt2.setString(2, rset.getString("nombre"));
+        pstmt2.setString(3, rset.getString("status").toUpperCase());
+        pstmt2.setInt(4, rset.getInt("version"));
         pstmt2.execute();
         pstmt2.close();
     }
-    */
+    
     rset.close();
     pstmt.close();
+    conexion.close();
+    conexion_real.close();
 %>
 <html>
     <head>
