@@ -1,6 +1,6 @@
 <%-- 
-    Document   : traspasoasociaciones
-    Created on : 8/05/2012, 11:41:51 AM
+    Document   : traspasotemporadas
+    Created on : 8/05/2012, 12:01:59 PM
     Author     : nujev
 --%>
 
@@ -8,21 +8,23 @@
 <%@ include file="conexion.jsp" %>
 <%@ include file="conexionreal.jsp" %>
 <% PreparedStatement pstmt2 = null;
-    String COMANDO = "SELECT * FROM asociacion ";
+    String COMANDO = "SELECT * FROM temporada ";
     COMANDO += "ORDER BY ID";
     PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
     ResultSet rset = pstmt.executeQuery();
     
     while (rset.next()) {
         out.println(rset.getString("nombre"));
-        COMANDO = "INSERT INTO asociaciones ";
-        COMANDO += "(id, nombre, status, version, union_id) ";
+        COMANDO = "INSERT INTO temporadas ";
+        COMANDO += "(id, fecha_final, fecha_inicio, nombre, version, asociacion_id) ";
         COMANDO += "VALUES ";
-        COMANDO += "(?, ?, 'A', ?, 1) ";
+        COMANDO += "(?, ?, ?, ?, ?, 1) ";
         pstmt2 = conexion.prepareStatement(COMANDO);
         pstmt2.setInt(1, rset.getInt("id"));
-        pstmt2.setString(2, rset.getString("nombre"));
-        pstmt2.setInt(3, rset.getInt("version"));
+        pstmt2.setDate(2, rset.getDate("fecha_final"));
+        pstmt2.setDate(3, rset.getDate("fecha_inicial"));
+        pstmt2.setString(4, rset.getString("nombre"));
+        pstmt2.setInt(5, rset.getInt("version"));
         pstmt2.execute();
         pstmt2.close();
     }
@@ -34,9 +36,9 @@
 %>
 <html>
     <head>
-        <title>Transpaso de Asociaciones</title>
+        <title>Transpaso de Temporadas</title>
     </head>
     <body>
-        <h1>Transpaso de asociaciones exitoso</h1>
+        <h1>Transpaso de temporadas exitoso</h1>
     </body>
 </html>
