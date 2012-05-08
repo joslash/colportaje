@@ -78,7 +78,7 @@ public class InicializaController {
         try {
             transaction = currentSession().beginTransaction();
             reporteDao.inicializa();
-            Union union = new Union("Noreste");
+            Union union = new Union("Únion Mexicana del Norte");
             union = unionDao.crea(union);
             Rol rol = new Rol("ROLE_ADMIN");
             rol = rolDao.crea(rol);
