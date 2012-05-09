@@ -63,9 +63,8 @@ public class Colportor implements Serializable {
     private String municipio;
     @Column(nullable = false, length = 15)
     private String tipoDeColportor;
-    @NotNull
     @Size(min = 6, max = 7)
-    @Column(unique = true, nullable = false, length = 7)
+    @Column(length = 7)
     private String matricula;
     @Temporal(TemporalType.DATE)
     @Column(nullable = true, name = "fecha")
