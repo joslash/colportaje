@@ -26,10 +26,7 @@ package mx.edu.um.mateo.general.web;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
@@ -235,6 +232,21 @@ public class UsuarioController {
         redirectAttributes.addFlashAttribute("message", "usuario.creado.message");
         redirectAttributes.addFlashAttribute("messageAttrs", new String[]{usuario.getUsername()});
 
+        //validando roles
+        Set<Rol> roles = usuario.getRoles();
+        
+        for (Iterator<Rol> rol = roles.iterator(); rol.hasNext(); ) {
+            Rol r = rol.next();
+            if (r.getAuthority().equals("ROLE_ASO")) {
+                log.info("Rol Asociado");
+                modelo.addAttribute("usuario", usuario.getId());
+                return "redirect:/asociado/nuevo";
+            } else if (r.getAuthority().equals("ROLE_COL")) {
+                log.info("Rol Colportor");
+                modelo.addAttribute("usuario", usuario.getId());
+                return "redirect:/colportor/nuevo";
+            }
+        }
         return "redirect:/admin/usuario/ver/" + usuario.getId();
     }
 
@@ -308,13 +320,13 @@ public class UsuarioController {
         List<Rol> roles = usuarioDao.roles();
         if (springSecurityUtils.ifAnyGranted("ROLE_ADMIN")) {
             // no se hace nada
-        } else if (springSecurityUtils.ifAnyGranted("ROLE_ORG")) {
+        } else if (springSecurityUtils.ifAnyGranted("ROLE_ASO")) {
             roles.remove(new Rol("ROLE_ADMIN"));
-            roles.remove(new Rol("ROLE_ORG"));
+            roles.remove(new Rol("ROLE_ASO"));
         } else {
             roles.remove(new Rol("ROLE_ADMIN"));
-            roles.remove(new Rol("ROLE_ORG"));
-            roles.remove(new Rol("ROLE_EMP"));
+            roles.remove(new Rol("ROLE_ASO"));
+            roles.remove(new Rol("ROLE_COL"));
         }
 
         return roles;
