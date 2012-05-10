@@ -163,7 +163,7 @@ public class DocumentoController {
                     totalDepositos = totalDepositos.add(doc.getImporte());
                     break;
                 }
-                case Constantes.NOTA_DE_COMPRA: {
+                case Constantes.NOTAS_DE_COMPRA: {
                     totalDepositos = totalDepositos.add(doc.getImporte());
                     break;
 
@@ -248,7 +248,7 @@ public class DocumentoController {
                 documentos.setTipoDeDocumento(Constantes.DIEZMO);
                 break;
             case "3":
-                documentos.setTipoDeDocumento(Constantes.NOTA_DE_COMPRA);
+                documentos.setTipoDeDocumento(Constantes.NOTAS_DE_COMPRA);
                 break;
             case "4":
                 documentos.setTipoDeDocumento(Constantes.BOLETIN);
@@ -308,7 +308,7 @@ public class DocumentoController {
                 documentos.setTipoDeDocumento(Constantes.DIEZMO);
                 break;
             case "3":
-                documentos.setTipoDeDocumento(Constantes.NOTA_DE_COMPRA);
+                documentos.setTipoDeDocumento(Constantes.NOTAS_DE_COMPRA);
                 break;
             case "4":
                 documentos.setTipoDeDocumento(Constantes.BOLETIN);

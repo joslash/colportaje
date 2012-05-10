@@ -87,8 +87,8 @@
                     <c:forEach items="${documentos}" var="documento" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
                             <td><a href="<c:url value='/documento/ver/${documento.id}' />">${documento.tipoDeDocumento}</a></td>
-                            <td>${documento.folio}</td>
                             <td>${documento.fecha}</td>
+                            <td>${documento.folio}</td>
                             <td>${documento.importe}</td>
                             <td>${documento.observaciones}</td>
                         </tr>

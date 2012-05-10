@@ -46,7 +46,7 @@ public class Colportor implements Serializable {
     @Version
     private Integer version;
     @NotNull
-    @Column(unique = true, nullable = false, length = 64)
+    @Column( nullable = false, length = 64)
     private String clave;
     @NotNull
     @Column(nullable = false, length = 2)

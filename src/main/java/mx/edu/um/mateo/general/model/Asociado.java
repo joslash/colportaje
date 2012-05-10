@@ -24,7 +24,7 @@ public class Asociado implements Serializable {
     @Version
     private Integer version;
     @NotBlank
-    @Column(nullable = false, length = 65 ,unique=true)
+    @Column(nullable = false, length = 65)
     private String clave;
     @Column(length = 15)
     private String telefono;

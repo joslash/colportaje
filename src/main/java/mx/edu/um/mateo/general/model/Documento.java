@@ -34,7 +34,7 @@ public class Documento implements Serializable{
     @NotNull
     @Column(length = 20)
     private BigDecimal importe;
-    @Column(length = 100)
+    @Column(length = 1000)
     private String observaciones;
    
   
