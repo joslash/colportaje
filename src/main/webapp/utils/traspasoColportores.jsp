@@ -10,7 +10,7 @@
 
 <%
 	PreparedStatement pstmt2 = null;
-	String COMANDO = "SELECT coalesce(p.id,1) id, coalesce(p.clave,'.') clave, coalesce(address,'.') address,coalesce(province,'.') province,coalesce(phone_number,'.') phone_number,coalesce(p.version,1) as version, coalesce(u.fecha_nacimiento,now()) fecha_nacimiento,u.matricula,case when tipo_user = 'Alum' then '2' else '0' end as tipo FROM PERSONA P, APP_USER U WHERE U.CLAVE =P.CLAVE AND P.DISCRIMINATOR_COL ='C'";
+	String COMANDO = "SELECT coalesce(u.id,1) id, coalesce(clave,'.') clave, coalesce(address,'.') address,coalesce(province,'.') province,coalesce(phone_number,'.') phone_number,coalesce(version,1) as version, coalesce(u.fecha_nacimiento,now()) fecha_nacimiento,u.matricula,case when tipo_user = 'Alum' then '2' else '0' end as tipo FROM  APP_USER U WHERE  asociado_id is not null ";
 	PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
 	ResultSet rset = pstmt.executeQuery();
 
