@@ -10,7 +10,7 @@
 
 <%
 	PreparedStatement pstmt2 = null;
-	String COMANDO = "SELECT p.id, p.clave, address,province,phone_number,p.version FROM PERSONA P, APP_USER U WHERE U.CLAVE =P.CLAVE AND P.DISCRIMINATOR_COL ='S'";
+	String COMANDO = "SELECT u.id, coalesce(clave,'.') clave, address,province,phone_number,version FROM  APP_USER U WHERE  tipo_user ='S'";
 	PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
 	ResultSet rset = pstmt.executeQuery();
 
