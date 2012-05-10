@@ -102,12 +102,10 @@ public class AsociadoController extends BaseController {
     }
 
     @RequestMapping("/nuevo")
-    public String nueva(Model modelo, Model user) {
+    public String nuevo(Model modelo) {
         log.debug("Nuevo asociado");
         Asociado asociado = new Asociado();
         modelo.addAttribute(Constantes.ADDATTRIBUTE_ASOCIADO, asociado);
-        Usuario usuario = new Usuario();
-        user.addAttribute(Constantes.ADDATTRIBUTE_USUARIO, usuario);
         return Constantes.PATH_ASOCIADO_NUEVO;
     }
 

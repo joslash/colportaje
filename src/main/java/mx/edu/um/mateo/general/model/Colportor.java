@@ -27,10 +27,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.ws.rs.HEAD;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -45,13 +42,10 @@ public class Colportor implements Serializable {
     private Long id;
     @Version
     private Integer version;
-    @NotNull
-    @Column(unique = true, nullable = false, length = 64)
+    @Column(unique = true, length = 64)
     private String clave;
-    @NotNull
     @Column(nullable = false, length = 2)
     private String status;
-    @NotNull
     @Size(min = 10, max = 12)
     @Column(nullable = false, length = 12)
     private String telefono;
@@ -63,7 +57,6 @@ public class Colportor implements Serializable {
     private String municipio;
     @Column(nullable = false, length = 15)
     private String tipoDeColportor;
-    @NotNull
     @Size(min = 6, max = 7)
     @Column(unique = true, nullable = false, length = 7)
     private String matricula;

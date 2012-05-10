@@ -7,8 +7,7 @@ package mx.edu.um.mateo.general.model;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -23,30 +22,24 @@ public class Asociado implements Serializable {
     private Long id;
     @Version
     private Integer version;
-    @NotBlank
-    @Column(nullable = false, length = 65 ,unique=true)
+    @Column(length = 65, unique = true)
     private String clave;
-    @Column(length = 15)
+    @Size(min = 10, max = 12)
+    @Column(length = 12)
     private String telefono;
-    @NotNull
-    @Column(nullable = false, length = 23, name = "status")
+    @Column(nullable = false, length = 23)
     private String status;
-    @NotNull
     @Column(length = 200)
     private String calle;
-    @NotNull
     @Column(length = 200)
     private String colonia;
-    @NotNull
     @Column(length = 200)
     private String municipio;
-    
-    
-    
+
     public Asociado() {
     }
 
-    public Asociado( String clave,  String telefono, String status,String calle,String colonia,String municipio) {
+    public Asociado(String clave, String telefono, String status, String calle, String colonia, String municipio) {
         this.clave = clave;
         this.telefono = telefono;
         this.status = status;

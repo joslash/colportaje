@@ -33,7 +33,11 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import mx.edu.um.mateo.general.dao.AsociadoDao;
+import mx.edu.um.mateo.general.dao.ColportorDao;
 import mx.edu.um.mateo.general.dao.UsuarioDao;
+import mx.edu.um.mateo.general.model.Asociado;
+import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.Ambiente;
@@ -75,6 +79,10 @@ public class UsuarioController {
     private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
     @Autowired
     private UsuarioDao usuarioDao;
+    @Autowired
+    private AsociadoDao asociadoDao;
+    @Autowired
+    private ColportorDao colportorDao;
     @Autowired
     private SpringSecurityUtils springSecurityUtils;
     @Autowired
@@ -205,6 +213,25 @@ public class UsuarioController {
             Long asociacionId = (Long) request.getSession().getAttribute("asociacionId");
             password = KeyGenerators.string().generateKey();
             usuario.setPassword(password);
+
+            //creando realacion usuario-asociado/colportor
+            Set<Rol> rol = usuario.getRoles();
+            for (Iterator<Rol> iter = rol.iterator(); iter.hasNext();) {
+                Rol r = iter.next();
+                if (r.getAuthority().equals("ROLE_ASO")) {
+                    log.info("Creando objeto Asociado");
+                    Asociado asociado = new Asociado("", "          ", "", "", "", "");
+                    asociadoDao.crea(asociado);
+                    usuario.setAsociado(asociado);
+                } else if (r.getAuthority().equals("ROLE_COL")) {
+                    log.info("Creando objeto Colportor");
+                    Colportor colportor = new Colportor("", "", "          ", "", "      ");
+                    colportorDao.crea(colportor);
+                    usuario.setColportor(colportor);
+                }
+            }
+
+
             usuario = usuarioDao.crea(usuario, asociacionId, roles);
 
             MimeMessage message = mailSender.createMimeMessage();
@@ -234,17 +261,17 @@ public class UsuarioController {
 
         //validando roles
         Set<Rol> roles = usuario.getRoles();
-        
-        for (Iterator<Rol> rol = roles.iterator(); rol.hasNext(); ) {
+
+        for (Iterator<Rol> rol = roles.iterator(); rol.hasNext();) {
             Rol r = rol.next();
             if (r.getAuthority().equals("ROLE_ASO")) {
                 log.info("Rol Asociado");
-                modelo.addAttribute("usuario", usuario.getId());
-                return "redirect:/asociado/nuevo";
+                modelo.addAttribute("usuario", usuario);
+                return "redirect:/asociado/edita/" + usuario.getAsociado().getId();
             } else if (r.getAuthority().equals("ROLE_COL")) {
                 log.info("Rol Colportor");
-                modelo.addAttribute("usuario", usuario.getId());
-                return "redirect:/colportor/nuevo";
+                modelo.addAttribute("usuario", usuario);
+                return "redirect:/colportor/edita/" + usuario.getColportor().getId();
             }
         }
         return "redirect:/admin/usuario/ver/" + usuario.getId();
