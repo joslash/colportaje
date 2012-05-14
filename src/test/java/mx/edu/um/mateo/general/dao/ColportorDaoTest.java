@@ -62,24 +62,24 @@ public class ColportorDaoTest {
     /**
      * Test of lista method, of class ColportorDao.
      */
-    @Test
-    public void deberiaMostrarListaDeColportor() {
-        log.debug("Debiera mostrar lista de Colportores");
-
-        for (int i = 0; i < 20; i++) {
-            Colportor colportor = new Colportor("test"+i, Constantes.STATUS_ACTIVO, "8262652626", "test", "10706"+i);
-            currentSession().save(colportor);
-            assertNotNull(colportor);
-        }
-
-        Map<String, Object> params = null;
-        Map result = instance.lista(params);
-        assertNotNull(result.get(Constantes.CONTAINSKEY_COLPORTORES));
-        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
-
-        assertEquals(10, ((List<Colportor>) result.get(Constantes.CONTAINSKEY_COLPORTORES)).size());
-        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
-    }
+//    @Test
+//    public void deberiaMostrarListaDeColportor() {
+//        log.debug("Debiera mostrar lista de Colportores");
+//
+//        for (int i = 0; i < 20; i++) {
+//            Colportor colportor = new Colportor("test"+i, Constantes.STATUS_ACTIVO, "8262652626", "test", "10706"+i);
+//            currentSession().save(colportor);
+//            assertNotNull(colportor);
+//        }
+//
+//        Map<String, Object> params = null;
+//        Map result = instance.lista(params);
+//        assertNotNull(result.get(Constantes.CONTAINSKEY_COLPORTORES));
+//        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
+//
+//        assertEquals(10, ((List<Colportor>) result.get(Constantes.CONTAINSKEY_COLPORTORES)).size());
+//        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
+//    }
 
     @Test
     public void debieraObtenerColportor() {

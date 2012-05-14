@@ -145,7 +145,7 @@
         <content>
             <script>
                 $(document).ready(function() {
-                    $('input#nombre').focus();
+                    $('input#matricula').focus();
                 });
             </script>                    
         </content>

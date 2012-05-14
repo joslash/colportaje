@@ -53,21 +53,29 @@
             <table id="lista" class="table">
                 <thead>
                     <tr>
-                       
-                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="tipoDeColportor" />
+                       <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="username" />
                         </jsp:include>
                          <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="matricula" />
+                        <jsp:param name="columna" value="nombre" />
                         </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >                            
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="apellidoP" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="apellidoM" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="status" />
-                        </jsp:include> 
+                        </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="clave" />
                         </jsp:include>
-                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="fechaDeNacimiento" />
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="telefono" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="matricula" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="calle" />
@@ -78,23 +86,22 @@
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="municipio" />
                         </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="telefono" />
-                        </jsp:include>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach items="${colportores}" var="colportor" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/colportor/ver/${colportor.id}' />">${colportor.tipoDeColportor}</a></td>
-                             <td>${colportor.matricula}</td>
-                            <td>${colportor.status}</td>
-                            <td>${colportor.clave}</td>
-                             <td>${colportor.fechaDeNacimiento}</td>
-                            <td>${colportor.calle}</td>
-                            <td>${colportor.colonia}</td>
-                            <td>${colportor.municipio}</td>
-                            <td>${colportor.telefono}</td>
+                            <td>${colportor[0]}</td>
+                            <td>${colportor[1]}</td>
+                            <td>${colportor[2]}</td>
+                            <td>${colportor[3]}</td>
+                            <td>${colportor[4]}</td>
+                            <td>${colportor[5]}</td>
+                            <td>${colportor[6]}</td>
+                            <td>${colportor[7]}</td>
+                            <td>${colportor[8]}</td>
+                            <td>${colportor[9]}</td>
+                            <td>${colportor[10]}</td>
                         </tr>
                     </c:forEach>
                 </tbody>

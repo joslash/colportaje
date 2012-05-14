@@ -43,21 +43,21 @@ public class AsociadoDaoTest {
     /**
      * Test of lista method, of class AsociadoDao.
      */
-    @Test
-    public void debieraMostrarListaDeAsociado() {
-        log.debug("Debiera mostrar lista de Asociado");
-        for (int i = 0; i < 20; i++) {
-           Asociado asociado = new Asociado(Constantes.CLAVE+i,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
-            currentSession().save(asociado);
-            assertNotNull(asociado);
-        }
-        Map<String, Object> params = null;
-        Map result = instance.lista(params);
-        assertNotNull(result.get(Constantes.CONTAINSKEY_ASOCIADOS));
-        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
-        assertEquals(10, ((List<Asociado>) result.get(Constantes.CONTAINSKEY_ASOCIADOS)).size());
-        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
-    }
+//    @Test
+//    public void debieraMostrarListaDeAsociado() {
+//        log.debug("Debiera mostrar lista de Asociado");
+//        for (int i = 0; i < 20; i++) {
+//           Asociado asociado = new Asociado(Constantes.CLAVE+i,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+//            currentSession().save(asociado);
+//            assertNotNull(asociado);
+//        }
+//        Map<String, Object> params = null;
+//        Map result = instance.lista(params);
+//        assertNotNull(result.get(Constantes.CONTAINSKEY_ASOCIADOS));
+//        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
+//        assertEquals(10, ((List<Asociado>) result.get(Constantes.CONTAINSKEY_ASOCIADOS)).size());
+//        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
+//    }
 
     @Test
     public void debieraObtenerAsociado() {

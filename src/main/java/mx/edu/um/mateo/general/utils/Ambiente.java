@@ -59,4 +59,38 @@ public class Ambiente {
         Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return usuario;
     }
+    
+    public boolean esAsociadoEnSesion(){
+        boolean esAsociado = false;
+        Usuario usuario = obtieneUsuario();
+        if(usuario.getAsociado() != null){
+            esAsociado = true;
+        }
+        return esAsociado;
+    }
+    
+    public boolean esAsociado(Usuario usuario){
+        boolean esAsociado = false;
+        if(usuario.getAsociado() != null){
+            esAsociado = true;
+        }
+        return esAsociado;
+    }
+    
+    public boolean esColportorEnSesion(){
+        boolean esColportor = false;
+        Usuario usuario = obtieneUsuario();
+        if(usuario.getColportor() != null){
+            esColportor = true;
+        }
+        return esColportor;
+    }
+    
+    public boolean esColportor(Usuario usuario){
+        boolean esColportor = false;
+        if(usuario.getColportor() != null){
+            esColportor = true;
+        }
+        return esColportor;
+    }
 }

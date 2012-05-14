@@ -9,7 +9,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,7 @@ import mx.edu.um.mateo.general.dao.ColportorDao;
 import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.Ambiente;
+import mx.edu.um.mateo.general.utils.ReporteException;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -54,17 +54,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping(Constantes.PATH_COLPORTOR)
-public class ColportorController {
+public class ColportorController extends BaseController {
 
     private static final Logger log = LoggerFactory.getLogger(ColportorController.class);
     @Autowired
-    private ColportorDao ColportorDao;
-    @Autowired
-    private JavaMailSender mailSender;
-    @Autowired
-    private ResourceBundleMessageSource messageSource;
-    @Autowired
-    private Ambiente ambiente;
+    private ColportorDao colportorDao;
     /*
      * DE AQUI @InitBinder public void initBinder(WebDataBinder binder) {
      *
@@ -83,68 +77,46 @@ public class ColportorController {
             Usuario usuario,
             Errors errors,
             Model modelo) {
-        log.debug("Mostrando lista de colportores");
+        log.debug("Mostrando lista de Asociado");
         Map<String, Object> params = new HashMap<>();
+        //Long asociacionId = (Long) request.getSession().getAttribute("asociacionId");
+        //params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
+
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
-        }
-        if (pagina != null) {
-            params.put(Constantes.CONTAINSKEY_PAGINA, pagina);
-            modelo.addAttribute(Constantes.CONTAINSKEY_PAGINA, pagina);
-        } else {
-            pagina = 1L;
-            modelo.addAttribute(Constantes.CONTAINSKEY_PAGINA, pagina);
         }
         if (StringUtils.isNotBlank(order)) {
             params.put(Constantes.CONTAINSKEY_ORDER, order);
             params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
-
         if (StringUtils.isNotBlank(tipo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
-            params = ColportorDao.lista(params);
+            params = colportorDao.lista(params);
             try {
-                generaReporte(tipo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), response);
+                generaReporte(tipo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), response, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
                 return null;
-            } catch (JRException | IOException e) {
+            } catch (ReporteException e) {
                 log.error("No se pudo generar el reporte", e);
                 params.remove(Constantes.CONTAINSKEY_REPORTE);
                 //errors.reject("error.generar.reporte");
             }
         }
-
         if (StringUtils.isNotBlank(correo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
-            params = ColportorDao.lista(params);
-
+            params = colportorDao.lista(params);
             params.remove(Constantes.CONTAINSKEY_REPORTE);
             try {
-                enviaCorreo(correo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), request);
+                enviaCorreo(correo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), request, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
                 modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
-                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
-            } catch (JRException | MessagingException e) {
+                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("asociado.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
+            } catch (ReporteException e) {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
-        params = ColportorDao.lista(params);
-        modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, params.get(Constantes.CONTAINSKEY_COLPORTORES));
 
-        // inicia paginado
-        Long cantidad = (Long) params.get(Constantes.CONTAINSKEY_CANTIDAD);
-        Integer max = (Integer) params.get(Constantes.CONTAINSKEY_MAX);
-        Long cantidadDePaginas = cantidad / max;
-        List<Long> paginas = new ArrayList<>();
-        long i = 1;
-        do {
-            paginas.add(i);
-        } while (i++ < cantidadDePaginas);
-        List<Colportor> colportores = (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES);
-        Long primero = ((pagina - 1) * max) + 1;
-        Long ultimo = primero + (colportores.size() - 1);
-        String[] paginacion = new String[]{primero.toString(), ultimo.toString(), cantidad.toString()};
-        modelo.addAttribute(Constantes.CONTAINSKEY_PAGINACION, paginacion);
-        modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
-        // termina paginado
+        params = colportorDao.lista(params);
+        modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, params.get(Constantes.CONTAINSKEY_COLPORTORES));
+        this.pagina(params, modelo, Constantes.CONTAINSKEY_COLPORTORES, pagina);
 
         return Constantes.PATH_COLPORTOR_LISTA;
     }
@@ -152,7 +124,7 @@ public class ColportorController {
     @RequestMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
         log.debug("Mostrando colportor {}", id);
-        Colportor colportores = ColportorDao.obtiene(id);
+        Colportor colportores = colportorDao.obtiene(id);
 
         modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
 
@@ -200,7 +172,7 @@ public class ColportorController {
 
         try {
             log.debug("Colportor FechaDeNacimiento" + colportores.getFechaDeNacimiento());
-            colportores = ColportorDao.crea(colportores);
+            colportores = colportorDao.crea(colportores);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear la colportor", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
@@ -215,7 +187,7 @@ public class ColportorController {
     @RequestMapping("/edita/{id}")
     public String edita(@PathVariable Long id, Model modelo) {
         log.debug("Editar colportor {}", id);
-        Colportor colportores = ColportorDao.obtiene(id);
+        Colportor colportores = colportorDao.obtiene(id);
         modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
         return Constantes.PATH_COLPORTOR_EDITA;
     }
@@ -249,7 +221,7 @@ public class ColportorController {
 
         try {
             log.debug("Colportor FechaDeNacimiento" + colportores.getFechaDeNacimiento());
-            colportores = ColportorDao.actualiza(colportores);
+            colportores = colportorDao.actualiza(colportores);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear la colportor", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
@@ -266,7 +238,7 @@ public class ColportorController {
     public String elimina(HttpServletRequest request, @RequestParam Long id, Model modelo, @ModelAttribute Colportor colportores, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.debug("Elimina colportor");
         try {
-            String nombre = ColportorDao.elimina(id);
+            String nombre = colportorDao.elimina(id);
 
             redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.eliminado.message");
             redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{nombre});
