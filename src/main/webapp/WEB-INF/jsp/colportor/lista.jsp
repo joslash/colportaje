@@ -91,18 +91,18 @@
                 <tbody>
                     <c:forEach items="${colportores}" var="colportor" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td>${colportor[0]}</td>
-                            <td>${colportor[1]}</td>
-                            <td>${colportor[2]}</td>
-                            <td>${colportor[3]}</td>
-                            <td>${colportor[4]}</td>
-                            <td>${colportor[5]}</td>
-                            <td>${colportor[6]}</td>
-                            <td>${colportor[7]}</td>
-                            <td>${colportor[8]}</td>
-                            <td>${colportor[9]}</td>
-                            <td>${colportor[10]}</td>
-                        </tr>
+                            <td><a href="<c:url value='/colportor/ver/${colportor.id}' />">${colportor.username}</a></td>
+                            <td>${colportor.nombre}</td>
+                            <td>${colportor.apellidop}</td>
+                            <td>${colportor.apellidom}</td>
+                            <td>${colportor.status}</td>
+                            <td>${colportor.clave}</td>
+                            <td>${colportor.telefono}</td>
+                             <td>${colportor.matricula}</td>
+                            <td>${colportor.calle}</td>
+                            <td>${colportor.colonia}</td>
+                            <td>${colportor.municipio}</td>
+                       </tr>
                     </c:forEach>
                 </tbody>
             </table>

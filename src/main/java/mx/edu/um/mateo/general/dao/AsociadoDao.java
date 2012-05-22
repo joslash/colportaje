@@ -70,12 +70,12 @@ public class AsociadoDao {
         //countCriteria = currentSession().createCriteria(Usuario.class);
         
         String hql = "SELECT "
-                + "a.id, u.username, u.nombre, u.apellidom, u.apellidop, a.status, a.clave, a.telefono, a.calle, a.colonia, a.municipio "
+                + "new Asociado(a.id, u.username, u.nombre, u.apellidoP, u.apellidoM, a.status, a.clave, a.telefono, a.calle, a.colonia, a.municipio )"
                 + "FROM "
-                + "usuarios u, roles r, usuarios_roles ur, asociados a "
+                + "Usuario u join u.asociado a join u.roles r "
                 + "WHERE "
-                + "u.asociado_id = a.id AND ur.rol_id = r.id AND r.authority = 'ROLE_ASO'";
-        Query query = currentSession().createSQLQuery(hql);
+                + "r.authority = 'ROLE_ASO'";
+        Query query = currentSession().createQuery(hql);
         
         if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
             criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));

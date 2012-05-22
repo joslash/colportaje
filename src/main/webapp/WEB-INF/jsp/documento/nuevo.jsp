@@ -44,7 +44,7 @@
                                     <form:option value="0" label="Deposito_Caja" />
                                     <form:option value="1" label="Deposito_Banco" />
                                      <form:option value="2" label="Diezmo" />
-                                    <form:option value="3" label="Nota_De_Compra" />
+                                    <form:option value="3" label="Notas_De_Compra" />
                                      <form:option value="4" label="Boletín" />
                                     <form:option value="5" label="Informe" />
                                 </form:select>
@@ -89,7 +89,7 @@
                                 <s:message code="observaciones.label" />
                               
                             </label>
-                            <form:textarea path="observaciones" maxlength="100" />
+                            <form:textarea path="observaciones" maxlength="1000" />
                             <form:errors path="observaciones" cssClass="alert alert-error" />
                         </div>
                     </s:bind>

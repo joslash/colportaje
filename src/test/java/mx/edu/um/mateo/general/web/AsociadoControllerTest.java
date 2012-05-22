@@ -59,24 +59,24 @@ public class AsociadoControllerTest extends BaseTest {
     public void tearDown() {
     }
 
-//    @Test
-//    public void debieraMostrarListaDeAsociado() throws Exception {
-//        log.debug("Debiera monstrar lista asociado");
-//        
-//        for (int i = 0; i < 20; i++) {
-//           Asociado asociado = new Asociado(Constantes.CLAVE+i,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
-//            asociadoDao.crea(asociado);
-//            assertNotNull(asociado);
-//        }
-//
-//        this.mockMvc.perform(get(Constantes.PATH_ASOCIADO))
-//                .andExpect(status().isOk())
-//                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIADO_LISTA+ ".jsp"))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_ASOCIADOS))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
-//    }
+    @Test
+    public void debieraMostrarListaDeAsociado() throws Exception {
+        log.debug("Debiera monstrar lista asociado");
+        
+        for (int i = 0; i < 20; i++) {
+           Asociado asociado = new Asociado(Constantes.CLAVE+i,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+            asociadoDao.crea(asociado);
+            assertNotNull(asociado);
+        }
+
+        this.mockMvc.perform(get(Constantes.PATH_ASOCIADO))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIADO_LISTA+ ".jsp"))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_ASOCIADOS))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
+    }
     @Test
     public void debieraMostrarAsociado() throws Exception {
         log.debug("Debiera mostrar  asociado");

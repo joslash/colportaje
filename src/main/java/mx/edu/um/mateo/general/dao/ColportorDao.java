@@ -84,14 +84,19 @@ public class ColportorDao {
         }
         Criteria criteria = currentSession().createCriteria(Colportor.class);
         Criteria countCriteria = currentSession().createCriteria(Colportor.class);
-        
+
         String hql = "SELECT "
-                + "u.username, u.nombre, u.apellidom, u.apellidop, c.status, c.clave, c.telefono, c.matricula, c.calle, c.colonia, c.municipio "
+                + "new Colportor(u.username, u.nombre, u.apellidoP, u.apellidoM, c.status, c.clave, c.telefono, c.matricula, c.calle, c.colonia, c.municipio) "
                 + "FROM "
-                + "usuarios u, roles r, usuarios_roles ur, colportores c "
+                + "Usuario u join u.colportor c join u.roles r "
                 + "WHERE "
-                + "u.colportor_id = c.id AND ur.rol_id = r.id AND r.authority = 'ROLE_COL'";
-        Query query = currentSession().createSQLQuery(hql);
+                + "r.authority = 'ROLE_COL'";
+        Query query = currentSession().createQuery(hql);
+        
+         if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
+            criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
+            countCriteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
+        }
 
         if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
@@ -128,6 +133,22 @@ public class ColportorDao {
         Colportor colportor = (Colportor) currentSession().get(Colportor.class, id);
         return colportor;
     }
+    
+      public Object obtienePorUsuario(Long id) {
+        log.debug("Obtiene cuenta de colportor con id = {}", id);
+        String hql = "SELECT "
+                + "u.id, c.status, c.clave, c.telefono, c.calle, c.colonia, c.municipio "
+                + "FROM "
+                + "usuarios u, roles r, usuarios_roles ur, colportores c "
+                + "WHERE "
+                + "u.colportor_id = :id AND ur.rol_id = r.id AND r.authority = 'ROLE_COL'";
+        Query query = currentSession().createSQLQuery(hql);
+        query.setLong("id", id);
+        return query.uniqueResult();
+    }
+    
+    
+    
 
     public Colportor crea(Colportor colportor) {
         log.debug("Creando colportor : {}", colportor);

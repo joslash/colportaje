@@ -24,9 +24,12 @@
 package mx.edu.um.mateo.general.utils;
 
 import javax.servlet.http.HttpServletRequest;
+import mx.edu.um.mateo.general.dao.TemporadaColportorDao;
+import mx.edu.um.mateo.general.model.TemporadaColportor;
 import mx.edu.um.mateo.general.model.Usuario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +41,8 @@ import org.springframework.stereotype.Component;
 public class Ambiente {
 
     private static final Logger log = LoggerFactory.getLogger(Ambiente.class);
+     @Autowired
+    private TemporadaColportorDao tempColportorDao;
 
     public void actualizaSesion(HttpServletRequest request) {
         Usuario usuario = obtieneUsuario();
@@ -78,6 +83,7 @@ public class Ambiente {
     }
     
     public boolean esColportorEnSesion(){
+        log.debug("COLPORTOR EN SECION");
         boolean esColportor = false;
         Usuario usuario = obtieneUsuario();
         if(usuario.getColportor() != null){
@@ -93,4 +99,12 @@ public class Ambiente {
         }
         return esColportor;
     }
+    
+    public TemporadaColportor getTemporadaColportorDeUsuarioEnSesion(){
+        if(!esColportorEnSesion()){
+            return null;
+        }
+          return  tempColportorDao.obtiene(obtieneUsuario().getColportor());
+    
+}
 }

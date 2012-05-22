@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.dao;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,6 +76,11 @@ public class DocumentoDao {
             criteria.add(propiedades);
             countCriteria.add(propiedades);
         }
+        
+        if(params.get("temporadaColportor")!=null){
+            criteria.add(Restrictions.eq("temporadaColportor",params.get("temporadaColportor")));
+        
+        }
 
         if (params.containsKey(Constantes.CONTAINSKEY_ORDER)) {
             String campo = (String) params.get(Constantes.CONTAINSKEY_ORDER);
@@ -89,8 +95,14 @@ public class DocumentoDao {
             criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
             criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
-        params.put(Constantes.CONTAINSKEY_DOCUMENTOS, criteria.list());
-
+        
+         if(params.get("temporadaColportor")!=null){
+        params.put(Constantes.CONTAINSKEY_DOCUMENTOS, criteria.list());      
+        
+         }else{
+              params.put(Constantes.CONTAINSKEY_DOCUMENTOS, new ArrayList());
+         }
+       
         countCriteria.setProjection(Projections.rowCount());
         params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
 

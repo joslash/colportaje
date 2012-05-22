@@ -4,10 +4,12 @@
  */
 package mx.edu.um.mateo.general.dao;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import mx.edu.um.mateo.Constantes;
-import mx.edu.um.mateo.general.model.Asociado;
+import mx.edu.um.mateo.general.model.*;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -43,21 +45,39 @@ public class AsociadoDaoTest {
     /**
      * Test of lista method, of class AsociadoDao.
      */
-//    @Test
-//    public void debieraMostrarListaDeAsociado() {
-//        log.debug("Debiera mostrar lista de Asociado");
-//        for (int i = 0; i < 20; i++) {
-//           Asociado asociado = new Asociado(Constantes.CLAVE+i,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
-//            currentSession().save(asociado);
-//            assertNotNull(asociado);
-//        }
-//        Map<String, Object> params = null;
-//        Map result = instance.lista(params);
-//        assertNotNull(result.get(Constantes.CONTAINSKEY_ASOCIADOS));
-//        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
-//        assertEquals(10, ((List<Asociado>) result.get(Constantes.CONTAINSKEY_ASOCIADOS)).size());
-//        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
-//    }
+    @Test
+    public void debieraMostrarListaDeAsociado() {
+        log.debug("Debiera mostrar lista de Asociado");
+            Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        Rol rol = new Rol("ROLE_ASO");
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+        for (int i = 0; i < 10; i++) {
+           Asociado asociado = new Asociado(Constantes.CLAVE+i,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+            currentSession().save(asociado);
+            assertNotNull(asociado);
+            
+              
+            Usuario usuario = new Usuario("test" + i + "@test.com", "test", "test", "test", "test");
+            usuario.setAsociacion(asociacion);
+            usuario.setRoles(roles);
+            usuario.setAsociado(asociado);
+            currentSession().save(usuario);
+        
+        }
+        Map<String, Object> params = null;
+        Map result = instance.lista(params);
+        assertNotNull(result.get(Constantes.CONTAINSKEY_ASOCIADOS));
+        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
+        
+        assertEquals(10, ((List<Asociado>) result.get(Constantes.CONTAINSKEY_ASOCIADOS)).size());
+        assertEquals(10, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
+    }
 
     @Test
     public void debieraObtenerAsociado() {

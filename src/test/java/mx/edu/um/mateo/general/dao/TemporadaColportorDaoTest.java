@@ -105,6 +105,40 @@ public class TemporadaColportorDaoTest extends BaseTest {
         assertEquals(result, temporadacolportor);
     }
    @Test
+    public void debieraObtenerTemporadaColportorPorColportor() {
+        log.debug("Debiera obtener Temporada Colportor por Colportor");
+        String nombre = "test";
+        Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        Colportor colportor = new Colportor("test", Constantes.STATUS_ACTIVO, "8262652626", "test", "1070666");
+        currentSession().save(colportor);
+        Asociacion test2 = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(test2);
+        Asociado test3 = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
+        currentSession().save(test3);
+        Temporada test4 = new Temporada ("test5");
+        currentSession().save(test4);
+        Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
+        TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"test","test");
+        temporadacolportor.setColportor(colportor);
+        temporadacolportor.setAsociacion(test2);
+        temporadacolportor.setAsociado(test3);
+        temporadacolportor.setTemporada(test4);
+        temporadacolportor.setUnion(union);
+        temporadacolportor.setColegio(colegio);
+        currentSession().save(temporadacolportor);
+        assertNotNull(temporadacolportor.getId());
+        
+        TemporadaColportor result = instance.obtiene(colportor);
+        assertNotNull(result);
+      
+        assertEquals(result, temporadacolportor);
+    }
+   
+   
+   @Test
     public void deberiaCrearTemporadaColportor() {
         log.debug("Deberia crear Temporada Colportor");
         Union union = new Union("test");
