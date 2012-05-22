@@ -24,9 +24,12 @@
 package mx.edu.um.mateo.general.utils;
 
 import javax.servlet.http.HttpServletRequest;
+import mx.edu.um.mateo.general.dao.TemporadaColportorDao;
+import mx.edu.um.mateo.general.model.TemporadaColportor;
 import mx.edu.um.mateo.general.model.Usuario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +41,8 @@ import org.springframework.stereotype.Component;
 public class Ambiente {
 
     private static final Logger log = LoggerFactory.getLogger(Ambiente.class);
+     @Autowired
+    private TemporadaColportorDao tempColportorDao;
 
     public void actualizaSesion(HttpServletRequest request) {
         Usuario usuario = obtieneUsuario();
@@ -59,4 +64,47 @@ public class Ambiente {
         Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return usuario;
     }
+    
+    public boolean esAsociadoEnSesion(){
+        boolean esAsociado = false;
+        Usuario usuario = obtieneUsuario();
+        if(usuario.getAsociado() != null){
+            esAsociado = true;
+        }
+        return esAsociado;
+    }
+    
+    public boolean esAsociado(Usuario usuario){
+        boolean esAsociado = false;
+        if(usuario.getAsociado() != null){
+            esAsociado = true;
+        }
+        return esAsociado;
+    }
+    
+    public boolean esColportorEnSesion(){
+        log.debug("COLPORTOR EN SECION");
+        boolean esColportor = false;
+        Usuario usuario = obtieneUsuario();
+        if(usuario.getColportor() != null){
+            esColportor = true;
+        }
+        return esColportor;
+    }
+    
+    public boolean esColportor(Usuario usuario){
+        boolean esColportor = false;
+        if(usuario.getColportor() != null){
+            esColportor = true;
+        }
+        return esColportor;
+    }
+    
+    public TemporadaColportor getTemporadaColportorDeUsuarioEnSesion(){
+        if(!esColportorEnSesion()){
+            return null;
+        }
+          return  tempColportorDao.obtiene(obtieneUsuario().getColportor());
+    
+}
 }

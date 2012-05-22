@@ -78,7 +78,8 @@ public class Usuario implements Serializable, UserDetails {
     private Asociacion asociacion;
     @ManyToOne(optional = true)
     private Asociado asociado;
-    
+    @ManyToOne(optional = true)
+    private Colportor colportor;
 
     public Usuario() {
     }
@@ -226,6 +227,14 @@ public class Usuario implements Serializable, UserDetails {
         this.asociado = asociado;
     }
 
+    public Colportor getColportor() {
+        return colportor;
+    }
+
+    public void setColportor(Colportor colportor) {
+        this.colportor = colportor;
+    }
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new LinkedHashSet<>();

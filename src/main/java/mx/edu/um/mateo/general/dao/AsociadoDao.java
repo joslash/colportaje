@@ -5,16 +5,16 @@
 package mx.edu.um.mateo.general.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociado;
-import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +67,15 @@ public class AsociadoDao {
 
         Criteria criteria = currentSession().createCriteria(Asociado.class);
         Criteria countCriteria = currentSession().createCriteria(Asociado.class);
+        //countCriteria = currentSession().createCriteria(Usuario.class);
+        
+        String hql = "SELECT "
+                + "new Asociado(a.id, u.username, u.nombre, u.apellidoP, u.apellidoM, a.status, a.clave, a.telefono, a.calle, a.colonia, a.municipio )"
+                + "FROM "
+                + "Usuario u join u.asociado a join u.roles r "
+                + "WHERE "
+                + "r.authority = 'ROLE_ASO'";
+        Query query = currentSession().createQuery(hql);
         
         if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
             criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
@@ -98,9 +107,9 @@ public class AsociadoDao {
             criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
             criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
-        params.put(Constantes.CONTAINSKEY_ASOCIADOS, criteria.list());
-        countCriteria.setProjection(Projections.rowCount());
-        params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
+        params.put(Constantes.CONTAINSKEY_ASOCIADOS, query.list());
+        //countCriteria.setProjection(Projections.rowCount());
+        params.put(Constantes.CONTAINSKEY_CANTIDAD, (long) query.list().size());
 
         return params;
     }
@@ -109,6 +118,19 @@ public class AsociadoDao {
         log.debug("Obtiene cuenta de asociado con id = {}", id);
         Asociado asociado = (Asociado) currentSession().get(Asociado.class, id);
         return asociado;
+    }
+    
+    public Object obtienePorUsuario(Long id) {
+        log.debug("Obtiene cuenta de asociado con id = {}", id);
+        String hql = "SELECT "
+                + "u.id, a.status, a.clave, a.telefono, a.calle, a.colonia, a.municipio "
+                + "FROM "
+                + "usuarios u, roles r, usuarios_roles ur, asociados a "
+                + "WHERE "
+                + "u.asociado_id = :id AND ur.rol_id = r.id AND r.authority = 'ROLE_ASO'";
+        Query query = currentSession().createSQLQuery(hql);
+        query.setLong("id", id);
+        return query.uniqueResult();
     }
 
     public Asociado crea(Asociado asociado) {

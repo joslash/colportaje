@@ -36,18 +36,20 @@ public class Documento implements Serializable{
     private BigDecimal importe;
     @Column(length = 1000)
     private String observaciones;
-   
+   @ManyToOne
+    private TemporadaColportor temporadaColportor;
   
     
     public Documento(){
     }
-    public Documento(String tipoDeDocumento,String folio,BigDecimal importe,String observaciones){
-        this.tipoDeDocumento=tipoDeDocumento;
-        this.folio=folio;
-        this.fecha = new Date();
-        this.importe=importe;
-        this.observaciones=observaciones;
-          
+  
+    public Documento(String tipoDeDocumento, String folio, Date fecha, BigDecimal importe, String observaciones, TemporadaColportor temporadaColporotor) {
+        this.tipoDeDocumento = tipoDeDocumento;
+        this.folio = folio;
+        this.fecha = fecha;
+        this.importe = importe;
+        this.observaciones = observaciones;
+        this.temporadaColportor = temporadaColporotor;
     }
 
     public Date getFecha() {
@@ -90,6 +92,14 @@ public class Documento implements Serializable{
         this.observaciones = observaciones;
     }
 
+    public TemporadaColportor getTemporadaColporotor() {
+        return temporadaColportor;
+    }
+
+    public void setTemporadaColporotor(TemporadaColportor temporadaColporotor) {
+        this.temporadaColportor = temporadaColporotor;
+    }
+
     public String getTipoDeDocumento() {
         return tipoDeDocumento;
     }
@@ -121,10 +131,16 @@ public class Documento implements Serializable{
         if (!Objects.equals(this.folio, other.folio)) {
             return false;
         }
+        if (!Objects.equals(this.fecha, other.fecha)) {
+            return false;
+        }
         if (!Objects.equals(this.importe, other.importe)) {
             return false;
         }
         if (!Objects.equals(this.observaciones, other.observaciones)) {
+            return false;
+        }
+        if (!Objects.equals(this.temporadaColportor, other.temporadaColportor)) {
             return false;
         }
         return true;
@@ -133,16 +149,18 @@ public class Documento implements Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.tipoDeDocumento);
-        hash = 97 * hash + Objects.hashCode(this.folio);
-        hash = 97 * hash + Objects.hashCode(this.importe);
-        hash = 97 * hash + Objects.hashCode(this.observaciones);
+        hash = 29 * hash + Objects.hashCode(this.tipoDeDocumento);
+        hash = 29 * hash + Objects.hashCode(this.folio);
+        hash = 29 * hash + Objects.hashCode(this.fecha);
+        hash = 29 * hash + Objects.hashCode(this.importe);
+        hash = 29 * hash + Objects.hashCode(this.observaciones);
+        hash = 29 * hash + Objects.hashCode(this.temporadaColportor);
         return hash;
     }
 
     @Override
     public String toString() {
-        return "Documento{" + "tipoDeDocumento=" + tipoDeDocumento + ", folio=" + folio + ", importe=" + importe + ", observaciones=" + observaciones + '}';
+        return "Documento{" + "tipoDeDocumento=" + tipoDeDocumento + ", folio=" + folio + ", fecha=" + fecha + ", importe=" + importe + ", observaciones=" + observaciones + ", temporadaColporotor=" + temporadaColportor + '}';
     }
         
 }

@@ -7,8 +7,7 @@ package mx.edu.um.mateo.general.model;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -23,30 +22,28 @@ public class Asociado implements Serializable {
     private Long id;
     @Version
     private Integer version;
-    @NotBlank
     @Column(nullable = false, length = 65)
     private String clave;
-    @Column(length = 15)
+    @Size(min = 10, max = 12)
+    @Column(length = 12)
     private String telefono;
-    @NotNull
-    @Column(nullable = false, length = 23, name = "status")
+    @Column(nullable = false, length = 23)
     private String status;
-    @NotNull
     @Column(length = 200)
     private String calle;
-    @NotNull
     @Column(length = 200)
     private String colonia;
-    @NotNull
     @Column(length = 200)
     private String municipio;
-    
-    
-    
+    private String nombre;
+    private String apellidop;
+    private String apellidom;
+    private String username;
+
     public Asociado() {
     }
 
-    public Asociado( String clave,  String telefono, String status,String calle,String colonia,String municipio) {
+    public Asociado(String clave, String telefono, String status, String calle, String colonia, String municipio) {
         this.clave = clave;
         this.telefono = telefono;
         this.status = status;
@@ -55,6 +52,20 @@ public class Asociado implements Serializable {
         this.municipio = municipio;
     }
 
+    public Asociado(Long id, String username, String nombre, String apellidop, String apellidom, String status, String clave, String telefono, String calle, String colonia, String municipio){
+    this.id=id;
+    this.username=username;
+    this.nombre=nombre;
+    this.apellidop=apellidop;
+    this.apellidom=apellidom;
+    this.status=status;
+    this.clave=clave;
+    this.telefono=telefono;
+    this.calle = calle;
+    this.colonia = colonia;
+    this.municipio = municipio;
+    }
+    
     public String getCalle() {
         return calle;
     }
@@ -118,6 +129,40 @@ public class Asociado implements Serializable {
     public void setVersion(Integer version) {
         this.version = version;
     }
+
+    public String getApellidom() {
+        return apellidom;
+    }
+
+    public void setApellidom(String apellidom) {
+        this.apellidom = apellidom;
+    }
+
+    public String getApellidop() {
+        return apellidop;
+    }
+
+    public void setApellidop(String apellidop) {
+        this.apellidop = apellidop;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    
 
     @Override
     public boolean equals(Object obj) {

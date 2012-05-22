@@ -39,24 +39,39 @@
             <c:if test="${asociado != null}">
                 <s:bind path="asociado.*">
                     <c:if test="${not empty status.errorMessages}">
-                    <div class="alert alert-block alert-error fade in" role="status">
-                        <a class="close" data-dismiss="alert">×</a>
-                        <c:forEach var="error" items="${status.errorMessages}">
-                            <c:out value="${error}" escapeXml="false"/><br />
-                        </c:forEach>
-                    </div>
+                        <div class="alert alert-block alert-error fade in" role="status">
+                            <a class="close" data-dismiss="alert">×</a>
+                            <c:forEach var="error" items="${status.errorMessages}">
+                                <c:out value="${error}" escapeXml="false"/><br />
+                            </c:forEach>
+                        </div>
                     </c:if>
                 </s:bind>
             </c:if>
-            
+
             <table id="lista" class="table">
                 <thead>
                     <tr>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="username" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="nombre" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="apellidoP" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="apellidoM" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="status" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="clave" />
                         </jsp:include>
-                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                        <jsp:param name="columna" value="status" />
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="telefono" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="calle" />
@@ -67,28 +82,29 @@
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="municipio" />
                         </jsp:include>
-                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="telefono" />
-                        </jsp:include>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach items="${asociados}" var="asociado" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/asociado/ver/${asociado.id}' />">${asociado.clave}</a></td>
+                            <td><a href="<c:url value='/asociado/ver/${asociado.id}' />">${asociado.username}</a></td>
+                            <td>${asociado.nombre}</td>
+                            <td>${asociado.apellidop}</td>
+                            <td>${asociado.apellidom}</td>
                             <td>${asociado.status}</td>
+                            <td>${asociado.clave}</td>
+                            <td>${asociado.telefono}</td>
                             <td>${asociado.calle}</td>
                             <td>${asociado.colonia}</td>
                             <td>${asociado.municipio}</td>
-                             <td>${asociado.telefono}</td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
             <jsp:include page="/WEB-INF/jsp/paginacion.jsp" />
         </form>        
-        <content>
-            <script src="<c:url value='/js/lista.js' />"></script>
-        </content>
-    </body>
+    <content>
+        <script src="<c:url value='/js/lista.js' />"></script>
+    </content>
+</body>
 </html>

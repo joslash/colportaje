@@ -100,6 +100,15 @@ public class TemporadaColportorDao {
         return temporadacolportor;
     }
     
+     public TemporadaColportor obtiene(Colportor colportor) {
+        log.debug("Obtiene Temporada Colportor con Colportor = {}",colportor.getId());
+        Criteria sql = currentSession().createCriteria(TemporadaColportor.class);
+        sql.add(Restrictions.eq("colportor",colportor));
+        return (TemporadaColportor)sql.uniqueResult();
+              
+    }
+    
+    
     public TemporadaColportor crea(TemporadaColportor temporadacolportor) {
         log.debug("Creando Temporada Colportor : {}", temporadacolportor);
         currentSession().save(temporadacolportor);

@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.web;
+import java.util.Date;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.DocumentoDao;
 import mx.edu.um.mateo.general.model.Documento;
@@ -66,7 +67,7 @@ public class DocumentoControllerTest extends BaseTest {
         log.debug("Debiera monstrar lista de documentos");
 
         for (int i = 0; i < 20; i++) {
-            Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,Constantes.IMPORTE, Constantes.OBSERVACIONES);
+            Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,new Date(),Constantes.IMPORTE, Constantes.OBSERVACIONES,null);
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
@@ -77,7 +78,7 @@ public class DocumentoControllerTest extends BaseTest {
     @Test
     public void debieraMostrarDocumento() throws Exception {
         log.debug("Debiera mostrar documento");
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,Constantes.IMPORTE, Constantes.OBSERVACIONES);
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,new Date(),Constantes.IMPORTE, Constantes.OBSERVACIONES,null);
         documento = documentoDao.crea(documento);
         assertNotNull(documento);
 
@@ -104,7 +105,7 @@ public class DocumentoControllerTest extends BaseTest {
     @Test
     public void debieraActualizarDocumento() throws Exception {
         log.debug("Debiera actualizar documento");
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,Constantes.IMPORTE, Constantes.OBSERVACIONES);
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,new Date(),Constantes.IMPORTE, Constantes.OBSERVACIONES,null);
         documento = documentoDao.crea(documento);
         assertNotNull(documento);
 
@@ -122,7 +123,7 @@ public class DocumentoControllerTest extends BaseTest {
     @Test
     public void debieraEliminarDocumento() throws Exception {
         log.debug("Debiera eliminar documento");
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,Constantes.IMPORTE, Constantes.OBSERVACIONES);
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,new Date(),Constantes.IMPORTE, Constantes.OBSERVACIONES,null);
         documentoDao.crea(documento);
         assertNotNull(documento);
 

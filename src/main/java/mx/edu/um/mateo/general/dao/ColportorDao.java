@@ -28,11 +28,11 @@ import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Colportor;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,6 +85,19 @@ public class ColportorDao {
         Criteria criteria = currentSession().createCriteria(Colportor.class);
         Criteria countCriteria = currentSession().createCriteria(Colportor.class);
 
+        String hql = "SELECT "
+                + "new Colportor(u.username, u.nombre, u.apellidoP, u.apellidoM, c.status, c.clave, c.telefono, c.matricula, c.calle, c.colonia, c.municipio) "
+                + "FROM "
+                + "Usuario u join u.colportor c join u.roles r "
+                + "WHERE "
+                + "r.authority = 'ROLE_COL'";
+        Query query = currentSession().createQuery(hql);
+        
+         if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
+            criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
+            countCriteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
+        }
+
         if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";
@@ -108,10 +121,9 @@ public class ColportorDao {
             criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
             criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
-        params.put(Constantes.CONTAINSKEY_COLPORTORES, criteria.list());
-
-        countCriteria.setProjection(Projections.rowCount());
-        params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
+        params.put(Constantes.CONTAINSKEY_COLPORTORES, query.list());
+        //countCriteria.setProjection(Projections.rowCount());
+        params.put(Constantes.CONTAINSKEY_CANTIDAD, (long) query.list().size());
 
         return params;
     }
@@ -121,6 +133,22 @@ public class ColportorDao {
         Colportor colportor = (Colportor) currentSession().get(Colportor.class, id);
         return colportor;
     }
+    
+      public Object obtienePorUsuario(Long id) {
+        log.debug("Obtiene cuenta de colportor con id = {}", id);
+        String hql = "SELECT "
+                + "u.id, c.status, c.clave, c.telefono, c.calle, c.colonia, c.municipio "
+                + "FROM "
+                + "usuarios u, roles r, usuarios_roles ur, colportores c "
+                + "WHERE "
+                + "u.colportor_id = :id AND ur.rol_id = r.id AND r.authority = 'ROLE_COL'";
+        Query query = currentSession().createSQLQuery(hql);
+        query.setLong("id", id);
+        return query.uniqueResult();
+    }
+    
+    
+    
 
     public Colportor crea(Colportor colportor) {
         log.debug("Creando colportor : {}", colportor);

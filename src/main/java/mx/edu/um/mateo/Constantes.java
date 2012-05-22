@@ -20,7 +20,7 @@ public class Constantes {
     public static final String CLAVE = "000";
     public static final String DIRECCION = "testd";
     public static final String CORREO = "test@tes.tst";
-    public static final String TELEFONO = "12345";
+    public static final String TELEFONO = "1234567890";
     public static final String TIPO_DOCUMENTO = "A";
     public static final String TIPO_COLPORTOR = "test";
     public static final String FOLIO = "test";

@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -31,6 +32,14 @@
                 <input name="filtro" type="text" class="input-medium search-query" value="${param.filtro}">
                 <button type="submit" class="btn"><s:message code="buscar.label" /></button>
             </p>
+            <sec:authorize access="hasRole('ROLE_ASO')">
+                <p>
+                    <input name="filtro" type="text" class="input-medium search-query" value="${param.filtro}">
+                    <button type="submit" class="btn"><s:message code="buscar.label" /></button>         
+                </p>
+            </sec:authorize>
+
+
 
             <c:if test="${not empty message}">
                 <div class="alert alert-block alert-success fade in" role="status">
@@ -76,7 +85,7 @@
                             <jsp:param name="columna" value="folio" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                        <jsp:param name="columna" value="importe" />
+                            <jsp:param name="columna" value="importe" />
                         </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="observaciones" />

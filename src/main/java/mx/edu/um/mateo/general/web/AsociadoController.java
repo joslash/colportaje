@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociadoDao;
 import mx.edu.um.mateo.general.dao.UsuarioDao;
-import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Asociado;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.ReporteException;
@@ -85,7 +84,7 @@ public class AsociadoController extends BaseController {
             params = asociadoDao.lista(params);
             params.remove(Constantes.CONTAINSKEY_REPORTE);
             try {
-                enviaCorreo(correo, (List<Asociacion>) params.get(Constantes.CONTAINSKEY_ASOCIADOS), request, Constantes.CONTAINSKEY_ASOCIADOS, Constantes.ASO, null);
+                enviaCorreo(correo, (List<Asociado>) params.get(Constantes.CONTAINSKEY_ASOCIADOS), request, Constantes.CONTAINSKEY_ASOCIADOS, Constantes.ASO, null);
                 modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
                 modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("asociado.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
             } catch (ReporteException e) {
@@ -102,12 +101,10 @@ public class AsociadoController extends BaseController {
     }
 
     @RequestMapping("/nuevo")
-    public String nueva(Model modelo, Model user) {
+    public String nuevo(Model modelo) {
         log.debug("Nuevo asociado");
         Asociado asociado = new Asociado();
         modelo.addAttribute(Constantes.ADDATTRIBUTE_ASOCIADO, asociado);
-        Usuario usuario = new Usuario();
-        user.addAttribute(Constantes.ADDATTRIBUTE_USUARIO, usuario);
         return Constantes.PATH_ASOCIADO_NUEVO;
     }
 

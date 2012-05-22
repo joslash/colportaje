@@ -97,7 +97,7 @@ public class AsociadoControllerTest extends BaseTest {
 
         this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_CREA)
                 .param("clave", "test")
-                .param("telefono", "test")
+                .param("telefono", "1234567890")
                 .param("status", Constantes.STATUS_ACTIVO)
                 .param("calle", "test1")
                 .param("colonia", "test1")
@@ -121,7 +121,7 @@ public class AsociadoControllerTest extends BaseTest {
                 .param("colonia", "test1")
                 .param("municipio", "test1")
                 .param("clave", "test2")
-                .param("telefono", "test4")
+                .param("telefono", "1234567890")
                 .param("status", asociado.getStatus()))
                 .andExpect(status().isOk())
                 .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))

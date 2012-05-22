@@ -27,10 +27,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.ws.rs.HEAD;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -45,13 +42,10 @@ public class Colportor implements Serializable {
     private Long id;
     @Version
     private Integer version;
-    @NotNull
     @Column( nullable = false, length = 64)
     private String clave;
-    @NotNull
     @Column(nullable = false, length = 2)
     private String status;
-    @NotNull
     @Size(min = 10, max = 12)
     @Column(nullable = false, length = 12)
     private String telefono;
@@ -69,14 +63,11 @@ public class Colportor implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(nullable = true, name = "fecha")
     private Date fechaDeNacimiento;
-    /*
-     * DE AQUI private Set<TipoColportor> tipoColportor = new
-     * HashSet<TipoColportor>(); * @ElementCollection
-     * @Enumerated(EnumType.STRING) public Set<TipoColportor>
-     * getTipoColportors() { return tipoColportor; } * public void
-     * setTipoColportors(Set<TipoColportor> tipoColportor) { this.tipoColportor
-     * = tipoColportor; }
-     */
+    private String username;
+    private String nombre;
+    private String apellidop;
+    private String apellidom;
+    
 
     public Colportor() {
     }
@@ -100,7 +91,20 @@ public class Colportor implements Serializable {
         this.matricula = matricula;
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
-
+    public Colportor(String username, String nombre,String apellidop,String apellidom,String status,String clave,String telefono,String matricula,String calle,String colonia,String municipio){
+    this.username=username;
+    this.nombre=nombre;
+    this.apellidop=apellidop;
+    this.apellidom=apellidom;
+    this.status=status;
+    this.clave=clave;
+    this.telefono=telefono;
+    this.matricula=matricula;
+    this.calle=calle;
+    this.colonia=colonia;
+    this.municipio=municipio;
+    }
+    
     public String getCalle() {
         return calle;
     }
@@ -188,6 +192,39 @@ public class Colportor implements Serializable {
     public void setVersion(Integer version) {
         this.version = version;
     }
+
+    public String getApellidom() {
+        return apellidom;
+    }
+
+    public void setApellidom(String apellidom) {
+        this.apellidom = apellidom;
+    }
+
+    public String getApellidop() {
+        return apellidop;
+    }
+
+    public void setApellidop(String apellidop) {
+        this.apellidop = apellidop;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
 
     @Override
     public boolean equals(Object obj) {
