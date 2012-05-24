@@ -22,7 +22,7 @@ public class Asociado implements Serializable {
     private Long id;
     @Version
     private Integer version;
-    @Column(length = 65, unique = true)
+    @Column(nullable = false, length = 65)
     private String clave;
     @Size(min = 10, max = 12)
     @Column(length = 12)
@@ -35,6 +35,10 @@ public class Asociado implements Serializable {
     private String colonia;
     @Column(length = 200)
     private String municipio;
+    private String nombre;
+    private String apellidop;
+    private String apellidom;
+    private String username;
 
     public Asociado() {
     }
@@ -48,6 +52,20 @@ public class Asociado implements Serializable {
         this.municipio = municipio;
     }
 
+    public Asociado(Long id, String username, String nombre, String apellidop, String apellidom, String status, String clave, String telefono, String calle, String colonia, String municipio){
+    this.id=id;
+    this.username=username;
+    this.nombre=nombre;
+    this.apellidop=apellidop;
+    this.apellidom=apellidom;
+    this.status=status;
+    this.clave=clave;
+    this.telefono=telefono;
+    this.calle = calle;
+    this.colonia = colonia;
+    this.municipio = municipio;
+    }
+    
     public String getCalle() {
         return calle;
     }
@@ -111,6 +129,40 @@ public class Asociado implements Serializable {
     public void setVersion(Integer version) {
         this.version = version;
     }
+
+    public String getApellidom() {
+        return apellidom;
+    }
+
+    public void setApellidom(String apellidom) {
+        this.apellidom = apellidom;
+    }
+
+    public String getApellidop() {
+        return apellidop;
+    }
+
+    public void setApellidop(String apellidop) {
+        this.apellidop = apellidop;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    
 
     @Override
     public boolean equals(Object obj) {

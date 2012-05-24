@@ -157,7 +157,8 @@ public class TemporadaColportorController {
         Map<String, Object> temporadas = temporadaDao.lista(null);
         modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, temporadas.get(Constantes.CONTAINSKEY_TEMPORADAS));
         Map<String, Object> asociados = asociadoDao.lista(null);
-        modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, asociados.get(Constantes.CONTAINSKEY_ASOCIADOS));
+        List<Asociado> lista=(List)asociados.get(Constantes.CONTAINSKEY_ASOCIADOS);
+        modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, lista);
         Map<String, Object> colportores = colportorDao.lista(null);
         modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, colportores.get(Constantes.CONTAINSKEY_COLPORTORES));
         

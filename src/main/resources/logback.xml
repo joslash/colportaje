@@ -28,9 +28,9 @@
     </triggeringPolicy>
   </appender>
   <logger name="mx.edu.um.mateo" level="DEBUG"/>
-  <logger name="org.spingframework" level="DEBUG"/>
-  <logger name="org.hibernate.sql" level="TRACE"/>
-  <logger name="org.hibernate.type" level="TRACE"/>
+  <logger name="org.spingframework" level="ERROR"/>
+  <logger name="org.hibernate.sql" level="INFO"/>
+  <logger name="org.hibernate.type" level="ERROR"/>
   <!--
   -->
   <root level="INFO">

@@ -23,10 +23,12 @@
  */
 package mx.edu.um.mateo.general.dao;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import mx.edu.um.mateo.Constantes;
-import mx.edu.um.mateo.general.model.Colportor;
+import mx.edu.um.mateo.general.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import static org.junit.Assert.*;
@@ -62,24 +64,40 @@ public class ColportorDaoTest {
     /**
      * Test of lista method, of class ColportorDao.
      */
-//    @Test
-//    public void deberiaMostrarListaDeColportor() {
-//        log.debug("Debiera mostrar lista de Colportores");
-//
-//        for (int i = 0; i < 20; i++) {
-//            Colportor colportor = new Colportor("test"+i, Constantes.STATUS_ACTIVO, "8262652626", "test", "10706"+i);
-//            currentSession().save(colportor);
-//            assertNotNull(colportor);
-//        }
-//
-//        Map<String, Object> params = null;
-//        Map result = instance.lista(params);
-//        assertNotNull(result.get(Constantes.CONTAINSKEY_COLPORTORES));
-//        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
-//
-//        assertEquals(10, ((List<Colportor>) result.get(Constantes.CONTAINSKEY_COLPORTORES)).size());
-//        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
-//    }
+     @Test
+    public void debieraMostrarListaDeColportor() {
+        log.debug("Debiera mostrar lista de Colportor");
+            Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        Rol rol = new Rol("ROLE_COL");
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+        for (int i = 0; i < 10; i++) {
+           Colportor colportor = new Colportor("test"+i, Constantes.STATUS_ACTIVO, "8262652626", "test", "10706"+i);
+            
+            currentSession().save(colportor);
+            assertNotNull(colportor);
+            
+              
+            Usuario usuario = new Usuario("test" + i + "@test.com", "test", "test", "test", "test");
+            usuario.setAsociacion(asociacion);
+            usuario.setRoles(roles);
+            usuario.setColportor(colportor);
+            currentSession().save(usuario);
+       
+        }
+        Map<String, Object> params = null;
+        Map result = instance.lista(params);
+        assertNotNull(result.get(Constantes.CONTAINSKEY_COLPORTORES));
+        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
+        
+        assertEquals(10, ((List<Colportor>) result.get(Constantes.CONTAINSKEY_COLPORTORES)).size());
+        assertEquals(10, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
+    }
 
     @Test
     public void debieraObtenerColportor() {

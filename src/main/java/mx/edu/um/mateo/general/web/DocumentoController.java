@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.DocumentoDao;
+import mx.edu.um.mateo.general.dao.TemporadaColportorDao;
 import mx.edu.um.mateo.general.model.Documento;
 import mx.edu.um.mateo.general.model.Usuario;
-import mx.edu.um.mateo.general.utils.Ambiente;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -46,6 +46,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import mx.edu.um.mateo.general.utils.Ambiente;
 
 /**
  *
@@ -58,6 +59,8 @@ public class DocumentoController {
     private static final Logger log = LoggerFactory.getLogger(DocumentoController.class);
     @Autowired
     private DocumentoDao DocumentoDao;
+    @Autowired
+    private TemporadaColportorDao tempColportorDao;
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
@@ -98,7 +101,9 @@ public class DocumentoController {
             params.put(Constantes.CONTAINSKEY_ORDER, order);
             params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
-
+            
+    params.put("temporadaColportor",ambiente.getTemporadaColportorDeUsuarioEnSesion());
+    
         if (StringUtils.isNotBlank(tipo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = DocumentoDao.lista(params);
@@ -112,6 +117,7 @@ public class DocumentoController {
             }
         }
 
+        
         if (StringUtils.isNotBlank(correo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = DocumentoDao.lista(params);
@@ -125,6 +131,10 @@ public class DocumentoController {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
+    
+           
+           
+       
         params = DocumentoDao.lista(params);
         modelo.addAttribute(Constantes.CONTAINSKEY_DOCUMENTOS, params.get(Constantes.CONTAINSKEY_DOCUMENTOS));
 
@@ -138,7 +148,7 @@ public class DocumentoController {
         BigDecimal fidelidad = new BigDecimal("0");
         BigDecimal alcanzado = new BigDecimal("0");
 
-
+  
 
         while (iter.hasNext()) {
             doc = iter.next();
@@ -163,7 +173,7 @@ public class DocumentoController {
                     totalDepositos = totalDepositos.add(doc.getImporte());
                     break;
                 }
-                case Constantes.NOTA_DE_COMPRA: {
+                case Constantes.NOTAS_DE_COMPRA: {
                     totalDepositos = totalDepositos.add(doc.getImporte());
                     break;
 
@@ -207,7 +217,10 @@ public class DocumentoController {
         // termina paginado
 
         return Constantes.PATH_DOCUMENTO_LISTA;
+    
+ 
     }
+ 
 
     @RequestMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
@@ -248,7 +261,7 @@ public class DocumentoController {
                 documentos.setTipoDeDocumento(Constantes.DIEZMO);
                 break;
             case "3":
-                documentos.setTipoDeDocumento(Constantes.NOTA_DE_COMPRA);
+                documentos.setTipoDeDocumento(Constantes.NOTAS_DE_COMPRA);
                 break;
             case "4":
                 documentos.setTipoDeDocumento(Constantes.BOLETIN);
@@ -269,7 +282,7 @@ public class DocumentoController {
 
         try {
             log.debug("Documento Fecha" + documentos.getFecha());
-
+   documentos.setTemporadaColporotor(ambiente.getTemporadaColportorDeUsuarioEnSesion());
             documentos = DocumentoDao.crea(documentos);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear el documento", e);
@@ -308,7 +321,7 @@ public class DocumentoController {
                 documentos.setTipoDeDocumento(Constantes.DIEZMO);
                 break;
             case "3":
-                documentos.setTipoDeDocumento(Constantes.NOTA_DE_COMPRA);
+                documentos.setTipoDeDocumento(Constantes.NOTAS_DE_COMPRA);
                 break;
             case "4":
                 documentos.setTipoDeDocumento(Constantes.BOLETIN);
@@ -327,6 +340,7 @@ public class DocumentoController {
         }
 
         try {
+             documentos.setTemporadaColporotor(ambiente.getTemporadaColportorDeUsuarioEnSesion());
             log.debug("Documento Fecha" + documentos.getFecha());
             documentos = DocumentoDao.actualiza(documentos);
         } catch (ConstraintViolationException e) {

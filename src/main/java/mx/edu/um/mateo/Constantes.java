@@ -34,7 +34,7 @@ public class Constantes {
     public static final String DEPOSITO_CAJA = "Deposito_Caja";
     public static final String DEPOSITO_BANCO = "Deposito_Banco";
     public static final String DIEZMO = "Diezmo";
-    public static final String NOTA_DE_COMPRA = "Nota_De_Compra";
+    public static final String NOTAS_DE_COMPRA = "Notas_De_Compra";
     public static final String BOLETIN = "Boletín";
     public static final String INFORME = "Informe";
     public static final String TOTALBOLETIN = "Total_Boletin";
