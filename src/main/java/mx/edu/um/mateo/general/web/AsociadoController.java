@@ -14,6 +14,7 @@ import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociadoDao;
 import mx.edu.um.mateo.general.dao.UsuarioDao;
 import mx.edu.um.mateo.general.model.Asociado;
+import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.ReporteException;
 import org.apache.commons.lang.StringUtils;
@@ -109,7 +110,7 @@ public class AsociadoController extends BaseController {
     }
 
     @Transactional
-    @RequestMapping(value = "/crea", method = RequestMethod.POST)
+    @RequestMapping(value = "/crear", method = RequestMethod.POST)
     public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Asociado asociado, @Valid Usuario usuario, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) {
         for (String nombre : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
@@ -119,14 +120,19 @@ public class AsociadoController extends BaseController {
             return Constantes.PATH_ASOCIADO_NUEVO;
         }
         try {
-            asociado = asociadoDao.crea(asociado);
-            Long asociacionId = usuario.getAsociacion().getId();
-            String [] rolAso  = new String[1];
-            rolAso[0] = "ROLE_ASO";
-            usuario = usuarioDao.crea(usuario, asociacionId, rolAso);
-        } catch (ConstraintViolationException e) {
+            asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
+                   Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
+                   Constantes.MUNICIPIO);
+            Long asociacionId = (Long)request.getSession().getAttribute("asociacionId");
+//           
+              
+            usuario = usuarioDao.crea(asociado, asociacionId,  new String[]{"ROLE_ASO"});
+        } catch(ConstraintViolationException e) {
             log.error("No se pudo crear al asociado", e);
             return Constantes.PATH_ASOCIADO_NUEVO;
+//                (Exception e){
+//            e.printStackTrace();
+            
         }
 
         redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "asociado.creado.message");

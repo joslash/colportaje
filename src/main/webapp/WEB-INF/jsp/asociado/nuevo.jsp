@@ -12,17 +12,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><s:message code="asociado.nuevo.label" /></title>
+        <title><s:message code="usuario.nuevo.label" /></title>
     </head>
     <body>
         <jsp:include page="../menu.jsp" >
-            <jsp:param name="menu" value="asociado" />
+            <jsp:param name="menu" value="usuario" />
         </jsp:include>
 
         <div id="nueva-asociado" class="content scaffold-list" role="main">
-            <h1><s:message code="asociado.nuevo.label" /></h1>
+            <h1><s:message code="usuario.nuevo.label" /></h1>
             <p class="well">
-                <a class="btn btn-primary" href="<s:url value='/asociado'/>"><i class="icon-list icon-white"></i> <s:message code='asociado.lista.label' /></a>
+                <a class="btn btn-primary" href="<s:url value='admin/usuario'/>"><i class="icon-list icon-white"></i> <s:message code='usuario.lista.label' /></a>
             </p>
             <form:form commandName="asociado" action="crea" method="post">
                 <form:errors path="*">
@@ -35,6 +35,60 @@
                 </form:errors>
 
                 <fieldset>
+                    
+                    <s:bind path="asociado.username">
+                        <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
+                            <label for="correo">
+                                <s:message code="correo.label" />
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <form:input path="username" maxlength="128" required="true" />
+                            <form:errors path="username" cssClass="alert alert-error" />
+                        </div>
+                    </s:bind>
+                    <s:bind path="asociado.nombre">
+                        <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
+                            <label for="nombre">
+                                <s:message code="nombre.label" />
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <form:input path="nombre" maxlength="128" required="true" />
+                            <form:errors path="nombre" cssClass="alert alert-error" />
+                        </div>
+                    </s:bind>
+                    <s:bind path="asociado.apellidoP">
+                        <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
+                            <label for="apellidoP">
+                                <s:message code="apellidoP.label" />
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <form:input path="apellidoP" maxlength="128" required="true" />
+                            <form:errors path="apellidoP" cssClass="alert alert-error" />
+                        </div>
+                    </s:bind>
+                    <s:bind path="asociado.apellidoM">
+                        <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
+                            <label for="apellidoM">
+                                <s:message code="apellidoM.label" />
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <form:input path="apellidoM" maxlength="128" required="true" />
+                            <form:errors path="apellidoM" cssClass="alert alert-error" />
+                        </div>
+                    </s:bind>
+                    <s:bind path="asociado.roles">
+                        <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
+                            <label for="roles">
+                                <s:message code="authorities.label" />
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <c:forEach items="${roles}" var="rol">
+                                <form:checkbox path="roles" value="${rol.authority}" /> <s:message code="${rol.authority}" />&nbsp;
+                            </c:forEach>
+                            <form:errors path="authorities" cssClass="errors" />
+                        </div>
+                    </s:bind>
+                    
                        <s:bind path="asociado.status">
                         <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
                                 <label for="status">

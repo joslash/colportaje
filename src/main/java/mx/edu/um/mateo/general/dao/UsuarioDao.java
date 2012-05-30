@@ -23,10 +23,7 @@
  */
 package mx.edu.um.mateo.general.dao;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
@@ -42,7 +39,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- *
+ * 
  * @author jdmr
  */
 @Repository("userDao")
@@ -83,12 +80,20 @@ public class UsuarioDao {
             params.put("offset", 0);
         }
 
+        if (!params.containsKey("asociacion")) {
+            params.put("usuarios", new ArrayList());
+            params.put("cantidad", 0L);
+
+            return params;
+        }
+        
         Criteria criteria = currentSession().createCriteria(Usuario.class);
         Criteria countCriteria = currentSession().createCriteria(Usuario.class);
 
         if (params.containsKey("asociacion")) {
-            criteria.createCriteria("asociacion").add(Restrictions.idEq(params.get("asociacion")));
-            countCriteria.createCriteria("asociacion").add(Restrictions.idEq(params.get("asociacion")));
+            log.debug("valor de asociacion"+params.get("asociacion"));
+            criteria.createCriteria("asociacion").add(Restrictions.eq("id",((Asociacion)params.get("asociacion")).getId()));
+            countCriteria.createCriteria("asociacion").add(Restrictions.eq("id",((Asociacion)params.get("asociacion")).getId()));
         }
 
         if (params.containsKey("filtro")) {
@@ -152,6 +157,7 @@ public class UsuarioDao {
         }
         Query query = currentSession().createQuery("select r from Rol r where r.authority = :nombre");
         for (String nombre : nombreDeRoles) {
+            log.debug("Nombre del rol"+nombre);
             query.setString("nombre", nombre);
             Rol rol = (Rol) query.uniqueResult();
             usuario.addRol(rol);

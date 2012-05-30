@@ -88,12 +88,46 @@ public class UsuarioDaoTest {
             currentSession().save(usuario);
         }
 
-        Map<String, Object> params = null;
+        Map<String, Object> params = new HashMap();
+        params.put("asociacion", asociacion);
         Map<String, Object> result = instance.lista(params);
         List<Usuario> usuarios = (List<Usuario>) result.get("usuarios");
         Long cantidad = (Long) result.get("cantidad");
         assertEquals(10, usuarios.size());
         assertTrue(20 <= cantidad);
+    }
+    
+    /**
+     * En caso de que params no lleve una asociacion se grese lista vacia de usuarios
+     */
+     
+    @Test
+    public void debieraObtenerListaVaciaDeUsuarios() {
+        log.debug("Debiera obtener lista vacia de usuarios");
+
+        Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        Rol rol = new Rol("ROLE_TEST");
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+
+        for (int i = 0; i < 20; i++) {
+            Usuario usuario = new Usuario("test" + i + "@test.com", "test", "test", "test", "test");
+            usuario.setAsociacion(asociacion);
+            usuario.setRoles(roles);
+            currentSession().save(usuario);
+        }
+
+        Map<String, Object> params = null;
+        Map<String, Object> result = instance.lista(params);
+        List<Usuario> usuarios = (List<Usuario>) result.get("usuarios");
+        Long cantidad = (Long) result.get("cantidad");
+        assertEquals(0, usuarios.size());
+        assertTrue(0 <= cantidad);
     }
 
     /**
@@ -175,7 +209,7 @@ public class UsuarioDaoTest {
 
     @Test
     public void debieraCambiarRolDeUsuario() {
-        log.debug("Debiera actualizar usuario");
+        log.debug("Debiera Cambiar Rol de usuario");
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
@@ -198,20 +232,17 @@ public class UsuarioDaoTest {
         assertEquals(usuario, result);
         assertTrue(result.getRoles().contains(rol));
 
-        result.setNombre("PRUEBA");
         instance.actualiza(result, asociacion.getId(), new String[]{rol2.getAuthority()});
 
-        Usuario prueba = instance.obtiene(id);
-        assertEquals(result.getNombre(), prueba.getNombre());
         assertTrue(result.getRoles().contains(rol2));
     }
 
     /**
-     * Test of elimina method, of class UsuarioDao.
+     * No debiera borrar al usuario si este es el unico que existe en la db 
      */
     @Test(expected = UltimoException.class)
     public void noDebieraEliminarUsuario() throws UltimoException {
-        log.debug("Debiera actualizar usuario");
+        log.debug("No Debiera Eliminar usuario");
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
@@ -229,6 +260,7 @@ public class UsuarioDaoTest {
         assertNotNull(id);
 
         instance.elimina(id);
+        assertNotNull("usuario eliminado", usuario.getId());
         fail("Debio lanzar la excepcion de ultimo usuario");
     }
 
@@ -237,7 +269,7 @@ public class UsuarioDaoTest {
      */
     @Test
     public void debieraEliminarUsuario() throws UltimoException {
-        log.debug("Debiera actualizar usuario");
+        log.debug("Debiera eliminar usuario");
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
@@ -265,48 +297,4 @@ public class UsuarioDaoTest {
         assertNull(result);
     }
 
-    @Test
-    public void debieraMostrarLosUsuariosFiltradosPorAsociacion() {
-        log.debug("Mostrar los usuarios filtrados por asociacion");
-        Union union = new Union("test");
-        union.setStatus(Constantes.STATUS_ACTIVO);
-        currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
-        currentSession().save(rol);
-        Set<Rol> roles = new HashSet<>();
-        roles.add(rol);
-        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
-        currentSession().save(asociacion);
-        Asociacion asociacion2 = new Asociacion("TEST02", Constantes.STATUS_ACTIVO, union);
-        currentSession().save(asociacion2);
-
-        for (int i = 0; i < 20; i++) {
-            Usuario usuario = new Usuario("test-a" + i + "@test.com", "test", "test", "test", "test");
-            usuario.setAsociacion(asociacion);
-            usuario.setRoles(roles);
-            currentSession().save(usuario);
-        }
-
-        for (int i = 0; i < 30; i++) {
-            Usuario usuario = new Usuario("test-b" + i + "@test.com", "test", "test", "test", "test");
-            usuario.setAsociacion(asociacion2);
-            usuario.setRoles(roles);
-            currentSession().save(usuario);
-        }
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("asociacion", asociacion.getId());
-        Map<String, Object> result = instance.lista(params);
-        List<Usuario> usuarios = (List<Usuario>) result.get("usuarios");
-        Long cantidad = (Long) result.get("cantidad");
-        assertEquals(10, usuarios.size());
-        assertTrue(20 <= cantidad);
-
-        params.put("asociacion", asociacion2.getId());
-        result = instance.lista(params);
-        usuarios = (List<Usuario>) result.get("usuarios");
-        cantidad = (Long) result.get("cantidad");
-        assertEquals(10, usuarios.size());
-        assertTrue(30 <= cantidad);
-    }
 }

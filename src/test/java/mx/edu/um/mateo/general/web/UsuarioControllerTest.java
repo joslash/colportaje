@@ -23,18 +23,28 @@
  */
 package mx.edu.um.mateo.general.web;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.RolDao;
 import mx.edu.um.mateo.general.dao.UnionDao;
 import mx.edu.um.mateo.general.dao.UsuarioDao;
+import mx.edu.um.mateo.general.model.*;
 import mx.edu.um.mateo.general.test.GenericWebXmlContextLoader;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.*;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.server.MockMvc;
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.server.request.MockMvcRequestBuilders.post;
 import org.springframework.test.web.server.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -51,7 +61,7 @@ import org.springframework.web.context.WebApplicationContext;
 })
 @Transactional
 public class UsuarioControllerTest {
-
+  private static final Logger log = LoggerFactory.getLogger(UsuarioControllerTest.class);
     @Autowired
     private UsuarioDao usuarioDao;
     @Autowired
@@ -61,6 +71,12 @@ public class UsuarioControllerTest {
     @Autowired
     private WebApplicationContext wac;
     private MockMvc mockMvc;
+        @Autowired
+    private SessionFactory sessionFactory;
+
+    private Session currentSession() {
+        return sessionFactory.getCurrentSession();
+    }
 
     public UsuarioControllerTest() {
     }
@@ -84,6 +100,21 @@ public class UsuarioControllerTest {
 
     @Test
     public void debieraMostrarListaDeUsuarios() throws Exception {
+        Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        Rol rol = new Rol("ROLE_TEST");
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+        for(int i=0; i<10; i++){
+        Usuario usuario = new Usuario("test"+i+"@test.com", "test", "test", "test", "test");
+        usuario.setRoles(roles);
+        usuario.setAsociacion(asociacion);
+        currentSession().save(usuario);
+        }
         this.mockMvc.perform(get("/admin/usuario"))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/admin/usuario/lista.jsp"))
@@ -92,33 +123,107 @@ public class UsuarioControllerTest {
                 .andExpect(model().attributeExists("paginas"))
                 .andExpect(model().attributeExists("pagina"));
     }
-    /*
-     * @Test public void debieraMostrarUsuario() throws Exception { Union union
-     * = new Union("TEST01", Constantes.STATUS_ACTIVO); union =
-     * unionDao.crea(union); Rol rol = new Rol("ROLE_TEST"); rol =
-     * rolDao.crea(rol); Usuario usuario = new Usuario("test-01@test.com",
-     * "test-01", "TEST1", "TEST"); Long asociacionId = 0l; actualizaUsuario:
-     * for (Asociacion asociacion : union.getAsociaciones()) { asociacionId =
-     * asociacion.getId(); break actualizaUsuario; } usuario =
-     * usuarioDao.crea(usuario, asociacionId, new String[]{rol.getAuthority()});
-     * Long id = usuario.getId(); this.mockMvc.perform(get("/admin/usuario/ver/"
-     * +
-     * id)).andExpect(status().isOk()).andExpect(forwardedUrl("/WEB-INF/jsp/admin/usuario/ver.jsp")).andExpect(model().attributeExists("usuario")).andExpect(model().attributeExists("roles"));
-     * }
-     *
-     * // TODO: Arreglar prueba public void debieraCrearUsuario() throws
-     * Exception { Union union = new Union("TEST01", Constantes.STATUS_ACTIVO);
-     * union = unionDao.crea(union); Rol rol = new Rol("ROLE_USER");
-     * rolDao.crea(rol); Long asociacionId = 0l; actualizaUsuario: for
-     * (Asociacion asociacion : union.getAsociaciones()) { asociacionId =
-     * asociacion.getId(); break actualizaUsuario; }
-     * this.mockMvc.perform(post("/admin/usuario/crea")
-     * .sessionAttr("almacenId", almacenId) .param("username",
-     * "test--01@test.com") .param("nombre", "TEST--01")
-     * .param("apellido","TEST--01") ) .andExpect(status().isOk())
-     * .andExpect(redirectedUrl("/admin/usuario/ver/1"))
-     * .andExpect(flash().attributeExists("message"))
-     * .andExpect(flash().attribute("message","usuario.creado.message")) ;
+    
+      @Test 
+      public void debieraMostrarUsuario() throws Exception { 
+        Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        Rol rol = new Rol("ROLE_TEST");
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        //for(int i=0; i<=10; i++){
+        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test", "test");
+        usuario.setRoles(roles);
+        usuario.setAsociacion(asociacion);
+        currentSession().save(usuario);
+        
+         Long id= usuario.getId();
+         this.mockMvc.perform(get("/admin/usuario/ver/"+id))
+              .andExpect(status().isOk())
+              .andExpect(forwardedUrl("/WEB-INF/jsp/admin/usuario/ver.jsp"))
+              .andExpect(model().attributeExists("usuario"))
+              .andExpect(model().attributeExists("roles"));
+     }
+    
+      // TODO: Arreglar prueba public void debieraCrearUsuario() throws
+      @Test
+       public void deberiaCrearUsuario()throws Exception { 
+        log.debug("Deberia crear Usuario");
+        Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+//        Rol rol = new Rol("ROLE_USER");
+//        currentSession().save(rol);
+//        Set<Rol> roles = new HashSet<>();
+//        roles.add(rol);
+         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+      
+
+       
+      this.mockMvc.perform(post("/admin/usuario/crea")
+              .sessionAttr("asociacionId", asociacion.getId())
+              .param("roles",  "ROLE_USER")
+              .param("username","test--01@test.com") 
+              .param("nombre", "TEST--01")
+              .param("apellidoP","TEST--01") 
+              .param("apellidoM","TEST--01")) 
+              .andExpect(status().isOk())
+              .andExpect(redirectedUrl("/admin/usuario/ver/1"))
+              .andExpect(flash().attributeExists("message"))
+              .andExpect(flash().attribute("message","usuario.creado.message")) ;
     }
-     */
+     
+   @Test
+    public void debieraActualizarUsuario() throws Exception {
+        log.debug("Debiera actualizar usuario");
+         Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        Rol rol = new Rol("ROLE_TEST");
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+         Usuario usuario = new Usuario("test@test.com", "test", "test", "test", "test");
+         usuario.setRoles(roles);
+         usuario.setAsociacion(asociacion);
+         currentSession().save(usuario);
+         
+          this.mockMvc.perform(post("/admin/usuario/actualiza")
+                .param("id", usuario.getId().toString()))
+                .andExpect(status().isOk());
+    }    
+   
+    @Test
+    public void debieraEliminarUsuario() throws Exception {
+        log.debug("Debiera eliminar usuario");
+         Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        Rol rol = new Rol("ROLE_TEST");
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+         Usuario usuario = new Usuario("test@test.com", "test", "test", "test", "test");
+         usuario.setRoles(roles);
+         usuario.setAsociacion(asociacion);
+         currentSession().save(usuario);
+         
+
+        this.mockMvc.perform(post("/admin/usuario/elimina")
+                .param("id", usuario.getId().toString()))
+                .andExpect(status().isOk());
+               // .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                //.andExpect(flash().attribute("message", "usuario.eliminado.message"));
+        
+    }
+
 }

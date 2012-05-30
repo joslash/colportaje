@@ -23,7 +23,6 @@
  */
 package mx.edu.um.mateo.general.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.*;
@@ -34,77 +33,90 @@ import javax.validation.constraints.Size;
  * @author wilbert
  */
 @Entity
-@Table(name = "colportores")
-public class Colportor implements Serializable {
+@DiscriminatorValue("colportor")
+public class Colportor extends Usuario{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Integer version;
-    @Column( nullable = false, length = 64)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//    @Version
+//    private Integer version;
+   @Column(  length = 64)
     private String clave;
-    @Column(nullable = false, length = 2)
+    @Column( length = 2)
     private String status;
     @Size(min = 10, max = 12)
-    @Column(nullable = false, length = 12)
+    @Column(length = 12)
     private String telefono;
-    @Column(nullable = true, length = 200)
+    @Column( length = 200)
     private String calle;
-    @Column(nullable = true, length = 200)
+    @Column( length = 200)
     private String colonia;
-    @Column(nullable = true, length = 200)
+    @Column( length = 200)
     private String municipio;
-    @Column(nullable = false, length = 15)
+    @Column( length = 15)
     private String tipoDeColportor;
     @Size(min = 6, max = 7)
     @Column(length = 7)
     private String matricula;
     @Temporal(TemporalType.DATE)
-    @Column(nullable = true, name = "fecha")
+    @Column( name = "fecha_nac")
     private Date fechaDeNacimiento;
-    private String username;
-    private String nombre;
-    private String apellidop;
-    private String apellidom;
+//    private String username;
+//    private String nombre;
+//    private String apellidop;
+//    private String apellidom;
     
-
+   public Colportor(String username, String password, String nombre, String apellidoP, String apellidoM,
+           String clave, String status, String telefono, String calle, String colonia, String municipio,
+           String tipoColportor, String matricula, Date fechaNac) {
+       super(username, password, nombre, apellidoP, apellidoM); 
+       this.clave=clave;
+       this.status=status;
+       this.telefono=telefono;
+       this.calle=calle;
+       this.colonia=colonia;
+       this.municipio=municipio;
+       this.tipoDeColportor=tipoColportor;
+       this.matricula=matricula;
+       this.fechaDeNacimiento=fechaNac;
+    }
     public Colportor() {
     }
-
-    public Colportor(String clave, String status, String telefono, String tipoDeColportor, String matricula) {
-        this.clave = clave;
-        this.status = status;
-        this.telefono = telefono;
-        this.tipoDeColportor = tipoDeColportor;
-        this.matricula = matricula;
-    }
-
-    public Colportor(String clave, String status, String telefono, String calle, String colonia, String municipio, String tipoDeColportor, String matricula, Date fechaDeNacimiento) {
-        this.clave = clave;
-        this.status = status;
-        this.telefono = telefono;
-        this.calle = calle;
-        this.colonia = colonia;
-        this.municipio = municipio;
-        this.tipoDeColportor = tipoDeColportor;
-        this.matricula = matricula;
-        this.fechaDeNacimiento = fechaDeNacimiento;
-    }
-    public Colportor(String username, String nombre,String apellidop,String apellidom,String status,String clave,String telefono,String matricula,String calle,String colonia,String municipio){
-    this.username=username;
-    this.nombre=nombre;
-    this.apellidop=apellidop;
-    this.apellidom=apellidom;
-    this.status=status;
-    this.clave=clave;
-    this.telefono=telefono;
-    this.matricula=matricula;
-    this.calle=calle;
-    this.colonia=colonia;
-    this.municipio=municipio;
-    }
-    
+//
+//    public Colportor(String clave, String status, String telefono, String tipoDeColportor, String matricula) {
+//        this.clave = clave;
+//        this.status = status;
+//        this.telefono = telefono;
+//        this.tipoDeColportor = tipoDeColportor;
+//        this.matricula = matricula;
+//    }
+//
+//    public Colportor(String clave, String status, String telefono, String calle, String colonia, String municipio, String tipoDeColportor, String matricula, Date fechaDeNacimiento) {
+//        this.clave = clave;
+//        this.status = status;
+//        this.telefono = telefono;
+//        this.calle = calle;
+//        this.colonia = colonia;
+//        this.municipio = municipio;
+//        this.tipoDeColportor = tipoDeColportor;
+//        this.matricula = matricula;
+//        this.fechaDeNacimiento = fechaDeNacimiento;
+//    }
+//    public Colportor(String username, String nombre,String apellidop,String apellidom,String status,String clave,String telefono,String matricula,String calle,String colonia,String municipio){
+//    this.username=username;
+//    this.nombre=nombre;
+//    this.apellidop=apellidop;
+//    this.apellidom=apellidom;
+//    this.status=status;
+//    this.clave=clave;
+//    this.telefono=telefono;
+//    this.matricula=matricula;
+//    this.calle=calle;
+//    this.colonia=colonia;
+//    this.municipio=municipio;
+//    }
+//    
     public String getCalle() {
         return calle;
     }
@@ -136,14 +148,14 @@ public class Colportor implements Serializable {
     public void setFechaDeNacimiento(Date fechaDeNacimiento) {
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public String getMatricula() {
         return matricula;
@@ -185,45 +197,45 @@ public class Colportor implements Serializable {
         this.tipoDeColportor = tipoDeColportor;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public String getApellidom() {
-        return apellidom;
-    }
-
-    public void setApellidom(String apellidom) {
-        this.apellidom = apellidom;
-    }
-
-    public String getApellidop() {
-        return apellidop;
-    }
-
-    public void setApellidop(String apellidop) {
-        this.apellidop = apellidop;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+//    public Integer getVersion() {
+//        return version;
+//    }
+//
+//    public void setVersion(Integer version) {
+//        this.version = version;
+//    }
+//
+//    public String getApellidom() {
+//        return apellidom;
+//    }
+//
+//    public void setApellidom(String apellidom) {
+//        this.apellidom = apellidom;
+//    }
+//
+//    public String getApellidop() {
+//        return apellidop;
+//    }
+//
+//    public void setApellidop(String apellidop) {
+//        this.apellidop = apellidop;
+//    }
+//
+//    public String getNombre() {
+//        return nombre;
+//    }
+//
+//    public void setNombre(String nombre) {
+//        this.nombre = nombre;
+//    }
+//
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
     
 
     @Override
@@ -235,9 +247,9 @@ public class Colportor implements Serializable {
             return false;
         }
         final Colportor other = (Colportor) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
+//        if (!Objects.equals(this.id, other.id)) {
+//            return false;
+//        }
         if (!Objects.equals(this.clave, other.clave)) {
             return false;
         }
@@ -247,7 +259,7 @@ public class Colportor implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 29 * hash + Objects.hashCode(this.id);
+       // hash = 29 * hash + Objects.hashCode(this.id);
         hash = 29 * hash + Objects.hashCode(this.clave);
         return hash;
     }

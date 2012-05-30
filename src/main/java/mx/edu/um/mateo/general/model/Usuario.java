@@ -35,6 +35,9 @@ import org.springframework.security.core.userdetails.UserDetails;
  *
  * @author jdmr
  */
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "entity_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("user")
 @Entity
 @Table(name = "usuarios")
 public class Usuario implements Serializable, UserDetails {
@@ -76,10 +79,10 @@ public class Usuario implements Serializable, UserDetails {
     private Set<Rol> roles = new HashSet<>();
     @ManyToOne(optional = false)
     private Asociacion asociacion;
-    @ManyToOne(optional = true)
-    private Asociado asociado;
-    @ManyToOne(optional = true)
-    private Colportor colportor;
+//    @ManyToOne(optional = true)
+//    private Asociado asociado;
+//    @ManyToOne(optional = true)
+//    private Colportor colportor;
 
     public Usuario() {
     }
@@ -220,21 +223,21 @@ public class Usuario implements Serializable, UserDetails {
     }
 
     public Asociado getAsociado() {
-        return asociado;
+        return null;
     }
 
     public void setAsociado(Asociado asociado) {
-        this.asociado = asociado;
+      //  this.asociado = asociado;
     }
 
     public Colportor getColportor() {
-        return colportor;
+        return null;
     }
 
     public void setColportor(Colportor colportor) {
-        this.colportor = colportor;
+        //this.colportor = colportor;
     }
-    
+//    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new LinkedHashSet<>();

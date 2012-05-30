@@ -10,19 +10,19 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %><!DOCTYPE html>
 <html>
     <head>
-        <title><s:message code="asociado.ver.label" /></title>
+        <title><s:message code="usuario.ver.label" /></title>
     </head>
     <body>
         <jsp:include page="../menu.jsp" >
-            <jsp:param name="menu" value="asociado" />
+            <jsp:param name="menu" value="usuario" />
         </jsp:include>
 
         <div id="ver-asociado" class="content scaffold-list" role="main">
-            <h1><s:message code="asociado.ver.label" /></h1>
+            <h1><s:message code="usuario.ver.label" /></h1>
 
             <p class="well">
-                <a class="btn btn-primary" href="<s:url value='../'/>"><i class="icon-list icon-white"></i> <s:message code='asociado.lista.label' /></a>
-                <a class="btn btn-primary" href="<s:url value='../nueva'/>"><i class="icon-user icon-white"></i> <s:message code='asociado.nuevo.label' /></a>
+                <a class="btn btn-primary" href="<s:url value='../'/>"><i class="icon-list icon-white"></i> <s:message code='usuario.lista.label' /></a>
+                <a class="btn btn-primary" href="<s:url value='../nuevo'/>"><i class="icon-user icon-white"></i> <s:message code='usuario.nuevo.label' /></a>
             </p>
             <c:if test="${not empty message}">
                 <div class="alert alert-block alert-success fade in" role="status">
@@ -34,7 +34,28 @@
             <c:url var="eliminaUrl" value="/asociado/elimina" />
             <form:form commandName="asociado" action="${eliminaUrl}" >
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />
-                 <div class="row-fluid" style="padding-bottom: 10px;">
+                
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="username.label" /></div>
+                    <div class="span11">${asociado.username}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="nombre.label" /></div>
+                    <div class="span11">${asociado.nombre}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="apellidoP.label" /></div>
+                    <div class="span11">${asociado.apellidoP}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="apellidoM.label" /></div>
+                    <div class="span11">${asociado.apellidoM}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="asociacion.label" /></div>
+                    <div class="span11">${asociado.asociacion.getNombre()}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="status.label" /></div>
                     <div class="span11">${asociado.status}</div>
                 </div>

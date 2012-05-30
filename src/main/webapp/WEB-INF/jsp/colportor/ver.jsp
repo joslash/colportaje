@@ -11,19 +11,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><s:message code="colportor.ver.label" /></title>
+        <title><s:message code="usuario.ver.label" /></title>
     </head>
     <body>
          <jsp:include page="../menu.jsp" >
-            <jsp:param name="menu" value="colportor" />
+            <jsp:param name="menu" value="usuario" />
         </jsp:include>
 
         <div id="ver-colportor" class="content scaffold-list" role="main">
-            <h1><s:message code="colportor.ver.label" /></h1>
+            <h1><s:message code="usuario.ver.label" /></h1>
 
             <p class="well">
-                <a class="btn btn-primary" href="<s:url value='..'/>"><i class="icon-list icon-white"></i> <s:message code='colportor.lista.label' /></a>
-                <a class="btn btn-primary" href="<s:url value='../nuevo'/>"><i class="icon-user icon-white"></i> <s:message code='colportor.nuevo.label' /></a>
+                <a class="btn btn-primary" href="<s:url value='..'/>"><i class="icon-list icon-white"></i> <s:message code='usuario.lista.label' /></a>
+                <a class="btn btn-primary" href="<s:url value='../nuevo'/>"><i class="icon-user icon-white"></i> <s:message code='usuario.nuevo.label' /></a>
             </p>
             <c:if test="${not empty message}">
                 <div class="alert alert-block alert-success fade in" role="status">
@@ -35,7 +35,29 @@
             <c:url var="eliminaUrl" value="../elimina" />
             <form:form commandName="colportor" action="${eliminaUrl}" >
                 <form:errors path="*" cssClass="alert alert-error" element="ul" />          
-                  <div class="row-fluid" style="padding-bottom: 10px;">
+                
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="username.label" /></div>
+                    <div class="span11">${colportor.username}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="nombre.label" /></div>
+                    <div class="span11">${colportor.nombre}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="apellidoP.label" /></div>
+                    <div class="span11">${colportor.apellidoP}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="apellidoM.label" /></div>
+                    <div class="span11">${colportor.apellidoM}</div>
+                </div>
+                <div class="row-fluid" style="padding-bottom: 10px;">
+                    <div class="span1"><s:message code="asociacion.label" /></div>
+                    <div class="span11">${colportor.asociacion.getNombre()}</div>
+                </div>
+                
+                <div class="row-fluid" style="padding-bottom: 10px;">
                     <div class="span1"><s:message code="tipoDeColportor.label" /></div>
                     <div class="span11">${colportor.tipoDeColportor}</div>
                 </div>

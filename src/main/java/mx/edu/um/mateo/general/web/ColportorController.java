@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
+import mx.edu.um.mateo.general.dao.AsociacionDao;
 import mx.edu.um.mateo.general.dao.ColportorDao;
+import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.Ambiente;
@@ -39,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -59,6 +62,8 @@ public class ColportorController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(ColportorController.class);
     @Autowired
     private ColportorDao colportorDao;
+    @Autowired
+    private AsociacionDao asociacionDao;
     /*
      * DE AQUI @InitBinder public void initBinder(WebDataBinder binder) {
      *
@@ -138,7 +143,18 @@ public class ColportorController extends BaseController {
         modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
         return Constantes.PATH_COLPORTOR_NUEVO;
     }
-
+/**
+ * TODO 
+ * @param request
+ * @param response
+ * @param colportores
+ * @param bindingResult
+ * @param errors
+ * @param modelo
+ * @param redirectAttributes
+ * @return
+ * @throws ParseException 
+ */
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
     public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Colportor colportores, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
@@ -146,42 +162,51 @@ public class ColportorController extends BaseController {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
         }
         if (bindingResult.hasErrors()) {
-            log.debug("Hubo algun error en la forma, regresando");
+            log.debug("Hubo algun error en la forma, regresando "+bindingResult.getFieldErrors());
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
-        switch (colportores.getTipoDeColportor()) {
-            case "0":
-                colportores.setTipoDeColportor(Constantes.TIEMPO_COMPLETO);
-                break;
-            case "1":
-                colportores.setTipoDeColportor(Constantes.TIEMPO_PARCIAL);
-                break;
-            case "2":
-                colportores.setTipoDeColportor(Constantes.ESTUDIANTE);
-                break;
+        try{
+            switch (colportores.getTipoDeColportor()) {
+                case "0":
+                    colportores.setTipoDeColportor(Constantes.TIEMPO_COMPLETO);
+                    break;
+                case "1":
+                    colportores.setTipoDeColportor(Constantes.TIEMPO_PARCIAL);
+                    break;
+                case "2":
+                    colportores.setTipoDeColportor(Constantes.ESTUDIANTE);
+                    break;
 
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return Constantes.PATH_COLPORTOR_NUEVO;
         }
-
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
             colportores.setFechaDeNacimiento(sdf.parse(request.getParameter("fechaDeNacimiento")));
-        } catch (ConstraintViolationException e) {
+        } catch (ParseException e) {
             log.error("FechaDeNacimiento", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
-
+String password = null;
+ password = KeyGenerators.string().generateKey();
+        
         try {
-            log.debug("Colportor FechaDeNacimiento" + colportores.getFechaDeNacimiento());
+            colportores.setAsociacion(asociacionDao.obtiene((Long) request.getSession().getAttribute("asociacionId")));
+            colportores.setPassword(password);
             colportores = colportorDao.crea(colportores);
-        } catch (ConstraintViolationException e) {
+            
+        
+//        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message");
+//        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getColonia()});
+        modelo.addAttribute("colportor", colportores);
+        return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
+        } catch (Exception e) {
             log.error("No se pudo crear la colportor", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
-
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getColonia()});
-
-        return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
+        
     }
 
     @RequestMapping("/edita/{id}")

@@ -4,9 +4,11 @@
  */
 package mx.edu.um.mateo.general.model;
 
-import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 /**
@@ -14,14 +16,14 @@ import javax.validation.constraints.Size;
  * @author gibrandemetrioo
  */
 @Entity
-@Table(name = "asociados")
-public class Asociado implements Serializable {
+@DiscriminatorValue("asociado")
+public class Asociado extends Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Version
-    private Integer version;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//    @Version
+//    private Integer version;
     @Column(nullable = false, length = 65)
     private String clave;
     @Size(min = 10, max = 12)
@@ -35,32 +37,30 @@ public class Asociado implements Serializable {
     private String colonia;
     @Column(length = 200)
     private String municipio;
-    private String nombre;
-    private String apellidop;
-    private String apellidom;
-    private String username;
+//    private String nombre;
+//    private String apellidop;
+//    private String apellidom;
+//    private String username;
 
     public Asociado() {
     }
+//
+//    public Asociado(String clave, String telefono, String status, String calle, String colonia, String municipio) {
+//        this.clave = clave;
+//        this.telefono = telefono;
+//        this.status = status;
+//        this.calle = calle;
+//        this.colonia = colonia;
+//        this.municipio = municipio;
+//    }
 
-    public Asociado(String clave, String telefono, String status, String calle, String colonia, String municipio) {
-        this.clave = clave;
-        this.telefono = telefono;
-        this.status = status;
-        this.calle = calle;
-        this.colonia = colonia;
-        this.municipio = municipio;
-    }
-
-    public Asociado(Long id, String username, String nombre, String apellidop, String apellidom, String status, String clave, String telefono, String calle, String colonia, String municipio){
-    this.id=id;
-    this.username=username;
-    this.nombre=nombre;
-    this.apellidop=apellidop;
-    this.apellidom=apellidom;
-    this.status=status;
+    public Asociado(String username, String password,   String nombre, String apellidoP,
+            String apellidoM, String status, String clave, String telefono, String calle, 
+            String colonia, String municipio){
+     super(username, password, nombre, apellidoP, apellidoM); 
     this.clave=clave;
     this.telefono=telefono;
+    this.status=status;
     this.calle = calle;
     this.colonia = colonia;
     this.municipio = municipio;
@@ -90,14 +90,7 @@ public class Asociado implements Serializable {
         this.colonia = colonia;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+ 
     public String getMunicipio() {
         return municipio;
     }
@@ -122,45 +115,9 @@ public class Asociado implements Serializable {
         this.telefono = telefono;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
+    
 
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 
-    public String getApellidom() {
-        return apellidom;
-    }
-
-    public void setApellidom(String apellidom) {
-        this.apellidom = apellidom;
-    }
-
-    public String getApellidop() {
-        return apellidop;
-    }
-
-    public void setApellidop(String apellidop) {
-        this.apellidop = apellidop;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
     
     
 

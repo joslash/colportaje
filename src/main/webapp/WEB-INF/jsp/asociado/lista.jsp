@@ -13,10 +13,10 @@
     </head>
     <body>
         <jsp:include page="../menu.jsp" >
-            <jsp:param name="menu" value="asociado" />
+            <jsp:param name="menu" value="usuario" />
         </jsp:include>
 
-        <h1><s:message code="asociado.lista.label" /></h1>
+        <h1><s:message code="usuario.lista.label" /></h1>
         <hr/>
 
         <form name="filtraLista" class="form-search" method="post" action="<c:url value='/asociado' />">
@@ -55,6 +55,12 @@
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="username" />
                         </jsp:include>
+                       
+                      
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="asociacion" />
+                        </jsp:include>
+                        
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="nombre" />
                         </jsp:include>
@@ -88,6 +94,8 @@
                     <c:forEach items="${asociados}" var="asociado" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
                             <td><a href="<c:url value='/asociado/ver/${asociado.id}' />">${asociado.username}</a></td>
+                            <td>${asociado.nombre}</td>
+                            <td>${asociado.asociacion.getNombre()}</td>
                             <td>${asociado.nombre}</td>
                             <td>${asociado.apellidop}</td>
                             <td>${asociado.apellidom}</td>

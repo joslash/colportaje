@@ -10,14 +10,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><s:message code="colportor.lista.label" /></title>
+        <title><s:message code="usuario.lista.label" /></title>
     </head>
     <body>
         <jsp:include page="../menu.jsp" >
-            <jsp:param name="menu" value="colportor" />
+            <jsp:param name="menu" value="usuario" />
         </jsp:include>
 
-        <h1><s:message code="colportor.lista.label" /></h1>
+        <h1><s:message code="usuario.lista.label" /></h1>
         <hr/>
 
         <form name="filtraLista" class="form-search" method="post" action="<c:url value='/colportor' />">
@@ -53,6 +53,21 @@
             <table id="lista" class="table">
                 <thead>
                     <tr>
+                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="username" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="nombre" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="apellidoP" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="apellidoM" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="asociacion" />
+                        </jsp:include>
                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="username" />
                         </jsp:include>
@@ -92,6 +107,10 @@
                     <c:forEach items="${colportores}" var="colportor" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
                             <td><a href="<c:url value='/colportor/ver/${colportor.id}' />">${colportor.username}</a></td>
+                            <td>${colportor.nombre}</td>
+                            <td>${colportor.apellidoP}</td>
+                            <td>${colportor.apellidoM}</td>
+                            <td>${colportor.asociacion.getNombre()}</td>
                             <td>${colportor.nombre}</td>
                             <td>${colportor.apellidop}</td>
                             <td>${colportor.apellidom}</td>

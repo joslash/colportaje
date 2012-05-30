@@ -25,6 +25,8 @@ package mx.edu.um.mateo.general.dao;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Usuario;
@@ -48,6 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
+
 public class AsociacionDao {
 
     private static final Logger log = LoggerFactory.getLogger(AsociacionDao.class);

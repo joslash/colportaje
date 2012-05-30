@@ -22,7 +22,7 @@ public class Constantes {
     public static final String CORREO = "test@tes.tst";
     public static final String TELEFONO = "1234567890";
     public static final String TIPO_DOCUMENTO = "A";
-    public static final String TIPO_COLPORTOR = "test";
+    public static final String TIPO_COLPORTOR = "1";
     public static final String FOLIO = "test";
     public static final String FECHA = "dd/MM/yyyy";
     public static final BigDecimal IMPORTE = new BigDecimal("0.0");
@@ -30,7 +30,7 @@ public class Constantes {
     public static final String CALLE = "test";
     public static final String COLONIA = "test";
     public static final String MUNICIPIO = "testmu";
-    public static final String MATRICULA = "1070";
+    public static final String MATRICULA = "1070980";
     public static final String DEPOSITO_CAJA = "Deposito_Caja";
     public static final String DEPOSITO_BANCO = "Deposito_Banco";
     public static final String DIEZMO = "Diezmo";
@@ -190,7 +190,7 @@ public class Constantes {
     public static final String PATH_ASOCIADO_VER = "/asociado/ver";
     public static final String PATH_ASOCIADO_NUEVO = "/asociado/nuevo";
     public static final String PATH_ASOCIADO_EDITA = "/asociado/edita";
-    public static final String PATH_ASOCIADO_CREA = "/asociado/crea";
+    public static final String PATH_ASOCIADO_CREAR = "/asociado/crear";
     public static final String PATH_ASOCIADO_ACTUALIZA = "/asociado/actualiza";
     public static final String PATH_ASOCIADO_ELIMINA = "/asociado/elimina";
     public static final String PATH_TEMPORADA = "/temporada";

@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.model;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;

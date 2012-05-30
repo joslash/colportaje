@@ -214,23 +214,8 @@ public class UsuarioController {
             password = KeyGenerators.string().generateKey();
             usuario.setPassword(password);
 
-            //creando realacion usuario-asociado/colportor
-            Set<Rol> rol = usuario.getRoles();
-            for (Iterator<Rol> iter = rol.iterator(); iter.hasNext();) {
-                Rol r = iter.next();
-                if (r.getAuthority().equals("ROLE_ASO")) {
-                    log.info("Creando objeto Asociado");
-                    Asociado asociado = new Asociado("", "          ", "", "", "", "");
-                    asociadoDao.crea(asociado);
-                    usuario.setAsociado(asociado);
-                } else if (r.getAuthority().equals("ROLE_COL")) {
-                    log.info("Creando objeto Colportor");
-                    Colportor colportor = new Colportor("", "", "          ", "", "      ");
-                    colportorDao.crea(colportor);
-                    usuario.setColportor(colportor);
-                }
-            }
-
+           
+            log.debug("Roles"+roles.toString());
 
             usuario = usuarioDao.crea(usuario, asociacionId, roles);
 
