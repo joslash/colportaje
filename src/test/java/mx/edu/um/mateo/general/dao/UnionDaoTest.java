@@ -61,6 +61,7 @@ public class UnionDaoTest extends BaseTest {
     }
 
     @Test
+    //PRUEBA PASO 100%
     public void debieraMostrarListaDeUniones() {
         log.debug("Debiera mostrar lista de uniones");
         for (int i = 0; i < 20; i++) {
@@ -68,7 +69,7 @@ public class UnionDaoTest extends BaseTest {
             union.setStatus(Constantes.STATUS_ACTIVO);
             currentSession().save(union);
         }
-        Map<String, Object> params = null;
+        Map <String, Object> params = null;
         Map result = instance.lista(params);
         assertNotNull(result.get(Constantes.CONTAINSKEY_UNIONES));
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
@@ -78,6 +79,7 @@ public class UnionDaoTest extends BaseTest {
     }
 
     @Test
+    //PRUEBA PASA 100%
     public void debieraObtenerUnion() {
         log.debug("Debiera obtener union");
         Union union = new Union("tst-01");
@@ -92,6 +94,7 @@ public class UnionDaoTest extends BaseTest {
     }
 
     @Test
+    //PRUEBA PASO 100%
     public void debieraCrearUnion() {
         log.debug("Debiera crear union");
         Union union = new Union("TEST01");
@@ -110,15 +113,14 @@ public class UnionDaoTest extends BaseTest {
         currentSession().flush();
         Long id = usuario.getId();
         assertNotNull(id);
-
         authenticate(usuario, usuario.getPassword(), new ArrayList<GrantedAuthority>(usuario.getRoles()));
-        
         union = new Union("tst-01");
         union = instance.crea(union, usuario);
         assertNotNull(union.getId());
     }
 
     @Test
+    //PRUEBA PASO 100%
     public void debieraActualizarUnion() {
         log.debug("Debiera actualizar union");
         Union union = new Union("test");
@@ -151,9 +153,9 @@ public class UnionDaoTest extends BaseTest {
     }
 
     @Test
+    //PRUEBA PASO 100%
     public void debieraEliminarUnion() {
         log.debug("Debiera eliminar union");
-
         Union union = new Union("TEST01");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);

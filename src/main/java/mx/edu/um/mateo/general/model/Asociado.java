@@ -24,12 +24,12 @@ public class Asociado extends Usuario {
 //    private Long id;
 //    @Version
 //    private Integer version;
-    @Column(nullable = false, length = 65)
+    @Column(length = 65)
     private String clave;
     @Size(min = 10, max = 12)
     @Column(length = 12)
     private String telefono;
-    @Column(nullable = false, length = 23)
+    @Column(length = 23)
     private String status;
     @Column(length = 200)
     private String calle;
