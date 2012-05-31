@@ -178,13 +178,13 @@ public class UnionControllerTest extends BaseTest {
         
         this.authenticate(usuario, usuario.getPassword(), new ArrayList(usuario.getAuthorities()));
         
-        Union union2 = new Union("TEST2");
-        union2.setStatus(Constantes.STATUS_ACTIVO);
-        union2 = unionDao.crea(union2);
+//        Union union2 = new Union("TEST2");
+//        union2.setStatus(Constantes.STATUS_ACTIVO);
+//        union2 = unionDao.crea(union2);
 
         this.mockMvc.perform(post(Constantes.PATH_UNION_ACTUALIZA)
-                .param("id",union2.getId().toString())
-                .param("version", union2.getVersion().toString())
+                //.param("id",union2.getId().toString())
+                //.param("version", union2.getVersion().toString())
                 .param("nombre", "test2")
                 .param("status", "1"))
                 .andExpect(status().isOk())
@@ -201,9 +201,6 @@ public class UnionControllerTest extends BaseTest {
         assertNotNull(union);
 
         
-        
-        
-
         this.mockMvc.perform(post(Constantes.PATH_UNION_ELIMINA)
                 .param("id",union.getId().toString()))
                 .andExpect(status().isOk());

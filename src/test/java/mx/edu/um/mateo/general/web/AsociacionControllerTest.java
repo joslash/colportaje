@@ -28,6 +28,8 @@ import java.util.HashSet;
 import java.util.Set;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociacionDao;
+import mx.edu.um.mateo.general.dao.RolDao;
+import mx.edu.um.mateo.general.dao.UsuarioDao;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Union;
@@ -74,6 +76,10 @@ public class AsociacionControllerTest extends BaseTest {
     private AsociacionDao asociacionDao;
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private RolDao rolDao;
+    @Autowired
+    private UsuarioDao usuarioDao;
     
     private Session currentSession() {
         return sessionFactory.getCurrentSession();
@@ -138,7 +144,7 @@ public class AsociacionControllerTest extends BaseTest {
 
     @Test
     //PRUEBA PASO 100%
-    public void debieraCrearASociacion() throws Exception {
+    public void debieraCrearAsociacion() throws Exception {
         log.debug("Debiera crear asociacion");
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
@@ -168,7 +174,7 @@ public class AsociacionControllerTest extends BaseTest {
     }
 
     @Test
-    //NO PASO PRUEBA PROBLEMAS CON SECURITY
+    //PRUEBA PASO 100%
     public void debieraActualizarAsociacion() throws Exception {
         log.debug("Debiera actualizar asociacion");
         Union union = new Union(Constantes.NOMBRE);
@@ -176,7 +182,15 @@ public class AsociacionControllerTest extends BaseTest {
         Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
         asociacion = asociacionDao.crea(asociacion);
         assertNotNull(asociacion);
-
+        Rol rol = new Rol("ROLE_TEST");
+        rol = rolDao.crea(rol);
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        usuario = usuarioDao.crea(usuario,asociacion.getId(), new String[]{rol.getAuthority()});
+        Long id = usuario.getId();
+        assertNotNull(id);
+        
+        this.authenticate(usuario, usuario.getPassword(), new ArrayList(usuario.getAuthorities()));
+        
         this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_ACTUALIZA)
                 .sessionAttr("unionId",union.getId().toString())
                 .param("id", asociacion.getId().toString())
