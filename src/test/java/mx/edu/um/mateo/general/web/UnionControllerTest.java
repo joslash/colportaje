@@ -193,20 +193,20 @@ public class UnionControllerTest extends BaseTest {
     }
 
     @Test
-    //NO PASO PRUEBA
+    //PRUEBA PASO 100% (Sin Mensajes)
     public void debieraEliminarUnion() throws Exception {
-//        log.debug("Debiera eliminar union");
-//        Union union = new Union(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
-//        unionDao.crea(union);
-//        assertNotNull(union);
+        log.debug("Debiera eliminar union");
+        Union union = new Union(Constantes.NOMBRE);
+        unionDao.crea(union);
+        assertNotNull(union);
 
         
         
         
 
-//        this.mockMvc.perform(post(Constantes.PATH_UNION_ELIMINA)
-//                //.param("id",union.getId().toString()))
-//                .andExpect(status().isOk())
+        this.mockMvc.perform(post(Constantes.PATH_UNION_ELIMINA)
+                .param("id",union.getId().toString()))
+                .andExpect(status().isOk());
 //                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
 //                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "union.eliminada.message"));
     }
