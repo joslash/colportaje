@@ -193,7 +193,7 @@ public class UnionControllerTest extends BaseTest {
     }
 
     @Test
-    //PRUEBA PASO 100% (Sin Mensajes)
+    //PRUEBA PASO 100% (Sin Mensajes de flash())
     public void debieraEliminarUnion() throws Exception {
         log.debug("Debiera eliminar union");
         Union union = new Union(Constantes.NOMBRE);
