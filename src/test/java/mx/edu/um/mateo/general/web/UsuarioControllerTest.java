@@ -156,15 +156,14 @@ public class UsuarioControllerTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-//        Rol rol = new Rol("ROLE_USER");
-//        currentSession().save(rol);
-//        Set<Rol> roles = new HashSet<>();
-//        roles.add(rol);
-         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        Rol rol = new Rol("ROLE_USER");
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
       
 
-       
       this.mockMvc.perform(post("/admin/usuario/crea")
               .sessionAttr("asociacionId", asociacion.getId())
               .param("roles",  "ROLE_USER")
