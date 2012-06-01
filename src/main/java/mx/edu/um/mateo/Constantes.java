@@ -190,7 +190,7 @@ public class Constantes {
     public static final String PATH_ASOCIADO_VER = "/asociado/ver";
     public static final String PATH_ASOCIADO_NUEVO = "/asociado/nuevo";
     public static final String PATH_ASOCIADO_EDITA = "/asociado/edita";
-    public static final String PATH_ASOCIADO_CREAR = "/asociado/crear";
+    public static final String PATH_ASOCIADO_CREA = "/asociado/crea";
     public static final String PATH_ASOCIADO_ACTUALIZA = "/asociado/actualiza";
     public static final String PATH_ASOCIADO_ELIMINA = "/asociado/elimina";
     public static final String PATH_TEMPORADA = "/temporada";

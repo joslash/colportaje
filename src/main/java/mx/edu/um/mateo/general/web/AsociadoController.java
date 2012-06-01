@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociadoDao;
 import mx.edu.um.mateo.general.dao.UsuarioDao;
+import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Asociado;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
@@ -60,7 +61,7 @@ public class AsociadoController extends BaseController {
         Map<String, Object> params = new HashMap<>();
         //Long asociacionId = (Long) request.getSession().getAttribute("asociacionId");
         //params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
-
+params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }
@@ -110,8 +111,10 @@ public class AsociadoController extends BaseController {
     }
 
     @Transactional
-    @RequestMapping(value = "/crear", method = RequestMethod.POST)
+    @RequestMapping(value = "/crea", method = RequestMethod.POST)
     public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Asociado asociado, @Valid Usuario usuario, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) {
+       Map<String, Object> params = new HashMap<>();
+               params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
         for (String nombre : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
         }
@@ -123,10 +126,8 @@ public class AsociadoController extends BaseController {
             asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
                    Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
                    Constantes.MUNICIPIO);
-            Long asociacionId = (Long)request.getSession().getAttribute("asociacionId");
-//           
-              
-            usuario = usuarioDao.crea(asociado, asociacionId,  new String[]{"ROLE_ASO"});
+                   Asociacion asociacion= (Asociacion)request.getSession().getAttribute("asociacionId");
+            usuario = usuarioDao.crea(asociado,asociacion.getId(),  new String[]{"ROLE_ASO"});
         } catch(ConstraintViolationException e) {
             log.error("No se pudo crear al asociado", e);
             return Constantes.PATH_ASOCIADO_NUEVO;

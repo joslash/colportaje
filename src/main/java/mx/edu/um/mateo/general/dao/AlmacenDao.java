@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author wilbert
  */
-@Repository
+@Repository 
 @Transactional
 public class AlmacenDao {
 private static final Logger log = LoggerFactory.getLogger(AlmacenDao.class);
