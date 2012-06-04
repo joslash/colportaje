@@ -1,6 +1,5 @@
 ///*
-// * To change this template, choose Tools | Templates
-// * and open the template in the editor.
+// * TODO problemas con el constructor 
 // */
 //package mx.edu.um.mateo.general.dao;
 //import java.util.Date;

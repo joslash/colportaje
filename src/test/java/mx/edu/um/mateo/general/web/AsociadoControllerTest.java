@@ -2,6 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
+/**
+ * TODO problemas con type long: asociado
+ */
 package mx.edu.um.mateo.general.web;
 import java.util.Date;
 import java.util.HashSet;
@@ -32,6 +36,8 @@ import org.springframework.web.context.WebApplicationContext;
  *
  * @author gibrandemetrioo
  */
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = GenericWebXmlContextLoader.class, locations = {
     "classpath:mateo.xml",
@@ -72,7 +78,6 @@ public class AsociadoControllerTest extends BaseTest {
     @Test
     public void debieraMostrarListaDeAsociado() throws Exception {
         log.debug("Debiera monstrar lista asociado");
-   
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);

@@ -64,7 +64,10 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of lista method, of class AsociacionDao.
      */
+    
+    
     @Test
+    //PRUEBA PASO 100%
     public void debieraMostrarListaDeAsociaciones() {
         log.debug("Debiera mostrar lista de asociaciones");
         Union union = new Union("tst-01");
@@ -87,7 +90,10 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of obtiene method, of class AsociacionDao.
      */
+    
+    
     @Test
+    //PRUEBA PASO 100%
     public void debieraObtenerAsociacion() {
         log.debug("Debiera obtener asociacion");
         Union union = new Union("test");
@@ -104,7 +110,10 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of crea method, of class AsociacionDao.
      */
+    
+    
     @Test
+    //PRUEBA PASO 100%
     public void debieraCrearAsociacion() {
         log.debug("Debiera crear asociacion");
         Union union = new Union("TEST01");
@@ -133,7 +142,10 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of actualiza method, of class AsociacionDao.
      */
+    
+    
     @Test
+    //PRUEBA PASO 100%
     public void debieraActualizarAsociacion() {
         log.debug("Debiera actualizar asociacion");
         Union union = new Union("TEST01");
@@ -175,7 +187,10 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of elimina method, of class AsociacionDao.
      */
+    
+    
     @Test
+    //PRUEBA PASO 100%
     public void debieraEliminarAsociacion() {
         log.debug("Debiera actualizar asociacion");
 

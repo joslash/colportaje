@@ -21,6 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+/**
+ * TODO problemas con type long: user
+ */
 package mx.edu.um.mateo.general.web;
 
 import java.util.ArrayList;
@@ -28,6 +32,8 @@ import java.util.HashSet;
 import java.util.Set;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociacionDao;
+import mx.edu.um.mateo.general.dao.RolDao;
+import mx.edu.um.mateo.general.dao.UsuarioDao;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Union;
@@ -74,6 +80,10 @@ public class AsociacionControllerTest extends BaseTest {
     private AsociacionDao asociacionDao;
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private RolDao rolDao;
+    @Autowired
+    private UsuarioDao usuarioDao;
     
     private Session currentSession() {
         return sessionFactory.getCurrentSession();
@@ -97,6 +107,7 @@ public class AsociacionControllerTest extends BaseTest {
     }
 
     @Test
+    //PRUEBA PASO 100%
     public void debieraMostrarListaDeAsociacion() throws Exception {
         log.debug("Debiera monstrar lista de cuentas de asociacion");
 
@@ -119,6 +130,7 @@ public class AsociacionControllerTest extends BaseTest {
     }
 
     @Test
+    //PRUEBA PASO 100%
     public void debieraMostrarAsociacion() throws Exception {
         log.debug("Debiera mostrar  asociacion");
         Union union = new Union("test");
@@ -135,7 +147,8 @@ public class AsociacionControllerTest extends BaseTest {
     }
 
     @Test
-    public void debieraCrearASociacion() throws Exception {
+    //PRUEBA PASO 100%
+    public void debieraCrearAsociacion() throws Exception {
         log.debug("Debiera crear asociacion");
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
@@ -164,50 +177,64 @@ public class AsociacionControllerTest extends BaseTest {
                 .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.creada.message"));
     }
 
-//    @Test
-//    public void debieraActualizarAsociacion() throws Exception {
-//        log.debug("Debiera actualizar  asociacion");
-//        Union union = new Union("test", Constantes.STATUS_ACTIVO);
-//        currentSession().save(union);
-//        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
-//        asociacion = asociacionDao.crea(asociacion);
-//        assertNotNull(asociacion);
-//
-//        this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_ACTUALIZA)
-//                .param("id", asociacion.getId().toString())
-//                .param("version", asociacion.getVersion().toString())
-//                .param("nombre", "test1")
-//                .param("status", asociacion.getStatus()))
-//                .andExpect(status().isOk())
-//                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-//                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.actualizado.message"));
-//    }
-//
-//    @Test
-//    public void debieraEliminarAsociacion() throws Exception {
-//        log.debug("Debiera eliminar  asociacion");
-//        Union union = new Union("test", Constantes.STATUS_ACTIVO);
-//        currentSession().save(union);
-//        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
-//        asociacionDao.crea(asociacion);
-//        assertNotNull(asociacion);
-//        Rol rol = new Rol("ROLE_TEST");
-//        currentSession().save(rol);
-//        Set<Rol> roles = new HashSet<>();
-//        roles.add(rol);
-//        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
-//        usuario.setAsociacion(asociacion);
-//        usuario.setRoles(roles);
-//        currentSession().save(usuario);
-//        Long id = usuario.getId();
-//        assertNotNull(id);
-//        
-//        this.authenticate(usuario, usuario.getPassword(), new ArrayList<GrantedAuthority>(usuario.getRoles()));
-//
-//        this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_ELIMINA)
-//                .param("id", asociacion.getId().toString()))
-//                .andExpect(status().isOk())
-//                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-//                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.eliminado.message"));
-//    }
+    @Test
+    //PRUEBA PASO 100%
+    public void debieraActualizarAsociacion() throws Exception {
+        log.debug("Debiera actualizar asociacion");
+        Union union = new Union(Constantes.NOMBRE);
+        currentSession().save(union);
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        asociacion = asociacionDao.crea(asociacion);
+        assertNotNull(asociacion);
+        Rol rol = new Rol("ROLE_TEST");
+        rol = rolDao.crea(rol);
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        usuario = usuarioDao.crea(usuario,asociacion.getId(), new String[]{rol.getAuthority()});
+        Long id = usuario.getId();
+        assertNotNull(id);
+        
+        this.authenticate(usuario, usuario.getPassword(), new ArrayList(usuario.getAuthorities()));
+        
+        this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_ACTUALIZA)
+                .sessionAttr("unionId",union.getId().toString())
+                .param("id", asociacion.getId().toString())
+                .param("version", asociacion.getVersion().toString())
+                .param("nombre", "test1")
+                .param("status", asociacion.getStatus()))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.actualizada.message"));
+    }
+    
+
+    @Test
+    //PRUEBA PASO 100%
+    public void debieraEliminarAsociacion() throws Exception {
+        log.debug("Debiera eliminar  asociacion");
+        Union union = new Union(Constantes.NOMBRE);
+        currentSession().save(union);
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        asociacionDao.crea(asociacion);
+        assertNotNull(asociacion);
+        Rol rol = new Rol("ROLE_TEST");
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        usuario.setAsociacion(asociacion);
+        usuario.setRoles(roles);
+        currentSession().save(usuario);
+        Long id = usuario.getId();
+        assertNotNull(id);
+        
+        this.authenticate(usuario, usuario.getPassword(), new ArrayList<GrantedAuthority>(usuario.getRoles()));
+
+        this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_ELIMINA)
+                .param("id", asociacion.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.eliminada.message"));
+    }
+    
+    
 }

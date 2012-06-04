@@ -142,6 +142,7 @@ public class UnionDao {
         Session session = currentSession();
         log.debug("NombreCompleto: {}", union.getNombre());
         session.update(union);
+        session.merge(union);
         session.flush();
         if (usuario != null) {
             session.refresh(union);
