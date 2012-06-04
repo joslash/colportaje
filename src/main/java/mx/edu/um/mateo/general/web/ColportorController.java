@@ -84,8 +84,7 @@ public class ColportorController extends BaseController {
             Model modelo) {
         log.debug("Mostrando lista de Asociado");
         Map<String, Object> params = new HashMap<>();
-        //Long asociacionId = (Long) request.getSession().getAttribute("asociacionId");
-        //params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
+        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
 
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
@@ -113,7 +112,7 @@ public class ColportorController extends BaseController {
             try {
                 enviaCorreo(correo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), request, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
                 modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
-                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("asociado.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
+                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
             } catch (ReporteException e) {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
@@ -193,7 +192,7 @@ String password = null;
  password = KeyGenerators.string().generateKey();
         
         try {
-            colportores.setAsociacion(asociacionDao.obtiene((Long) request.getSession().getAttribute("asociacionId")));
+            colportores.setAsociacion((Asociacion)request.getSession().getAttribute("asociacionId"));
             colportores.setPassword(password);
             colportores = colportorDao.crea(colportores);
             

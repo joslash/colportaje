@@ -53,18 +53,6 @@
             <table id="lista" class="table">
                 <thead>
                     <tr>
-                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="username" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="nombre" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="apellidoP" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="apellidoM" />
-                        </jsp:include>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="asociacion" />
                         </jsp:include>
@@ -111,9 +99,6 @@
                             <td>${colportor.apellidoP}</td>
                             <td>${colportor.apellidoM}</td>
                             <td>${colportor.asociacion.getNombre()}</td>
-                            <td>${colportor.nombre}</td>
-                            <td>${colportor.apellidop}</td>
-                            <td>${colportor.apellidom}</td>
                             <td>${colportor.status}</td>
                             <td>${colportor.clave}</td>
                             <td>${colportor.telefono}</td>

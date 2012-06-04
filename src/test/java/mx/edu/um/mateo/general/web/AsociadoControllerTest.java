@@ -72,36 +72,43 @@ public class AsociadoControllerTest extends BaseTest {
     @Test
     public void debieraMostrarListaDeAsociado() throws Exception {
         log.debug("Debiera monstrar lista asociado");
-        
-      Union union = new Union("test");
+   
+        Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_COL");
+        Rol rol = new Rol("ROLE_ASO");
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-         for (int i = 0; i < 20; i++) {
-           Asociado asociado = new Asociado("test"+i+"@test.com", "test", "test", "test", "test", 
-                   Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
-                   Constantes.MUNICIPIO);
+       // for (int i = 0; i < 20; i++) {
+            Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test",
+                    Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE, Constantes.COLONIA,
+                    Constantes.MUNICIPIO);
             asociado.setAsociacion(asociacion);
             currentSession().save(asociado);
             assertNotNull(asociado.getId());
-            
-              
 
-        
-        }
+       // }
 
-        this.mockMvc.perform(get(Constantes.PATH_ASOCIADO))
+              this.mockMvc.perform(get(Constantes.PATH_ASOCIADO)
+                .sessionAttr("asociacionId", asociacion))
                 .andExpect(status().isOk())
-                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIADO_LISTA+ ".jsp"))
-                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_ASOCIADOS))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIADO_LISTA + ".jsp"))
+                .andExpect(model()
+                .attributeExists(Constantes.CONTAINSKEY_ASOCIADOS))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
+//        this.mockMvc.perform(get(Constantes.PATH_ASOCIADO))
+//                .andExpect(status().isOk()
+//                )
+//                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIADO_LISTA+ ".jsp"))
+//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_ASOCIADOS))
+//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
+//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
+//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
     }
     @Test
     public void debieraMostrarAsociado() throws Exception {
@@ -143,8 +150,8 @@ public class AsociadoControllerTest extends BaseTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_CREAR)
-                .sessionAttr("asociacionId", asociacion.getId())
+        this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_CREA)
+                .sessionAttr("asociacionId", asociacion)
                 .param("roles", "ROLE_ASO")
                 .param("username", "test@test.com")
                 .param("password", "test")
