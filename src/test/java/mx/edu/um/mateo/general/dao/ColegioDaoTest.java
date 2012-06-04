@@ -44,7 +44,10 @@ public class ColegioDaoTest extends BaseTest {
     /**
      * Test of lista method, of class ColegioDao.
      */
+   
+   
     @Test
+    //PRUEBA PASO 100%
     public void deberiaMostrarListaDeColegio() {
         log.debug("Debiera mostrar lista de colegio");
 
@@ -62,7 +65,10 @@ public class ColegioDaoTest extends BaseTest {
         assertEquals(10, ((List<Colegio>) result.get(Constantes.CONTAINSKEY_COLEGIOS)).size());
         assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
-     @Test
+    
+    
+    @Test
+    //PRUEBA PASO 100%
     public void debieraObtenerColegio() {
         log.debug("Debiera obtener colegio");
 
@@ -78,7 +84,10 @@ public class ColegioDaoTest extends BaseTest {
 
         assertEquals(result, colegio);
     }
-     @Test
+    
+    
+    @Test
+    //PRUEBA PASO 100%
     public void deberiaCrearColegio() {
         log.debug("Deberia crear Colegio");
 
@@ -91,14 +100,16 @@ public class ColegioDaoTest extends BaseTest {
 
         assertEquals(colegio, colegio2);
     }
+    
 
     @Test
+    //PRUEBA PASO 100%
     public void deberiaActualizarColegio() {
         log.debug("Deberia actualizar Colegio");
 
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
-        assertNotNull(colegio);
         currentSession().save(colegio);
+        assertNotNull(colegio);
 
         String nombre = "test1";
         colegio.setNombre(nombre);
@@ -109,8 +120,10 @@ public class ColegioDaoTest extends BaseTest {
 
         assertEquals(colegio, colegio2);
     }
+    
 
     @Test
+    //PRUEBA PASO 100%
     public void deberiaEliminarColegio() throws UltimoException {
         log.debug("Debiera eliminar Colegio");
 

@@ -61,7 +61,9 @@ public class ColegioControllerTest extends BaseTest {
     public void tearDown() {
     }
 
+    
     @Test
+    //PRUEBA PASO 100%
     public void debieraMostrarListaDeColegio() throws Exception {
         log.debug("Debiera monstrar lista de colegioes");
         
@@ -79,22 +81,27 @@ public class ColegioControllerTest extends BaseTest {
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
     }
+    
 
-   @Test
+    @Test
+    //PRUEBA PASO 100%
     public void debieraMostrarColegio() throws Exception {
         log.debug("Debiera mostrar colegio");
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
         colegio = colegioDao.crea(colegio);
         assertNotNull(colegio);
 
-        this.mockMvc.perform(get(Constantes.PATH_COLEGIO_VER +"/"+ colegio.getId()))
+        this.mockMvc.perform(get(Constantes.PATH_COLEGIO_VER + "/" + colegio.getId()))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_COLEGIO_VER + ".jsp"))
                 .andExpect(model()
                 .attributeExists(Constantes.ADDATTRIBUTE_COLEGIO));
     }
+    
+    
 
     @Test
+    //PRUEBA PASO 100%
     public void debieraCrearColegio() throws Exception {
         log.debug("Debiera crear colegio");
 
@@ -107,6 +114,7 @@ public class ColegioControllerTest extends BaseTest {
     }
 
     @Test
+    //PRUEBA PASO 100%
     public void debieraActualizarColegio() throws Exception {
         log.debug("Debiera actualizar colegio");
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
@@ -123,7 +131,9 @@ public class ColegioControllerTest extends BaseTest {
                 .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "colegio.actualizado.message"));
     }
 
+    
     @Test
+    //PRUEBA PASO 100%
     public void debieraEliminarColegio() throws Exception {
         log.debug("Debiera eliminar colegio");
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
@@ -134,6 +144,8 @@ public class ColegioControllerTest extends BaseTest {
                 .param("id", colegio.getId().toString()))
                 .andExpect(status().isOk())
                 .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-                    .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "colegio.eliminado.message"));
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "colegio.eliminado.message"));
     }
+    
+    
 }

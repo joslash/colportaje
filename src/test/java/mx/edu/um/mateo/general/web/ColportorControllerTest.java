@@ -4,6 +4,10 @@
  */
 package mx.edu.um.mateo.general.web;
 
+/**
+ * TODO 
+ */
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -117,6 +121,8 @@ public class ColportorControllerTest {
                 "8262652626", "test", "test", "10706", "test", "test001", new Date());
         colportor.setAsociacion(asociacion);
         currentSession().save(colportor);
+        
+        
         this.mockMvc.perform(get(Constantes.PATH_COLPORTOR_VER + "/" + colportor.getId()))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_COLPORTOR_VER + ".jsp"))
