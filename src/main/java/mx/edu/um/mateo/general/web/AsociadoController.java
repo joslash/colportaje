@@ -113,8 +113,6 @@ params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
     public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Asociado asociado, @Valid Usuario usuario, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) {
-       Map<String, Object> params = new HashMap<>();
-               params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
         for (String nombre : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
         }
