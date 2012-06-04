@@ -21,6 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+/**
+ * TODO problemas con type long: user
+ * 
+ */
+
 package mx.edu.um.mateo.general.dao;
 import java.util.*;
 import mx.edu.um.mateo.Constantes;

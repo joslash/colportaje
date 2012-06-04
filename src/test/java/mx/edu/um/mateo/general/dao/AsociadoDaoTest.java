@@ -1,6 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * No Paso Prueba,problemas con type long: asociado
+ * 
  */
 package mx.edu.um.mateo.general.dao;
 
@@ -48,7 +48,7 @@ public class AsociadoDaoTest {
     @Test
     public void debieraMostrarListaDeAsociado() {
         log.debug("Debiera mostrar lista de Asociado");
-            Union union = new Union("test");
+        Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
         Rol rol = new Rol("ROLE_ASO");

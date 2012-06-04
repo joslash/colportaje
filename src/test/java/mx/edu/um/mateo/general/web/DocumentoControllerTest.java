@@ -2,6 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+/**
+ * TODO problemas con nullpointerexception
+ */
 package mx.edu.um.mateo.general.web;
 import java.util.Date;
 import mx.edu.um.mateo.Constantes;
