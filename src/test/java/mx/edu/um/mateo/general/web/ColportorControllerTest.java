@@ -98,7 +98,7 @@ public class ColportorControllerTest {
         }
 
         this.mockMvc.perform(get(Constantes.PATH_COLPORTOR)
-                .param("asociacion", asociacion.getId().toString()))
+                .sessionAttr("asociacionId", asociacion))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_COLPORTOR_LISTA + ".jsp"))
                 .andExpect(model()
@@ -144,7 +144,7 @@ public class ColportorControllerTest {
         currentSession().save(asociacion);
         
         this.mockMvc.perform(post(Constantes.PATH_COLPORTOR_CREA)
-                .sessionAttr("asociacionId", asociacion.getId())
+                .sessionAttr("asociacionId", asociacion)
                 .param("roles", "ROLE_COL")
                 .param("username", "test@test.com")
                 .param("password", "test")

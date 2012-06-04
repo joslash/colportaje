@@ -152,6 +152,7 @@ public class UsuarioControllerTest extends BaseTest{
               .andExpect(model().attributeExists("roles"));
      }
     
+
       /**
        * 
        * TODO problemas con el URL y con el id  @throws Exception 
@@ -191,7 +192,8 @@ public class UsuarioControllerTest extends BaseTest{
               .andExpect(flash().attributeExists("message"))
               .andExpect(flash().attribute("message","usuario.creado.message")) ;
     }*/
-     
+
+
    @Test
     public void debieraActualizarUsuario() throws Exception {
         log.debug("Debiera actualizar usuario");

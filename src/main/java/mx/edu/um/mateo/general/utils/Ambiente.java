@@ -54,8 +54,8 @@ public class Ambiente {
         if (usuario != null) {
             request.getSession().setAttribute("unionLabel", usuario.getAsociacion().getUnion().getNombre());
             request.getSession().setAttribute("asociacionLabel", usuario.getAsociacion().getNombre());
-            request.getSession().setAttribute("unionId", usuario.getAsociacion().getUnion().getId());
-            request.getSession().setAttribute("asociacionId", usuario.getAsociacion().getId());
+            request.getSession().setAttribute("unionId", usuario.getAsociacion().getUnion());
+            request.getSession().setAttribute("asociacionId", usuario.getAsociacion());
         }
         
     }

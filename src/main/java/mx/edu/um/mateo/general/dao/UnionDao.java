@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mx.edu.um.mateo.general.dao;
+package mx.edu.um.mateo.general.dao; 
 
 import java.util.HashMap;
 import java.util.Map;

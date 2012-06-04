@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.mail.util.ByteArrayDataSource;
+import javax.mail.util.ByteArrayDataSource;  
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -50,7 +50,7 @@ import mx.edu.um.mateo.general.utils.Ambiente;
 
 /**
  *
- * @author wilbert
+ * @author wilbert S
  */
 @Controller
 @RequestMapping(Constantes.PATH_DOCUMENTO)

@@ -11,7 +11,7 @@ import mx.edu.um.mateo.general.model.Cliente;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.SessionFactory; 
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
