@@ -97,8 +97,8 @@
                             <td>${asociado.nombre}</td>
                             <td>${asociado.asociacion.getNombre()}</td>
                             <td>${asociado.nombre}</td>
-                            <td>${asociado.apellidop}</td>
-                            <td>${asociado.apellidom}</td>
+                            <td>${asociado.apellidoP}</td>
+                            <td>${asociado.apellidoM}</td>
                             <td>${asociado.status}</td>
                             <td>${asociado.clave}</td>
                             <td>${asociado.telefono}</td>
