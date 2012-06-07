@@ -30,6 +30,8 @@
                 <a class="btn btn-primary" href="<s:url value='/colportor/nuevo'/>"><i class="icon-user icon-white"></i> <s:message code='colportor.nuevo.label' /></a>
                 <input name="filtro" type="text" class="input-medium search-query" value="${param.filtro}">
                 <button type="submit" class="btn"><s:message code="buscar.label" /></button>
+                <input type="text" data-provide="typeahead">
+            
             </p>
             <c:if test="${not empty message}">
                 <div class="alert alert-block alert-success fade in" role="status">
@@ -94,11 +96,11 @@
                 <tbody>
                     <c:forEach items="${colportores}" var="colportor" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/colportor/ver/${colportor.id}' />">${colportor.username}</a></td>
+                            <td><a href="<c:url value='/colportor/ver/${colportor.id}' />">${colportor.asociacion.getNombre()}</a></td>
+                            <td>${colportor.username}</td>
                             <td>${colportor.nombre}</td>
                             <td>${colportor.apellidoP}</td>
                             <td>${colportor.apellidoM}</td>
-                            <td>${colportor.asociacion.getNombre()}</td>
                             <td>${colportor.status}</td>
                             <td>${colportor.clave}</td>
                             <td>${colportor.telefono}</td>

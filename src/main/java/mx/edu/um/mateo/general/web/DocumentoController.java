@@ -14,15 +14,19 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.mail.util.ByteArrayDataSource;  
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
+import mx.edu.um.mateo.general.dao.ColportorDao;
 import mx.edu.um.mateo.general.dao.DocumentoDao;
 import mx.edu.um.mateo.general.dao.TemporadaColportorDao;
+import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.model.Documento;
+import mx.edu.um.mateo.general.model.TemporadaColportor;
 import mx.edu.um.mateo.general.model.Usuario;
+import mx.edu.um.mateo.general.utils.Ambiente;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -31,6 +35,8 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +51,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import mx.edu.um.mateo.general.utils.Ambiente;
 
 /**
  *
@@ -60,13 +66,21 @@ public class DocumentoController {
     @Autowired
     private DocumentoDao DocumentoDao;
     @Autowired
-    private TemporadaColportorDao tempColportorDao;
-    @Autowired
     private JavaMailSender mailSender;
     @Autowired
     private ResourceBundleMessageSource messageSource;
     @Autowired
     private Ambiente ambiente;
+    @Autowired
+    private TemporadaColportorDao temporadaColportorDao;
+    @Autowired
+    private ColportorDao colportorDao;
+        @Autowired
+    private SessionFactory sessionFactory;
+
+    private Session currentSession() {
+        return sessionFactory.getCurrentSession();
+    }
     /*
      * DE AQUI @InitBinder public void initBinder(WebDataBinder binder) {
      *
@@ -74,7 +88,7 @@ public class DocumentoController {
      * EnumEditor(TipoDocumento.class)); }
      */
 
-    @RequestMapping
+    @RequestMapping("/lista")
     public String lista(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(required = false) String filtro,
             @RequestParam(required = false) Long pagina,
@@ -101,10 +115,17 @@ public class DocumentoController {
             params.put(Constantes.CONTAINSKEY_ORDER, order);
             params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
-            
-    params.put("temporadaColportor",ambiente.getTemporadaColportorDeUsuarioEnSesion());
-    
-        if (StringUtils.isNotBlank(tipo)) {
+        TemporadaColportor temporadaColportorTmp= null;
+         if (ambiente.esAsociadoEnSesion()) {
+             temporadaColportorTmp=temporadaColportorDao.obtiene(((Colportor) request.getSession().getAttribute("colportorTmp")).getId());
+            params.put("temporadaColportor", temporadaColportorDao.obtiene(((Colportor) request.getSession().getAttribute("colportorTmp")).getId()));
+        } else {
+        }
+        if (ambiente.esColportorEnSesion()) {
+            temporadaColportorTmp=temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId());
+            params.put("temporadaColportor", temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId()));
+        }   
+    if (StringUtils.isNotBlank(tipo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = DocumentoDao.lista(params);
             try {
@@ -215,12 +236,27 @@ public class DocumentoController {
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINACION, paginacion);
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
         // termina paginado
-
+        
+        request.setAttribute("temporadaColportorTmp",temporadaColportorTmp);
         return Constantes.PATH_DOCUMENTO_LISTA;
     
  
     }
  
+    @RequestMapping
+    public String obtieneColportor(HttpServletRequest request, HttpServletResponse response, Model modelo) {
+        Map<String, Object> params = new HashMap<>();
+        log.debug("clave"+colportorDao.obtiene((String)request.getParameter("clave")));
+        Colportor colportor = colportorDao.obtiene((String)request.getParameter("clave"));
+        log.debug("colportor"+colportor);
+        TemporadaColportor temporadaColportor = temporadaColportorDao.obtiene(colportor);
+        request.getSession().setAttribute("temporadaColportorTmp", temporadaColportor);
+        
+        log.debug("temporadaColportor"+temporadaColportorDao.obtiene(colportor));
+        return "forward:/lista";
+//        return  "redirect:"+"/WEB-INF/jsp/"+Constantes.PATH_DOCUMENTO_LISTA+ ".jsp";
+//       return  "/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp";
+    }
 
     @RequestMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
@@ -282,7 +318,8 @@ public class DocumentoController {
 
         try {
             log.debug("Documento Fecha" + documentos.getFecha());
-   documentos.setTemporadaColporotor(ambiente.getTemporadaColportorDeUsuarioEnSesion());
+            //294 y 305
+   documentos.setTemporadaColportor(temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId()));
             documentos = DocumentoDao.crea(documentos);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear el documento", e);
@@ -340,7 +377,7 @@ public class DocumentoController {
         }
 
         try {
-             documentos.setTemporadaColporotor(ambiente.getTemporadaColportorDeUsuarioEnSesion());
+             documentos.setTemporadaColportor(temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId()));
             log.debug("Documento Fecha" + documentos.getFecha());
             documentos = DocumentoDao.actualiza(documentos);
         } catch (ConstraintViolationException e) {
@@ -372,6 +409,15 @@ public class DocumentoController {
         return "redirect:" + Constantes.PATH_DOCUMENTO;
     }
 
+    
+    
+    private void cargarColportorParaAsociado(){
+        
+    }
+    
+    
+    
+    
     private void generaReporte(String tipo, List<Documento> documentos, HttpServletResponse response) throws JRException, IOException {
         log.debug("Generando reporte {}", tipo);
         byte[] archivo = null;

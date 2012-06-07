@@ -121,7 +121,7 @@ public class AsociadoControllerTest extends BaseTest {
          Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_COL");
+        Rol rol = new Rol("ROLE_ASO");
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);

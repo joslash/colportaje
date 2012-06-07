@@ -23,6 +23,7 @@
  */
 package mx.edu.um.mateo.general.utils;
 
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import mx.edu.um.mateo.general.dao.TemporadaColportorDao;
 import mx.edu.um.mateo.general.model.TemporadaColportor;
@@ -30,12 +31,20 @@ import mx.edu.um.mateo.general.model.Usuario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
  *
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
+ * Constantes de Sesion:
+ * Union
+ * Asociacion
+ * Asociado
+ * Colportor
+ * Constantes de objetos temporales en Sesion:
+ * ColportorTmp
  */
 @Component
 public class Ambiente {
@@ -67,9 +76,17 @@ public class Ambiente {
     
     public boolean esAsociadoEnSesion(){
         boolean esAsociado = false;
+        GrantedAuthority ga=null;
         Usuario usuario = obtieneUsuario();
-        if(usuario.getAsociado() != null){
+        Iterator  it= usuario.getAuthorities().iterator();
+        while(it.hasNext()){
+            ga=(GrantedAuthority)it.next();
+            
+            if((ga).getAuthority().equals("ROLE_ASO")){
             esAsociado = true;
+                break;
+            }
+        
         }
         return esAsociado;
     }
@@ -85,10 +102,19 @@ public class Ambiente {
     public boolean esColportorEnSesion(){
         log.debug("COLPORTOR EN SECION");
         boolean esColportor = false;
+        GrantedAuthority ga=null;
         Usuario usuario = obtieneUsuario();
-        if(usuario.getColportor() != null){
+        Iterator  it= usuario.getAuthorities().iterator();
+        while(it.hasNext()){
+            ga=(GrantedAuthority)it.next();
+            
+            if((ga).getAuthority().equals("ROLE_COL")){
             esColportor = true;
+                break;
+            }
+        
         }
+        
         return esColportor;
     }
     
@@ -100,11 +126,5 @@ public class Ambiente {
         return esColportor;
     }
     
-    public TemporadaColportor getTemporadaColportorDeUsuarioEnSesion(){
-        if(!esColportorEnSesion()){
-            return null;
-        }
-          return  tempColportorDao.obtiene(obtieneUsuario().getColportor());
-    
-}
+ 
 }

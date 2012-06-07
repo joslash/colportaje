@@ -93,30 +93,54 @@ public class ColportorController extends BaseController {
             params.put(Constantes.CONTAINSKEY_ORDER, order);
             params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
-        if (StringUtils.isNotBlank(tipo)) {
-            params.put(Constantes.CONTAINSKEY_REPORTE, true);
+         if (StringUtils.isNotBlank(tipo)) {
+            params.put("reporte", true);
             params = colportorDao.lista(params);
             try {
-                generaReporte(tipo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), response, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
+                generaReporte(tipo, (List<Colportor>) params.get("colportores"), response);
                 return null;
-            } catch (ReporteException e) {
+            } catch (JRException | IOException e) {
                 log.error("No se pudo generar el reporte", e);
-                params.remove(Constantes.CONTAINSKEY_REPORTE);
-                //errors.reject("error.generar.reporte");
             }
         }
+
         if (StringUtils.isNotBlank(correo)) {
-            params.put(Constantes.CONTAINSKEY_REPORTE, true);
+            params.put("reporte", true);
             params = colportorDao.lista(params);
-            params.remove(Constantes.CONTAINSKEY_REPORTE);
+
+            params.remove("reporte");
             try {
-                enviaCorreo(correo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), request, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
-                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
-                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
-            } catch (ReporteException e) {
+                enviaCorreo(correo, (List<Colportor>) params.get("colportores"), request);
+                modelo.addAttribute("message", "lista.enviada.message");
+                modelo.addAttribute("messageAttrs", new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
+            } catch (JRException | MessagingException e) {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
+//        if (StringUtils.isNotBlank(tipo)) {
+//            params.put(Constantes.CONTAINSKEY_REPORTE, true);
+//            params = colportorDao.lista(params);
+//            try {
+//                generaReporte(tipo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), response, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
+//                return null;
+//            } catch (ReporteException e) {
+//                log.error("No se pudo generar el reporte", e);
+//                params.remove(Constantes.CONTAINSKEY_REPORTE);
+//                //errors.reject("error.generar.reporte");
+//            }
+//        }
+//        if (StringUtils.isNotBlank(correo)) {
+//            params.put(Constantes.CONTAINSKEY_REPORTE, true);
+//            params = colportorDao.lista(params);
+//            params.remove(Constantes.CONTAINSKEY_REPORTE);
+//            try {
+//                enviaCorreo(correo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), request, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
+//                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
+//                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
+//            } catch (ReporteException e) {
+//                log.error("No se pudo enviar el reporte por correo", e);
+//            }
+//        }
 
         params = colportorDao.lista(params);
         modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, params.get(Constantes.CONTAINSKEY_COLPORTORES));

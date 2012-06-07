@@ -119,18 +119,6 @@ public class AsociadoDao {
         return asociado;
     }
     
-    public Object obtienePorUsuario(Long id) {
-        log.debug("Obtiene cuenta de asociado con id = {}", id);
-        String hql = "SELECT "
-                + "u.id, a.status, a.clave, a.telefono, a.calle, a.colonia, a.municipio "
-                + "FROM "
-                + "usuarios u, roles r, usuarios_roles ur, asociados a "
-                + "WHERE "
-                + "u.asociado_id = :id AND ur.rol_id = r.id AND r.authority = 'ROLE_ASO'";
-        Query query = currentSession().createSQLQuery(hql);
-        query.setLong("id", id);
-        return query.uniqueResult();
-    }
 
     public Asociado crea(Asociado asociado) {
         log.debug("Creando cuenta de asociado : {}", asociado);

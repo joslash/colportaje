@@ -162,10 +162,10 @@ public class Constantes {
     public static final String PATH_COLPORTOR_ACTUALIZA = "/colportor/actualiza";
     public static final String PATH_COLPORTOR_ELIMINA = "/colportor/elimina";
     public static final String PATH_DOCUMENTO = "/documento";
-    public static final String PATH_DOCUMENTO_LISTA = "documento/lista";
+    public static final String PATH_DOCUMENTO_LISTA = "/documento/lista";
     public static final String PATH_DOCUMENTO_VER = "/documento/ver";
-    public static final String PATH_DOCUMENTO_NUEVO = "documento/nuevo";
-    public static final String PATH_DOCUMENTO_EDITA = "documento/edita";
+    public static final String PATH_DOCUMENTO_NUEVO = "/documento/nuevo";
+    public static final String PATH_DOCUMENTO_EDITA = "/documento/edita";
     public static final String PATH_DOCUMENTO_CREA = "/documento/crea";
     public static final String PATH_DOCUMENTO_ACTUALIZA = "/documento/actualiza";
     public static final String PATH_DOCUMENTO_ELIMINA = "/documento/elimina";

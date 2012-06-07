@@ -1,4 +1,4 @@
-/*
+  /*
  * The MIT License
  *
  * Copyright 2012 jdmr.
@@ -131,85 +131,31 @@ public class ColportorDao {
         return params;
     }
 
-//    public Map<String, Object> lista(Map<String, Object> params) {
-//        log.debug("Buscando lista de colportor con params {}", params);
-//        if (params == null) {
-//            params = new HashMap<>();
-//        }
-//
-//        if (!params.containsKey(Constantes.CONTAINSKEY_MAX)) {
-//            params.put(Constantes.CONTAINSKEY_MAX, 10);
-//        } else {
-//            params.put(Constantes.CONTAINSKEY_MAX, Math.min((Integer) params.get(Constantes.CONTAINSKEY_MAX), 100));
-//        }
-//
-//        if (params.containsKey(Constantes.CONTAINSKEY_PAGINA)) {
-//            Long pagina = (Long) params.get(Constantes.CONTAINSKEY_PAGINA);
-//            Long offset = (pagina - 1) * (Integer) params.get(Constantes.CONTAINSKEY_MAX);
-//            params.put(Constantes.CONTAINSKEY_OFFSET, offset.intValue());
-//        }
-//
-//        if (!params.containsKey(Constantes.CONTAINSKEY_OFFSET)) {
-//            params.put(Constantes.CONTAINSKEY_OFFSET, 0);
-//        }
-//        Criteria criteria = currentSession().createCriteria(Colportor.class);
-//        Criteria countCriteria = currentSession().createCriteria(Colportor.class);
-//
-//
-//        
-//         if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
-//            criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
-//            countCriteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
-//        }
-//
-//        if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
-//            String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
-//            filtro = "%" + filtro + "%";
-//            Disjunction propiedades = Restrictions.disjunction();
-//            propiedades.add(Restrictions.ilike("status", filtro));
-//            propiedades.add(Restrictions.ilike("clave", filtro));
-//            criteria.add(propiedades);
-//            countCriteria.add(propiedades);
-//        }
-//
-//        if (params.containsKey(Constantes.CONTAINSKEY_ORDER)) {
-//            String campo = (String) params.get(Constantes.CONTAINSKEY_ORDER);
-//            if (params.get(Constantes.CONTAINSKEY_SORT).equals(Constantes.CONTAINSKEY_DESC)) {
-//                criteria.addOrder(Order.desc(campo));
-//            } else {
-//                criteria.addOrder(Order.asc(campo));
-//            }
-//        }
-//
-//        if (!params.containsKey(Constantes.CONTAINSKEY_REPORTE)) {
-//            criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
-//            criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
-//        }
-//        params.put(Constantes.CONTAINSKEY_COLPORTORES, criteria.list());
-//        countCriteria.setProjection(Projections.rowCount());
-//        params.put(Constantes.CONTAINSKEY_CANTIDAD, (long) countCriteria.list().size());
-//
-//        return params;
-//    }
-
     public Colportor obtiene(Long id) {
         log.debug("Obtiene colportor con id = {}", id);
         Colportor colportor = (Colportor) currentSession().get(Colportor.class, id);
         return colportor;
     }
-    
-      public Object obtienePorUsuario(Long id) {
-        log.debug("Obtiene cuenta de colportor con id = {}", id);
-        String hql = "SELECT "
-                + "u.id, c.status, c.clave, c.telefono, c.calle, c.colonia, c.municipio "
-                + "FROM "
-                + "usuarios u, roles r, usuarios_roles ur, colportores c "
-                + "WHERE "
-                + "u.colportor_id = :id AND ur.rol_id = r.id AND r.authority = 'ROLE_COL'";
-        Query query = currentSession().createSQLQuery(hql);
-        query.setLong("id", id);
-        return query.uniqueResult();
+    public Colportor obtiene(String clave) {
+        log.debug("Obtiene colportor con clave = {}", clave);
+        Criteria criteria = currentSession().createCriteria(Colportor.class);
+        criteria.add(Restrictions.eq("clave", clave));
+        Colportor colportor = (Colportor) criteria.uniqueResult();
+        return colportor;
     }
+    
+//      public Object obtienePorUsuario(Long id) {
+//        log.debug("Obtiene cuenta de colportor con id = {}", id);
+//        String hql = "SELECT "
+//                + "u.id, c.status, c.clave, c.telefono, c.calle, c.colonia, c.municipio "
+//                + "FROM "
+//                + "usuarios u, roles r, usuarios_roles ur, colportores c "
+//                + "WHERE "
+//                + "u.colportor_id = :id AND ur.rol_id = r.id AND r.authority = 'ROLE_COL'";
+//        Query query = currentSession().createSQLQuery(hql);
+//        query.setLong("id", id);
+//        return query.uniqueResult();
+//    }
     
     
     
