@@ -214,6 +214,7 @@ public class ColportorController extends BaseController {
         }
 String password = null;
  password = KeyGenerators.string().generateKey();
+ log.debug("password"+password);
         
         try {
             colportores.setAsociacion((Asociacion)request.getSession().getAttribute("asociacionId"));

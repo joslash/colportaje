@@ -125,7 +125,7 @@ public class AsociadoDaoTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
+        Asociado asociado = new Asociado("sam@um.edu.mx", "test", "test", "test", "test", 
                 Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,
                 Constantes.COLONIA,Constantes.MUNICIPIO);
        asociado.setAsociacion(asociacion);
@@ -136,7 +136,9 @@ public class AsociadoDaoTest {
         assertNotNull(asociado2);
         assertNotNull(asociado2.getId());
 
-        assertEquals(asociado, asociado2);
+        assertEquals(asociado.getUsername(), asociado2.getUsername());
+        log.debug("username"+asociado.getUsername());
+        log.debug("username"+asociado2.getUsername());
     }
 
     @Test

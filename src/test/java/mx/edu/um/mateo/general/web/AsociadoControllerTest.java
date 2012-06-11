@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -15,6 +15,7 @@ import mx.edu.um.mateo.general.dao.AsociadoDao;
 import mx.edu.um.mateo.general.model.*;
 import mx.edu.um.mateo.general.test.BaseTest;
 import mx.edu.um.mateo.general.test.GenericWebXmlContextLoader;
+import org.apache.xmlbeans.impl.tool.Extension;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import static org.junit.Assert.assertNotNull;
@@ -158,7 +159,7 @@ public class AsociadoControllerTest extends BaseTest {
         this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_CREA)
                 .sessionAttr("asociacionId", asociacion)
                 .param("roles", "ROLE_ASO")
-                .param("username", "test@test.com")
+                .param("username", "sam@um.edu.mx")
                 .param("password", "test")
                 .param("nombre", "test")
                 .param("apellidoP", "test")
