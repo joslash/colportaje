@@ -21,8 +21,10 @@ import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociacionDao;
 import mx.edu.um.mateo.general.dao.ColportorDao;
+import mx.edu.um.mateo.general.dao.RolDao;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Colportor;
+import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.Ambiente;
 import mx.edu.um.mateo.general.utils.ReporteException;
@@ -63,7 +65,7 @@ public class ColportorController extends BaseController {
     @Autowired
     private ColportorDao colportorDao;
     @Autowired
-    private AsociacionDao asociacionDao;
+    private RolDao rolDao;
     /*
      * DE AQUI @InitBinder public void initBinder(WebDataBinder binder) {
      *
@@ -239,8 +241,10 @@ public class ColportorController extends BaseController {
     @RequestMapping("/edita/{id}")
     public String edita(@PathVariable Long id, Model modelo) {
         log.debug("Editar colportor {}", id);
+        Rol roles = rolDao.obtiene("ROLE_COL");
         Colportor colportores = colportorDao.obtiene(id);
         modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
+        modelo.addAttribute("roles", roles);
         return Constantes.PATH_COLPORTOR_EDITA;
     }
 
@@ -266,9 +270,10 @@ public class ColportorController extends BaseController {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
             colportores.setFechaDeNacimiento(sdf.parse(request.getParameter("fechaDeNacimiento")));
+            log.debug("fechaNacimiento"+colportores.getFechaDeNacimiento());
         } catch (ConstraintViolationException e) {
             log.error("FechaDeNacimiento", e);
-            return Constantes.PATH_COLPORTOR_NUEVO;
+            return Constantes.PATH_COLPORTOR_EDITA;
         }
 
         try {
