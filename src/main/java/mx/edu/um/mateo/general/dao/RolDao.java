@@ -55,7 +55,8 @@ public class RolDao {
     }
     
     public Rol obtiene(String nombre) {
-        Query query = currentSession().createQuery("select r from Rol r where authority = ?");
+        Query query = currentSession().createQuery("select r from Rol r where authority = :role");
+        query.setString("role", nombre);
         Rol rol = (Rol) query.uniqueResult();
         return rol;
     }

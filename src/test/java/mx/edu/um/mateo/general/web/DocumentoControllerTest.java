@@ -115,7 +115,7 @@ public class DocumentoControllerTest extends BaseTest {
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
-        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO))
+        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp"))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_DOCUMENTOS))
@@ -155,7 +155,7 @@ public class DocumentoControllerTest extends BaseTest {
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
-        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO)
+        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA)
                 .sessionAttr("colportorTmp", colportorTmp))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp"))

@@ -212,17 +212,21 @@ public class ColportorController extends BaseController {
             log.error("FechaDeNacimiento", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
-String password = null;
- password = KeyGenerators.string().generateKey();
-        
+        String password = null;
+        password = KeyGenerators.string().generateKey();
+        log.debug("passwordColportor"+password);
         try {
+            String[] roles = request.getParameterValues("roles");
+            log.debug("Asignando ROLE_COL por defecto");
+            roles = new String[]{"ROLE_COL"};
+            modelo.addAttribute("roles", roles);
             colportores.setAsociacion((Asociacion)request.getSession().getAttribute("asociacionId"));
             colportores.setPassword(password);
-            colportores = colportorDao.crea(colportores);
+            colportores = colportorDao.crea(colportores, roles);
             
         
-//        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message");
-//        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getColonia()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message");
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getNombre()});
         modelo.addAttribute("colportor", colportores);
         return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
         } catch (Exception e) {
@@ -269,14 +273,18 @@ String password = null;
 
         try {
             log.debug("Colportor FechaDeNacimiento" + colportores.getFechaDeNacimiento());
-            colportores = colportorDao.actualiza(colportores);
+            String[] roles = request.getParameterValues("roles");
+            log.debug("Asignando ROLE_ASO por defecto");
+            roles = new String[]{"ROLE_ASO"};
+            modelo.addAttribute("roles", roles);
+            colportores = colportorDao.actualiza(colportores, roles);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear la colportor", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
 
         redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.actualizado.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getColonia()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getNombre()});
 
         return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
     }
@@ -287,9 +295,9 @@ String password = null;
         log.debug("Elimina colportor");
         try {
             String nombre = colportorDao.elimina(id);
-
             redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.eliminado.message");
             redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{nombre});
+
         } catch (Exception e) {
             log.error("No se pudo eliminar el colportor " + id, e);
             bindingResult.addError(new ObjectError(Constantes.ADDATTRIBUTE_COLPORTOR, new String[]{"colportor.no.eliminado.message"}, null, null));

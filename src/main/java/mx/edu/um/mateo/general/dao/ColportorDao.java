@@ -28,12 +28,10 @@ import java.util.HashMap;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociacion;
+import mx.edu.um.mateo.general.model.Asociado;
 import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.model.Usuario;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.criterion.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +51,8 @@ public class ColportorDao {
     private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private RolDao rolDao;
 
     public ColportorDao() {
         log.info("Nueva instancia de ColportorDao");
@@ -136,6 +136,7 @@ public class ColportorDao {
         Colportor colportor = (Colportor) currentSession().get(Colportor.class, id);
         return colportor;
     }
+    
     public Colportor obtiene(String clave) {
         log.debug("Obtiene colportor con clave = {}", clave);
         Criteria criteria = currentSession().createCriteria(Colportor.class);
@@ -144,30 +145,35 @@ public class ColportorDao {
         return colportor;
     }
     
-//      public Object obtienePorUsuario(Long id) {
-//        log.debug("Obtiene cuenta de colportor con id = {}", id);
-//        String hql = "SELECT "
-//                + "u.id, c.status, c.clave, c.telefono, c.calle, c.colonia, c.municipio "
-//                + "FROM "
-//                + "usuarios u, roles r, usuarios_roles ur, colportores c "
-//                + "WHERE "
-//                + "u.colportor_id = :id AND ur.rol_id = r.id AND r.authority = 'ROLE_COL'";
-//        Query query = currentSession().createSQLQuery(hql);
-//        query.setLong("id", id);
-//        return query.uniqueResult();
-//    }
-    
-    
-    
-
-    public Colportor crea(Colportor colportor) {
+    public Colportor crea(Colportor colportor, String[] nombreDeRoles) {
         log.debug("Creando colportor : {}", colportor);
+        colportor.addRol(rolDao.obtiene("ROLE_COL"));
         colportor.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(colportor);
         currentSession().flush();
         return colportor;
     }
+        public Colportor actualiza(Colportor colportor, String[] nombreDeRoles) {
+        Colportor nuevoColportor= (Colportor) currentSession().get(Usuario.class, colportor.getId());
+        nuevoColportor.setVersion(colportor.getVersion());
+        nuevoColportor.setUsername(colportor.getUsername());
+        nuevoColportor.setNombre(colportor.getNombre());
+        nuevoColportor.setApellidoP(colportor.getApellidoP());
+        nuevoColportor.setApellidoM(colportor.getApellidoM());
+        
+        log.debug("password"+nuevoColportor.getPassword());
 
+
+        try {
+            currentSession().update(nuevoColportor);
+            currentSession().flush();
+        } catch (NonUniqueObjectException e) {
+            log.warn("Ya hay un objeto previamente cargado, intentando hacer merge", e);
+            currentSession().merge(nuevoColportor);
+            currentSession().flush();
+        }
+        return nuevoColportor;
+    }
     public Colportor actualiza(Colportor colportor) {
         log.debug("Actualizando colportor {}", colportor);
 
@@ -182,7 +188,7 @@ public class ColportorDao {
         return nuevo;
     }
 
-    public String elimina(Long id) {
+   public String elimina(Long id) {
         log.debug("Eliminando colportor {}", id);
 
         Colportor colportor = obtiene(id);

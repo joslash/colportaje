@@ -9,13 +9,8 @@ import java.util.HashMap;
 import java.util.List; 
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
-import mx.edu.um.mateo.general.model.Asociacion;
-import mx.edu.um.mateo.general.model.Asociado;
-import mx.edu.um.mateo.general.model.Colportor;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import mx.edu.um.mateo.general.model.*;
+import org.hibernate.*;
 import org.hibernate.criterion.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +30,8 @@ public class AsociadoDao {
     private static final Logger log = LoggerFactory.getLogger(AsociadoDao.class);
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private RolDao rolDao;
 
     public AsociadoDao() {
         log.info("Se ha creado una nueva AsociadoDao");
@@ -120,17 +117,39 @@ public class AsociadoDao {
     }
     
 
-    public Asociado crea(Asociado asociado) {
+    public Asociado crea(Asociado asociado, String[] nombreDeRoles) {
         log.debug("Creando cuenta de asociado : {}", asociado);
+        asociado.addRol(rolDao.obtiene("ROLE_ASO"));
         currentSession().save(asociado);
         currentSession().flush();
         return asociado;
     }
 
+        public Asociado actualiza(Asociado asociado, String[] nombreDeRoles) {
+        Asociado nuevoAsociado = (Asociado) currentSession().get(Usuario.class, asociado.getId());
+        nuevoAsociado.setVersion(asociado.getVersion());
+        nuevoAsociado.setUsername(asociado.getUsername());
+        nuevoAsociado.setNombre(asociado.getNombre());
+        nuevoAsociado.setApellidoP(asociado.getApellidoP());
+        nuevoAsociado.setApellidoM(asociado.getApellidoM());
+        
+        log.debug("password"+nuevoAsociado.getPassword());
+
+
+        try {
+            currentSession().update(nuevoAsociado);
+            currentSession().flush();
+        } catch (NonUniqueObjectException e) {
+            log.warn("Ya hay un objeto previamente cargado, intentando hacer merge", e);
+            currentSession().merge(nuevoAsociado);
+            currentSession().flush();
+        }
+        return nuevoAsociado;
+    }
     public Asociado actualiza(Asociado asociado) {
         log.debug("Actualizando cuenta de asociado {}", asociado);
 
-        //trae el objeto de la DB 
+//        trae el objeto de la DB 
         Asociado nueva = (Asociado) currentSession().get(Asociado.class, asociado.getId());
         //actualiza el objeto
         BeanUtils.copyProperties(asociado, nueva);
@@ -140,11 +159,12 @@ public class AsociadoDao {
         return nueva;
     }
 
-    public String elimina(Long id) {
-        log.debug("Eliminando cuenta de asociado con id {}", id);
+   public String elimina(Long id) {
+        log.debug("Eliminando asociado {}", id);
+
         Asociado asociado = obtiene(id);
-        currentSession().delete(asociado);
-        currentSession().flush();
+        asociado.setStatus(Constantes.STATUS_INACTIVO);
+        actualiza(asociado);
         String clave = asociado.getClave();
         return clave;
     }

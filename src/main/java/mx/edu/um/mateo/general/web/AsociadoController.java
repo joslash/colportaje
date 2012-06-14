@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociadoDao;
+import mx.edu.um.mateo.general.dao.RolDao;
 import mx.edu.um.mateo.general.dao.UsuarioDao;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Asociado;
@@ -23,6 +24,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -45,6 +47,8 @@ public class AsociadoController extends BaseController {
     @Autowired
     private AsociadoDao asociadoDao;
     @Autowired
+    private RolDao rolDao;
+    @Autowired
     private UsuarioDao usuarioDao;
     @RequestMapping
     public String lista(HttpServletRequest request, HttpServletResponse response,
@@ -61,7 +65,7 @@ public class AsociadoController extends BaseController {
         Map<String, Object> params = new HashMap<>();
         //Long asociacionId = (Long) request.getSession().getAttribute("asociacionId");
         //params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
-params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
+        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }
@@ -120,12 +124,18 @@ params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute
             log.debug("Hubo algun error en la forma, regresando");
             return Constantes.PATH_ASOCIADO_NUEVO;
         }
+        String password = null;
+        password = KeyGenerators.string().generateKey();
+        log.debug("passwordAsociado"+password);
         try {
-            asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
-                   Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
-                   Constantes.MUNICIPIO);
-                   Asociacion asociacion= (Asociacion)request.getSession().getAttribute("asociacionId");
-            usuario = usuarioDao.crea(asociado,asociacion.getId(),  new String[]{"ROLE_ASO"});
+             String[] roles = request.getParameterValues("roles");
+            log.debug("Asignando ROLE_ASO por defecto");
+            roles = new String[]{"ROLE_ASO"};
+            modelo.addAttribute("roles", roles);
+            asociado.setAsociacion((Asociacion) request.getSession().getAttribute("asociacionId"));
+            asociado.setPassword(password);
+            asociado = asociadoDao.crea(asociado, roles);
+           
         } catch(ConstraintViolationException e) {
             log.error("No se pudo crear al asociado", e);
             return Constantes.PATH_ASOCIADO_NUEVO;
@@ -135,7 +145,7 @@ params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute
         }
 
         redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "asociado.creado.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{asociado.getColonia()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{asociado.getNombre()});
 
         return "redirect:" + Constantes.PATH_ASOCIADO_VER + "/" + asociado.getId();
     }
@@ -155,8 +165,10 @@ params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute
     public String edita(@PathVariable Long id, Model modelo) {
 
         log.debug("Edita Asociado {}", id);
+        Rol roles = rolDao.obtiene("ROLE_ASO");
         Asociado asociados = asociadoDao.obtiene(id);
         modelo.addAttribute(Constantes.ADDATTRIBUTE_ASOCIADO, asociados);
+        modelo.addAttribute("roles", roles);
         return Constantes.PATH_ASOCIADO_EDITA;
     }
 
@@ -168,14 +180,18 @@ params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute
             return Constantes.PATH_ASOCIADO_EDITA;
         }
         try {
-            asociados = asociadoDao.actualiza(asociados);
+             String[] roles = request.getParameterValues("roles");
+            log.debug("Asignando ROLE_ASO por defecto");
+            roles = new String[]{"ROLE_ASO"};
+            modelo.addAttribute("roles", roles);
+            asociados = asociadoDao.actualiza(asociados, roles);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear al Asociacion", e);
             return Constantes.PATH_ASOCIADO_NUEVO;
         }
 
         redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "asociado.actualizado.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{asociados.getColonia()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{asociados.getNombre()});
 
         return "redirect:" + Constantes.PATH_ASOCIADO_VER + "/" + asociados.getId();
     }
