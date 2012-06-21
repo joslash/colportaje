@@ -290,17 +290,17 @@ public class TemporadaColportorController {
         log.debug("Generando reporte {}", tipo);
         byte[] archivo = null;
         switch (tipo) {
-            case "PDF":
+            case Constantes.TIPO_DOCUMENTO_PDF:
                 archivo = generaPdf(temporadaColportor);
                 response.setContentType("application/pdf");
                 response.addHeader("Content-Disposition", "attachment; filename=temporadacolportor.pdf");
                 break;
-            case "CSV":
+            case Constantes.TIPO_DOCUMENTO_CSV:
                 archivo = generaCsv(temporadaColportor);
                 response.setContentType("text/csv");
                 response.addHeader("Content-Disposition", "attachment; filename=temporadacolportor.csv");
                 break;
-            case "XLS":
+            case Constantes.TIPO_DOCUMENTO_XLS:
                 archivo = generaXls(temporadaColportor);
                 response.setContentType("application/vnd.ms-excel");
                 response.addHeader("Content-Disposition", "attachment; filename=temporadacolportor.xls");
@@ -318,15 +318,15 @@ public class TemporadaColportorController {
         byte[] archivo = null;
         String tipoContenido = null;
         switch (tipo) {
-            case "PDF":
+            case Constantes.TIPO_DOCUMENTO_PDF:
                 archivo = generaPdf(temporadaColportor);
                 tipoContenido = "application/pdf";
                 break;
-            case "CSV":
+            case Constantes.TIPO_DOCUMENTO_CSV:
                 archivo = generaCsv(temporadaColportor);
                 tipoContenido = "text/csv";
                 break;
-            case "XLS":
+            case Constantes.TIPO_DOCUMENTO_XLS:
                 archivo = generaXls(temporadaColportor);
                 tipoContenido = "application/vnd.ms-excel";
         }

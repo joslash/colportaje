@@ -79,7 +79,7 @@ public class UsuarioDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -94,10 +94,10 @@ public class UsuarioDaoTest {
         }
 
         Map<String, Object> params = new HashMap();
-        params.put("asociacion", asociacion);
+        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacion);
         Map<String, Object> result = instance.lista(params);
-        List<Usuario> usuarios = (List<Usuario>) result.get("usuarios");
-        Long cantidad = (Long) result.get("cantidad");
+        List<Usuario> usuarios = (List<Usuario>) result.get(Constantes.CONTAINSKEY_USUARIOS);
+        Long cantidad = (Long) result.get(Constantes.CONTAINSKEY_CANTIDAD);
         assertEquals(10, usuarios.size());
         assertTrue(20 <= cantidad);
     }
@@ -113,7 +113,7 @@ public class UsuarioDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -129,8 +129,8 @@ public class UsuarioDaoTest {
 
         Map<String, Object> params = null;
         Map<String, Object> result = instance.lista(params);
-        List<Usuario> usuarios = (List<Usuario>) result.get("usuarios");
-        Long cantidad = (Long) result.get("cantidad");
+        List<Usuario> usuarios = (List<Usuario>) result.get(Constantes.CONTAINSKEY_USUARIOS);
+        Long cantidad = (Long) result.get(Constantes.CONTAINSKEY_CANTIDAD);
         assertEquals(0, usuarios.size());
         assertTrue(0 <= cantidad);
     }
@@ -144,7 +144,7 @@ public class UsuarioDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -172,7 +172,7 @@ public class UsuarioDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
@@ -192,7 +192,7 @@ public class UsuarioDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -218,7 +218,7 @@ public class UsuarioDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Rol rol2 = new Rol("ROLE_TEST2");
         currentSession().save(rol2);
@@ -251,7 +251,7 @@ public class UsuarioDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -268,7 +268,7 @@ public class UsuarioDaoTest {
         assertNotNull("usuario eliminado", usuario.getId());
         fail("Debio lanzar la excepcion de ultimo usuario");
     }
-
+ 
     /**
      * Test of elimina method, of class UsuarioDao.
      */
@@ -278,7 +278,7 @@ public class UsuarioDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);

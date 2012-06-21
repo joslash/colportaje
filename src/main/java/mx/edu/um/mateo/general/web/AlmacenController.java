@@ -251,17 +251,17 @@ public class AlmacenController {
         log.debug("Generando reporte {}", tipo);
         byte[] archivo = null;
         switch (tipo) {
-            case "PDF":
+            case Constantes.TIPO_DOCUMENTO_PDF:
                 archivo = generaPdf(almacenes);
                 response.setContentType("application/pdf");
                 response.addHeader("Content-Disposition", "attachment; filename=Almacenes.pdf");
                 break;
-            case "CSV":
+            case Constantes.TIPO_DOCUMENTO_CSV:
                 archivo = generaCsv(almacenes);
                 response.setContentType("text/csv");
                 response.addHeader("Content-Disposition", "attachment; filename=Almacenes.csv");
                 break;
-            case "XLS":
+            case Constantes.TIPO_DOCUMENTO_XLS:
                 archivo = generaXls(almacenes);
                 response.setContentType("application/vnd.ms-excel");
                 response.addHeader("Content-Disposition", "attachment; filename=Almacenes.xls");
@@ -281,15 +281,15 @@ public class AlmacenController {
         byte[] archivo = null;
         String tipoContenido = null;
         switch (tipo) {
-            case "PDF":
+            case Constantes.TIPO_DOCUMENTO_PDF:
                 archivo = generaPdf(almacenes);
                 tipoContenido = "application/pdf";
                 break;
-            case "CSV":
+            case Constantes.TIPO_DOCUMENTO_CSV:
                 archivo = generaCsv(almacenes);
                 tipoContenido = "text/csv";
                 break;
-            case "XLS":
+            case Constantes.TIPO_DOCUMENTO_XLS:
                 archivo = generaXls(almacenes);
                 tipoContenido = "application/vnd.ms-excel";
         }

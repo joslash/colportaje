@@ -50,7 +50,7 @@ public class Union implements Serializable {
     @NotNull
     @Column(nullable = false, length = 2, name = "status")
     private String status = Constantes.STATUS_ACTIVO;
-    @OneToMany(mappedBy = "union", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = Constantes.ADDATTRIBUTE_UNION, cascade = CascadeType.ALL)
     private List<Asociacion> asociaciones;
     @ManyToMany
     private List<Reporte> reportes = new ArrayList<>();
