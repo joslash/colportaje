@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.TemporadaDao;
+import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Temporada;
 import mx.edu.um.mateo.general.utils.Ambiente;
 import net.sf.jasperreports.engine.*;
@@ -77,7 +78,7 @@ public class TemporadaController {
         log.debug("Mostrando lista de Temporada");
         //filtrar temporadas por asociacion
         Map<String, Object> params = new HashMap<>();
-        Long asociacionId = (Long) request.getSession().getAttribute("asociacionId");
+        Long asociacionId = ((Asociacion) request.getSession().getAttribute("asociacionId")).getId();
         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);

@@ -18,6 +18,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import mx.edu.um.mateo.general.utils.SpringSecurityUtils;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 
 /**
  *
@@ -32,6 +34,11 @@ public class AsociadoDao {
     private SessionFactory sessionFactory;
     @Autowired
     private RolDao rolDao;
+     @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private SpringSecurityUtils springSecurityUtils;
+
 
     public AsociadoDao() {
         log.info("Se ha creado una nueva AsociadoDao");
@@ -119,6 +126,7 @@ public class AsociadoDao {
 
     public Asociado crea(Asociado asociado, String[] nombreDeRoles) {
         log.debug("Creando cuenta de asociado : {}", asociado);
+        asociado.setPassword(passwordEncoder.encodePassword(asociado.getPassword(), asociado.getUsername()));
         asociado.addRol(rolDao.obtiene("ROLE_ASO"));
         currentSession().save(asociado);
         currentSession().flush();

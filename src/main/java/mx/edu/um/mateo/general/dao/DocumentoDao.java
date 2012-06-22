@@ -3,10 +3,7 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.dao;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Documento;
 import mx.edu.um.mateo.general.utils.UltimoException;
@@ -65,6 +62,7 @@ public class DocumentoDao {
             params.put(Constantes.CONTAINSKEY_OFFSET, 0);
         }
         Criteria criteria = currentSession().createCriteria(Documento.class);
+        log.debug("criteria"+criteria);
         Criteria countCriteria = currentSession().createCriteria(Documento.class);
 
         if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
@@ -97,8 +95,7 @@ public class DocumentoDao {
         }
         
          if(params.get("temporadaColportor")!=null){
-        params.put(Constantes.CONTAINSKEY_DOCUMENTOS, criteria.list());      
-        
+             params.put(Constantes.CONTAINSKEY_DOCUMENTOS, criteria.list());
          }else{
               params.put(Constantes.CONTAINSKEY_DOCUMENTOS, new ArrayList());
          }

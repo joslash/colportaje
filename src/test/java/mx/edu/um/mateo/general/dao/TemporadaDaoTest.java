@@ -52,7 +52,7 @@ public class TemporadaDaoTest {
         assertNotNull(result.get(Constantes.CONTAINSKEY_TEMPORADAS));
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
         assertEquals(10, ((List<Temporada>) result.get(Constantes.CONTAINSKEY_TEMPORADAS)).size());
-        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
+        assertEquals(21, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
     @Test
     public void debieraObtenerTemporada() {

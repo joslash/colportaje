@@ -39,7 +39,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
+import mx.edu.um.mateo.general.utils.SpringSecurityUtils;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 /**
  *
  * @author wilbert
@@ -53,6 +54,10 @@ public class ColportorDao {
     private SessionFactory sessionFactory;
     @Autowired
     private RolDao rolDao;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private SpringSecurityUtils springSecurityUtils;
 
     public ColportorDao() {
         log.info("Nueva instancia de ColportorDao");
@@ -147,6 +152,7 @@ public class ColportorDao {
     
     public Colportor crea(Colportor colportor, String[] nombreDeRoles) {
         log.debug("Creando colportor : {}", colportor);
+        colportor.setPassword(passwordEncoder.encodePassword(colportor.getPassword(), colportor.getUsername()));
         colportor.addRol(rolDao.obtiene("ROLE_COL"));
         colportor.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(colportor);

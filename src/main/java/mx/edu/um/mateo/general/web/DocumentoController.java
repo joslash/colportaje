@@ -22,10 +22,8 @@ import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.ColportorDao;
 import mx.edu.um.mateo.general.dao.DocumentoDao;
 import mx.edu.um.mateo.general.dao.TemporadaColportorDao;
-import mx.edu.um.mateo.general.model.Colportor;
-import mx.edu.um.mateo.general.model.Documento;
-import mx.edu.um.mateo.general.model.TemporadaColportor;
-import mx.edu.um.mateo.general.model.Usuario;
+import mx.edu.um.mateo.general.dao.TemporadaDao;
+import mx.edu.um.mateo.general.model.*;
 import mx.edu.um.mateo.general.utils.Ambiente;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -75,6 +73,8 @@ public class DocumentoController {
     private TemporadaColportorDao temporadaColportorDao;
     @Autowired
     private ColportorDao colportorDao;
+    @Autowired
+    private TemporadaDao temporadaDao;
         @Autowired
     private SessionFactory sessionFactory;
 
@@ -88,7 +88,7 @@ public class DocumentoController {
      * EnumEditor(TipoDocumento.class)); }
      */
 
-    @RequestMapping("/lista")
+    @RequestMapping({"/lista", ""})
     public String lista(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(required = false) String filtro,
             @RequestParam(required = false) Long pagina,
@@ -96,6 +96,7 @@ public class DocumentoController {
             @RequestParam(required = false) String correo,
             @RequestParam(required = false) String order,
             @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String clave,
             Usuario usuario,
             Errors errors,
             Model modelo) {
@@ -115,16 +116,55 @@ public class DocumentoController {
             params.put(Constantes.CONTAINSKEY_ORDER, order);
             params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
-        TemporadaColportor temporadaColportorTmp= null;
-         if (ambiente.esAsociadoEnSesion()) {
-             temporadaColportorTmp=temporadaColportorDao.obtiene(((Colportor) request.getSession().getAttribute("colportorTmp")).getId());
-            params.put("temporadaColportor", temporadaColportorDao.obtiene(((Colportor) request.getSession().getAttribute("colportorTmp")).getId()));
-        } else {
+        TemporadaColportor temporadaColportorTmp = null;
+        if (ambiente.esAsociadoEnSesion() && request.getSession().getAttribute("colportorTmp") == null) {
+           log.debug("Entrando a Documentos como Asociado sin Colportor");
+            if (clave != null && !clave.isEmpty()) {
+                log.debug("clave" + colportorDao.obtiene(clave));
+                Colportor colportor = colportorDao.obtiene(clave);
+                request.getSession().setAttribute("colportorTmp", colportor);
+                log.debug("colportor" + colportor);
+                TemporadaColportor temporadaColportor = temporadaColportorDao.obtiene(colportor);
+                request.getSession().setAttribute("temporadaColportorTmp", temporadaColportor);
+                params.put("temporadaColportor", temporadaColportorTmp);
+                log.debug("temporadaColportor" + temporadaColportor);
+               
+            } 
+            else {
+                return Constantes.PATH_DOCUMENTO_LISTA;
+            }
         }
+        
+        if (ambiente.esAsociadoEnSesion()) {
+            log.debug("Entrando a Documentos como Asociado con un Colportor");
+
+            temporadaColportorTmp = temporadaColportorDao.obtiene(((Colportor) request.getSession().getAttribute("colportorTmp")));
+            params.put("temporadaColportor", temporadaColportorTmp);
+        } 
+        
         if (ambiente.esColportorEnSesion()) {
-            temporadaColportorTmp=temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId());
-            params.put("temporadaColportor", temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId()));
-        }   
+            log.debug("Entrando a Documentos como Colportor");
+
+            Colportor colportor= colportorDao.obtiene(ambiente.obtieneUsuario().getId());
+            log.debug("temporadaId"+request.getParameter("temporadaId"));
+            if(request.getParameter("temporadaId")==null){
+            log.debug("Entrando a Documentos como Colportor con Temporada Activa");
+
+                temporadaColportorTmp = temporadaColportorDao.obtiene(colportor);
+                params.put("temporadaColportor", temporadaColportorTmp);
+//            log.debug("TemporadaColportor" + temporadaColportorTmp.getId().toString());
+            }else{
+                log.debug("Entrando a Documentos como Colportor con Temporada Inactiva");
+                Temporada temporada = temporadaDao.obtiene(Long.parseLong(request.getParameter("temporadaId")));
+                log.debug("temporada"+temporada.getId());
+                temporadaColportorTmp = temporadaColportorDao.obtiene(colportor, temporada);
+                params.put("temporadaColportor", temporadaColportorTmp);
+            }
+//          Codigo para validar prueba
+            modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
+//            params.put("temporadaColportor", temporadaColportorTmp);
+        }
+        
     if (StringUtils.isNotBlank(tipo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = DocumentoDao.lista(params);
@@ -157,6 +197,8 @@ public class DocumentoController {
            
        
         params = DocumentoDao.lista(params);
+//        Codigo para Valdiar Pruebas
+     
         modelo.addAttribute(Constantes.CONTAINSKEY_DOCUMENTOS, params.get(Constantes.CONTAINSKEY_DOCUMENTOS));
 
         List<Documento> lista = (List) params.get(Constantes.CONTAINSKEY_DOCUMENTOS);
@@ -236,27 +278,31 @@ public class DocumentoController {
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINACION, paginacion);
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
         // termina paginado
-        
-        request.setAttribute("temporadaColportorTmp",temporadaColportorTmp);
+        //        Codigo para Valdiar Pruebas
+        log.debug("SizeDocumento"+lista.size());
+        modelo.addAttribute("SizeDocumento", lista.size());
+        modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
+//        temporadaColportorDao.obtiene(temporadaColportorTmp.getId());
+//        request.setAttribute("claveTmp", temporadaColportorTmp.getColportor().getClave());
         return Constantes.PATH_DOCUMENTO_LISTA;
     
  
     }
  
-    @RequestMapping
-    public String obtieneColportor(HttpServletRequest request, HttpServletResponse response, Model modelo) {
-        Map<String, Object> params = new HashMap<>();
-        log.debug("clave"+colportorDao.obtiene((String)request.getParameter("clave")));
-        Colportor colportor = colportorDao.obtiene((String)request.getParameter("clave"));
-        log.debug("colportor"+colportor);
-        TemporadaColportor temporadaColportor = temporadaColportorDao.obtiene(colportor);
-        request.getSession().setAttribute("temporadaColportorTmp", temporadaColportor);
-        
-        log.debug("temporadaColportor"+temporadaColportorDao.obtiene(colportor));
-        return "forward:/lista";
-//        return  "redirect:"+"/WEB-INF/jsp/"+Constantes.PATH_DOCUMENTO_LISTA+ ".jsp";
-//       return  "/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp";
-    }
+//    @RequestMapping
+//    public String obtieneColportor(HttpServletRequest request, HttpServletResponse response, Model modelo) {
+//        Map<String, Object> params = new HashMap<>();
+//        log.debug("clave"+colportorDao.obtiene((String)request.getParameter("clave")));
+//        Colportor colportor = colportorDao.obtiene((String)request.getParameter("clave"));
+//        log.debug("colportor"+colportor);
+//        TemporadaColportor temporadaColportor = temporadaColportorDao.obtiene(colportor);
+//        request.getSession().setAttribute("temporadaColportorTmp", temporadaColportor);
+//        
+//        log.debug("temporadaColportor"+temporadaColportorDao.obtiene(colportor));
+//        return "forward:/lista";
+////        return  "redirect:"+"/WEB-INF/jsp/"+Constantes.PATH_DOCUMENTO_LISTA+ ".jsp";
+////       return  "/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp";
+//    }
 
     @RequestMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
@@ -279,6 +325,7 @@ public class DocumentoController {
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
     public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Documento documentos, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
+        Map<String, Object> params = new HashMap<>();
         for (String folio : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", folio, request.getParameterMap().get(folio));
         }
@@ -319,7 +366,10 @@ public class DocumentoController {
         try {
             log.debug("Documento Fecha" + documentos.getFecha());
             //294 y 305
-   documentos.setTemporadaColportor(temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId()));
+            TemporadaColportor temporadaColportorTmp= temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId());
+            documentos.setTemporadaColportor(temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId()));
+            params.put("temporadaColportor", temporadaColportorTmp);
+
             documentos = DocumentoDao.crea(documentos);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear el documento", e);
@@ -411,10 +461,7 @@ public class DocumentoController {
 
     
     
-    private void cargarColportorParaAsociado(){
-        
-    }
-    
+
     
     
     
