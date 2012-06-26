@@ -217,6 +217,7 @@ public class ColportorController extends BaseController {
         String password = null;
         password = KeyGenerators.string().generateKey();
         log.debug("passwordColportor"+password);
+
         try {
             String[] roles = request.getParameterValues("roles");
             log.debug("Asignando ROLE_COL por defecto");

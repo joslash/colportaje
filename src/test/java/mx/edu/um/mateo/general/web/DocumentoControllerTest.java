@@ -280,6 +280,7 @@ public class DocumentoControllerTest extends BaseTest {
                 .andExpect(model().attribute("temporadaColportorTmp", temporadaColportor2.getId().toString()))
                 .andExpect(status().isOk());
         log.debug("terminaSegundaLlamada");
+
     }
     @Test
     public void debieraMostrarListaDeDocumentoDeColportorQueSeCambiaAUnaTemporadaVasia() throws Exception {

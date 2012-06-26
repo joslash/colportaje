@@ -139,6 +139,7 @@ public class AsociadoDaoTest {
 //        assertEquals(asociado, asociado2);
 //    }
 
+
     @Test
     public void deberiaActualizarAsociado() {
         log.debug("Deberia actualizar asociado");

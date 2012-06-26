@@ -116,7 +116,7 @@ public class AsociadoController extends BaseController {
 
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
-    public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Asociado asociado, @Valid Usuario usuario, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) {
+    public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Asociado asociados, @Valid Usuario usuario, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) {
         for (String nombre : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
         }
@@ -132,9 +132,9 @@ public class AsociadoController extends BaseController {
             log.debug("Asignando ROLE_ASO por defecto");
             roles = new String[]{"ROLE_ASO"};
             modelo.addAttribute("roles", roles);
-            asociado.setAsociacion((Asociacion) request.getSession().getAttribute("asociacionId"));
-            asociado.setPassword(password);
-            asociado = asociadoDao.crea(asociado, roles);
+            asociados.setAsociacion((Asociacion) request.getSession().getAttribute("asociacionId"));
+            asociados.setPassword(password);
+            asociados= asociadoDao.crea(asociados, roles);
            
         } catch(ConstraintViolationException e) {
             log.error("No se pudo crear al asociado", e);
@@ -145,9 +145,8 @@ public class AsociadoController extends BaseController {
         }
 
         redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "asociado.creado.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{asociado.getNombre()});
-
-        return "redirect:" + Constantes.PATH_ASOCIADO_VER + "/" + asociado.getId();
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{asociados.getNombre()});
+        return "redirect:" + Constantes.PATH_ASOCIADO_VER + "/" + asociados.getId();
     }
 
     @RequestMapping("/ver/{id}")
