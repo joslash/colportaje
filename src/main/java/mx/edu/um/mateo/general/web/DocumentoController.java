@@ -75,7 +75,7 @@ public class DocumentoController {
     private ColportorDao colportorDao;
     @Autowired
     private TemporadaDao temporadaDao;
-        @Autowired
+    @Autowired
     private SessionFactory sessionFactory;
 
     private Session currentSession() {
@@ -118,7 +118,7 @@ public class DocumentoController {
         }
         TemporadaColportor temporadaColportorTmp = null;
         if (ambiente.esAsociadoEnSesion() && request.getSession().getAttribute("colportorTmp") == null) {
-           log.debug("Entrando a Documentos como Asociado sin Colportor");
+            log.debug("Entrando a Documentos como Asociado sin Colportor");
             if (clave != null && !clave.isEmpty()) {
                 log.debug("clave" + colportorDao.obtiene(clave));
                 Colportor colportor = colportorDao.obtiene(clave);
@@ -128,35 +128,34 @@ public class DocumentoController {
                 request.getSession().setAttribute("temporadaColportorTmp", temporadaColportor);
                 params.put("temporadaColportor", temporadaColportorTmp);
                 log.debug("temporadaColportor" + temporadaColportor);
-               
-            } 
-            else {
+
+            } else {
                 return Constantes.PATH_DOCUMENTO_LISTA;
             }
         }
-        
+
         if (ambiente.esAsociadoEnSesion()) {
             log.debug("Entrando a Documentos como Asociado con un Colportor");
 
             temporadaColportorTmp = temporadaColportorDao.obtiene(((Colportor) request.getSession().getAttribute("colportorTmp")));
             params.put("temporadaColportor", temporadaColportorTmp);
-        } 
-        
+        }
+
         if (ambiente.esColportorEnSesion()) {
             log.debug("Entrando a Documentos como Colportor");
 
-            Colportor colportor= colportorDao.obtiene(ambiente.obtieneUsuario().getId());
-            log.debug("temporadaId"+request.getParameter("temporadaId"));
-            if(request.getParameter("temporadaId")==null){
-            log.debug("Entrando a Documentos como Colportor con Temporada Activa");
+            Colportor colportor = colportorDao.obtiene(ambiente.obtieneUsuario().getId());
+            log.debug("temporadaId" + request.getParameter("temporadaId"));
+            if (request.getParameter("temporadaId") == null) {
+                log.debug("Entrando a Documentos como Colportor con Temporada Activa");
 
                 temporadaColportorTmp = temporadaColportorDao.obtiene(colportor);
                 params.put("temporadaColportor", temporadaColportorTmp);
 //            log.debug("TemporadaColportor" + temporadaColportorTmp.getId().toString());
-            }else{
+            } else {
                 log.debug("Entrando a Documentos como Colportor con Temporada Inactiva");
                 Temporada temporada = temporadaDao.obtiene(Long.parseLong(request.getParameter("temporadaId")));
-                log.debug("temporada"+temporada.getId());
+                log.debug("temporada" + temporada.getId());
                 temporadaColportorTmp = temporadaColportorDao.obtiene(colportor, temporada);
                 params.put("temporadaColportor", temporadaColportorTmp);
             }
@@ -164,8 +163,8 @@ public class DocumentoController {
             modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
 //            params.put("temporadaColportor", temporadaColportorTmp);
         }
-        
-    if (StringUtils.isNotBlank(tipo)) {
+
+        if (StringUtils.isNotBlank(tipo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = DocumentoDao.lista(params);
             try {
@@ -178,7 +177,7 @@ public class DocumentoController {
             }
         }
 
-        
+
         if (StringUtils.isNotBlank(correo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = DocumentoDao.lista(params);
@@ -192,13 +191,13 @@ public class DocumentoController {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
-    
-           
-           
-       
+
+
+
+
         params = DocumentoDao.lista(params);
 //        Codigo para Valdiar Pruebas
-     
+
         modelo.addAttribute(Constantes.CONTAINSKEY_DOCUMENTOS, params.get(Constantes.CONTAINSKEY_DOCUMENTOS));
 
         List<Documento> lista = (List) params.get(Constantes.CONTAINSKEY_DOCUMENTOS);
@@ -211,7 +210,7 @@ public class DocumentoController {
         BigDecimal fidelidad = new BigDecimal("0");
         BigDecimal alcanzado = new BigDecimal("0");
 
-  
+
 
         while (iter.hasNext()) {
             doc = iter.next();
@@ -279,30 +278,15 @@ public class DocumentoController {
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
         // termina paginado
         //        Codigo para Valdiar Pruebas
-        log.debug("SizeDocumento"+lista.size());
+        log.debug("SizeDocumento" + lista.size());
         modelo.addAttribute("SizeDocumento", lista.size());
         modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
 //        temporadaColportorDao.obtiene(temporadaColportorTmp.getId());
 //        request.setAttribute("claveTmp", temporadaColportorTmp.getColportor().getClave());
         return Constantes.PATH_DOCUMENTO_LISTA;
-    
- 
+
+
     }
- 
-//    @RequestMapping
-//    public String obtieneColportor(HttpServletRequest request, HttpServletResponse response, Model modelo) {
-//        Map<String, Object> params = new HashMap<>();
-//        log.debug("clave"+colportorDao.obtiene((String)request.getParameter("clave")));
-//        Colportor colportor = colportorDao.obtiene((String)request.getParameter("clave"));
-//        log.debug("colportor"+colportor);
-//        TemporadaColportor temporadaColportor = temporadaColportorDao.obtiene(colportor);
-//        request.getSession().setAttribute("temporadaColportorTmp", temporadaColportor);
-//        
-//        log.debug("temporadaColportor"+temporadaColportorDao.obtiene(colportor));
-//        return "forward:/lista";
-////        return  "redirect:"+"/WEB-INF/jsp/"+Constantes.PATH_DOCUMENTO_LISTA+ ".jsp";
-////       return  "/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp";
-//    }
 
     @RequestMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
@@ -366,10 +350,14 @@ public class DocumentoController {
         try {
             log.debug("Documento Fecha" + documentos.getFecha());
             //294 y 305
-            TemporadaColportor temporadaColportorTmp= temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId());
-            documentos.setTemporadaColportor(temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId()));
-            params.put("temporadaColportor", temporadaColportorTmp);
-
+            TemporadaColportor temporadaColportorTmp = temporadaColportorDao.obtiene((Colportor) ambiente.obtieneUsuario());
+            documentos.setTemporadaColportor(temporadaColportorTmp);
+            log.debug("temporadaColportorCrea" + temporadaColportorTmp.getId().toString());
+            params.put("temporadaColportor", temporadaColportorTmp.getId().toString());
+//            modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
+//            modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
+//            Codigo para validar prueba
+            request.getSession().setAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
             documentos = DocumentoDao.crea(documentos);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear el documento", e);
@@ -427,7 +415,7 @@ public class DocumentoController {
         }
 
         try {
-             documentos.setTemporadaColportor(temporadaColportorDao.obtiene(ambiente.obtieneUsuario().getId()));
+            documentos.setTemporadaColportor(temporadaColportorDao.obtiene((Colportor)ambiente.obtieneUsuario()));
             log.debug("Documento Fecha" + documentos.getFecha());
             documentos = DocumentoDao.actualiza(documentos);
         } catch (ConstraintViolationException e) {
@@ -459,12 +447,6 @@ public class DocumentoController {
         return "redirect:" + Constantes.PATH_DOCUMENTO;
     }
 
-    
-    
-
-    
-    
-    
     private void generaReporte(String tipo, List<Documento> documentos, HttpServletResponse response) throws JRException, IOException {
         log.debug("Generando reporte {}", tipo);
         byte[] archivo = null;
