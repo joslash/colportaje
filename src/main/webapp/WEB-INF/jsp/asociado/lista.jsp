@@ -39,6 +39,7 @@
             <c:if test="${asociado != null}">
                 <s:bind path="asociado.*">
                     <c:if test="${not empty status.errorMessages}">
+                        
                         <div class="alert alert-block alert-error fade in" role="status">
                             <a class="close" data-dismiss="alert">×</a>
                             <c:forEach var="error" items="${status.errorMessages}">

@@ -118,7 +118,11 @@ public class DocumentoController {
         }
         TemporadaColportor temporadaColportorTmp = null;
         if (ambiente.esAsociadoEnSesion() && request.getSession().getAttribute("colportorTmp") == null) {
+            Colportor colportor1= colportorDao.obtiene(clave);
+//            String clave1 = colportor1.getClave();
             log.debug("Entrando a Documentos como Asociado sin Colportor");
+            log.debug("clave" + clave);
+//            log.debug("clave1" + clave1);
             if (clave != null && !clave.isEmpty()) {
                 log.debug("clave" + colportorDao.obtiene(clave));
                 Colportor colportor = colportorDao.obtiene(clave);
@@ -415,7 +419,7 @@ public class DocumentoController {
         }
 
         try {
-            documentos.setTemporadaColportor(temporadaColportorDao.obtiene((Colportor)ambiente.obtieneUsuario()));
+            documentos.setTemporadaColportor(temporadaColportorDao.obtiene((Colportor) ambiente.obtieneUsuario()));
             log.debug("Documento Fecha" + documentos.getFecha());
             documentos = DocumentoDao.actualiza(documentos);
         } catch (ConstraintViolationException e) {
