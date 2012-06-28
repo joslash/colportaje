@@ -32,6 +32,7 @@ import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociacionDao;
 import mx.edu.um.mateo.general.model.Asociacion;
+import mx.edu.um.mateo.general.model.Union;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.ReporteException;
 import org.apache.commons.lang.StringUtils;
@@ -71,7 +72,8 @@ public class AsociacionController extends BaseController {
             Model modelo) {
         log.debug("Mostrando lista de Asociaciones");
         Map<String, Object> params = new HashMap<>();
-        Long unionId = (Long) request.getSession().getAttribute("unionId");
+        Long unionId = ((Long) request.getSession().getAttribute("unionId"));
+
         params.put(Constantes.ADDATTRIBUTE_UNION, unionId);
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
@@ -200,7 +202,7 @@ public class AsociacionController extends BaseController {
     public String elimina(HttpServletRequest request, @RequestParam Long id, Model modelo, @ModelAttribute Asociacion Asociacion, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.debug("Elimina Asociacion");
         try {
-            Long unionId = (Long) request.getSession().getAttribute("unionId");
+            Long unionId = ((Union) request.getSession().getAttribute("unionId")).getId();
             String nombre = asociacionDao.elimina(id, unionId);
             ambiente.actualizaSesion(request);
             redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.eliminada.message");

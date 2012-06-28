@@ -81,7 +81,7 @@ public class AsociadoControllerTest extends BaseTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_ASO");
+        Rol rol = new Rol(Constantes.ROLE_ASO);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -98,7 +98,7 @@ public class AsociadoControllerTest extends BaseTest {
        // }
 
               this.mockMvc.perform(get(Constantes.PATH_ASOCIADO)
-                .sessionAttr("asociacionId", asociacion))
+                .sessionAttr(Constantes.ASOCIACION_ID, asociacion))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIADO_LISTA + ".jsp"))
                 .andExpect(model()
@@ -121,7 +121,7 @@ public class AsociadoControllerTest extends BaseTest {
          Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_COL");
+        Rol rol = new Rol(Constantes.ROLE_COL);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -149,7 +149,7 @@ public class AsociadoControllerTest extends BaseTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_ASO");
+        Rol rol = new Rol(Constantes.ROLE_ASO);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -157,7 +157,7 @@ public class AsociadoControllerTest extends BaseTest {
         currentSession().save(asociacion);
         this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_CREA)
                 .sessionAttr("asociacionId", asociacion)
-                .param("roles", "ROLE_ASO")
+                .param(Constantes.ROLES, Constantes.ROLE_ASO)
                 .param("username", "test@test.com")
                 .param("password", "test")
                 .param("nombre", "test")
@@ -179,7 +179,7 @@ public class AsociadoControllerTest extends BaseTest {
        Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_COL");
+        Rol rol = new Rol(Constantes.ROLE_COL);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -221,7 +221,7 @@ public class AsociadoControllerTest extends BaseTest {
 Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_COL");
+        Rol rol = new Rol(Constantes.ROLE_COL);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);

@@ -101,7 +101,9 @@ public class DocumentoControllerTest extends BaseTest {
                 param("observaciones", Constantes.OBSERVACIONES)).
                
                 
-                andExpect(status().isOk()).andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE)).andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "documento.creado.message"));
+                andExpect(status().isOk()).andExpect(flash()
+                .attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "documento.creado.message"));
 
     }
 

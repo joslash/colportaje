@@ -51,7 +51,7 @@ public class AsociadoDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_ASO");
+        Rol rol = new Rol(Constantes.ROLE_ASO);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -75,7 +75,7 @@ public class AsociadoDaoTest {
         
         }
         Map<String, Object> params = new HashMap();
-        params.put("asociacion", asociacion);
+        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacion);
         Map result = instance.lista(params);
         assertNotNull(result.get(Constantes.CONTAINSKEY_ASOCIADOS));
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
@@ -119,7 +119,7 @@ public class AsociadoDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_ASO");
+        Rol rol = new Rol(Constantes.ROLE_ASO);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -145,7 +145,7 @@ public class AsociadoDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_ASO");
+        Rol rol = new Rol(Constantes.ROLE_ASO);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -177,7 +177,7 @@ public class AsociadoDaoTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_ASO");
+        Rol rol = new Rol(Constantes.ROLE_ASO);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);

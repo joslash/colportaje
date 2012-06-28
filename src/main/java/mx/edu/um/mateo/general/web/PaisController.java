@@ -215,17 +215,17 @@ public class PaisController {
         log.debug("Generando reporte {}", tipo);
         byte[] archivo = null;
         switch (tipo) {
-            case "PDF":
+            case Constantes.TIPO_DOCUMENTO_PDF:
                 archivo = generaPdf(pais);
                 response.setContentType("application/pdf");
                 response.addHeader("Content-Disposition", "attachment; filename=paises.pdf");
                 break;
-            case "CSV":
+            case Constantes.TIPO_DOCUMENTO_CSV:
                 archivo = generaCsv(pais);
                 response.setContentType("text/csv");
                 response.addHeader("Content-Disposition", "attachment; filename=paises.csv");
                 break;
-            case "XLS":
+            case Constantes.TIPO_DOCUMENTO_XLS:
                 archivo = generaXls(pais);
                 response.setContentType("application/vnd.ms-excel");
                 response.addHeader("Content-Disposition", "attachment; filename=paises.xls");
@@ -245,15 +245,15 @@ public class PaisController {
         byte[] archivo = null;
         String tipoContenido = null;
         switch (tipo) {
-            case "PDF":
+            case Constantes.TIPO_DOCUMENTO_PDF:
                 archivo = generaPdf(pais);
                 tipoContenido = "application/pdf";
                 break;
-            case "CSV":
+            case Constantes.TIPO_DOCUMENTO_CSV:
                 archivo = generaCsv(pais);
                 tipoContenido = "text/csv";
                 break;
-            case "XLS":
+            case Constantes.TIPO_DOCUMENTO_XLS:
                 archivo = generaXls(pais);
                 tipoContenido = "application/vnd.ms-excel";
         }
