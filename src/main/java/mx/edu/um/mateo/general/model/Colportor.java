@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import mx.edu.um.mateo.Constantes;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -60,6 +62,7 @@ public class Colportor extends Usuario{
     @Column(length = 7)
     private String matricula;
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern=Constantes.DATE_SHORT_HUMAN_PATTERN)
     @Column( name = "fecha_nac")
     private Date fechaDeNacimiento;
 //    private String username;
