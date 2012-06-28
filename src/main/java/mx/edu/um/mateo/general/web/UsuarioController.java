@@ -103,7 +103,7 @@ public class UsuarioController {
             Model modelo) {
         log.debug("Mostrando lista de usuarios");
         Map<String, Object> params = new HashMap<>();
-         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
+         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)));
         if (StringUtils.isNotBlank(filtro)) {
             params.put("filtro", filtro);
         }
@@ -211,7 +211,7 @@ public class UsuarioController {
                 log.debug("Asignando ROLE_USER por defecto");
                 roles = new String[]{"ROLE_USER"};
             }
-            Long asociacionId = ((Asociacion)request.getSession().getAttribute("asociacionId")).getId();
+            Long asociacionId = ((Asociacion)request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)).getId();
             password = KeyGenerators.string().generateKey();
             usuario.setPassword(password);
 

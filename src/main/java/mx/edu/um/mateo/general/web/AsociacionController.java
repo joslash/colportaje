@@ -72,7 +72,7 @@ public class AsociacionController extends BaseController {
             Model modelo) {
         log.debug("Mostrando lista de Asociaciones");
         Map<String, Object> params = new HashMap<>();
-        Long unionId = ((Union) request.getSession().getAttribute("unionId")).getId();
+        Long unionId = ((Union) request.getSession().getAttribute(Constantes.SESSION_UNION)).getId();
         params.put(Constantes.ADDATTRIBUTE_UNION, unionId);
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
@@ -201,7 +201,7 @@ public class AsociacionController extends BaseController {
     public String elimina(HttpServletRequest request, @RequestParam Long id, Model modelo, @ModelAttribute Asociacion Asociacion, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.debug("Elimina Asociacion");
         try {
-            Long unionId = ((Union) request.getSession().getAttribute("unionId")).getId();
+            Long unionId = ((Union) request.getSession().getAttribute(Constantes.SESSION_UNION)).getId();
             String nombre = asociacionDao.elimina(id, unionId);
             ambiente.actualizaSesion(request);
             redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.eliminada.message");

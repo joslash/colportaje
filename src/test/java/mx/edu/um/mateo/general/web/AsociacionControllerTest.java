@@ -196,7 +196,7 @@ public class AsociacionControllerTest extends BaseTest {
         this.authenticate(usuario, usuario.getPassword(), new ArrayList(usuario.getAuthorities()));
         
         this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_ACTUALIZA)
-                .sessionAttr("unionId",union.getId().toString())
+                .sessionAttr(Constantes.SESSION_UNION,union)
                 .param("id", asociacion.getId().toString())
                 .param("version", asociacion.getVersion().toString())
                 .param("nombre", "test1")

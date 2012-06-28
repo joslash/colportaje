@@ -11,7 +11,22 @@ import java.math.BigDecimal;
  * @author gibrandemetrioo
  */
 public class Constantes {
+//    Session
 
+    /**
+     * Variable en session donde se guarda la Union Actual de Usuario
+     */
+    public static final String SESSION_UNION = "union";
+    /**
+     * Variable en session donde se guarda la Asociacion Actual de Usuario
+     */
+    public static final String SESSION_ASOCIACION = "asociacion";
+    /**
+     * Variable en session donde se guarda la Temporada Colportor activa del
+     * colportor en caso que el colportor no tenga una temporada activa el valor
+     * de esta sera null
+     */
+    public static final String SESSION_TEMPORADA_COLPORTOR = "temporadaColportor";
     public static final String ADMIN = "ADMIN";
     public static final String UNI = "UNI";
     public static final String ASO = "ASO";

@@ -119,7 +119,10 @@ public class DocumentoControllerTest extends BaseTest {
         currentSession().save(asociado);
         Colportor colportorTmp = (Colportor) usuario;
         TemporadaColportor temporadaColportor = null;
-        Temporada temporada = new Temporada("test");
+        Temporada temporada=null;
+        for(int i =0; i< 9; i++){
+                temporada= new Temporada("test"+i);
+        }
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -145,6 +148,7 @@ public class DocumentoControllerTest extends BaseTest {
         }
         this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA).sessionAttr("colportorTmp", colportorTmp)) //                .andExpect(request().sessionAttribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
                 .andExpect(model().attribute("SizeDocumento", 9))
+                .andExpect(model().attribute("SizeTemporada", 9))
                 .andExpect(model().attribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
                 .andExpect(status().isOk());
     }

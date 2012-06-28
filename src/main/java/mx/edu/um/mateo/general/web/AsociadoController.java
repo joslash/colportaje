@@ -50,6 +50,7 @@ public class AsociadoController extends BaseController {
     private RolDao rolDao;
     @Autowired
     private UsuarioDao usuarioDao;
+
     @RequestMapping
     public String lista(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(required = false) String filtro,
@@ -65,7 +66,7 @@ public class AsociadoController extends BaseController {
         Map<String, Object> params = new HashMap<>();
         //Long asociacionId = (Long) request.getSession().getAttribute("asociacionId");
         //params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
-        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
+        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)));
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }
@@ -126,22 +127,22 @@ public class AsociadoController extends BaseController {
         }
         String password = null;
         password = KeyGenerators.string().generateKey();
-        log.debug("passwordAsociado"+password);
+        log.debug("passwordAsociado" + password);
         try {
-             String[] roles = request.getParameterValues("roles");
+            String[] roles = request.getParameterValues("roles");
             log.debug("Asignando ROLE_ASO por defecto");
             roles = new String[]{"ROLE_ASO"};
             modelo.addAttribute("roles", roles);
-            asociados.setAsociacion((Asociacion) request.getSession().getAttribute("asociacionId"));
+            asociados.setAsociacion((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION));
             asociados.setPassword(password);
-            asociados= asociadoDao.crea(asociados, roles);
-           
-        } catch(ConstraintViolationException e) {
+            asociados = asociadoDao.crea(asociados, roles);
+
+        } catch (ConstraintViolationException e) {
             log.error("No se pudo crear al asociado", e);
             return Constantes.PATH_ASOCIADO_NUEVO;
 //                (Exception e){
 //            e.printStackTrace();
-            
+
         }
 
         redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "asociado.creado.message");
@@ -179,7 +180,7 @@ public class AsociadoController extends BaseController {
             return Constantes.PATH_ASOCIADO_EDITA;
         }
         try {
-             String[] roles = request.getParameterValues("roles");
+            String[] roles = request.getParameterValues("roles");
             log.debug("Asignando ROLE_ASO por defecto");
             roles = new String[]{"ROLE_ASO"};
             modelo.addAttribute("roles", roles);

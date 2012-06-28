@@ -117,8 +117,7 @@ public class DocumentoController {
             params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
         TemporadaColportor temporadaColportorTmp = null;
-        if (ambiente.esAsociadoEnSesion() && request.getSession().getAttribute("colportorTmp") == null) {
-            Colportor colportor1= colportorDao.obtiene(clave);
+        if (ambiente.esAsociado() && request.getSession().getAttribute("colportorTmp") == null) {
 //            String clave1 = colportor1.getClave();
             log.debug("Entrando a Documentos como Asociado sin Colportor");
             log.debug("clave" + clave);
@@ -138,14 +137,14 @@ public class DocumentoController {
             }
         }
 
-        if (ambiente.esAsociadoEnSesion()) {
+        if (ambiente.esAsociado()) {
             log.debug("Entrando a Documentos como Asociado con un Colportor");
 
             temporadaColportorTmp = temporadaColportorDao.obtiene(((Colportor) request.getSession().getAttribute("colportorTmp")));
             params.put("temporadaColportor", temporadaColportorTmp);
         }
 
-        if (ambiente.esColportorEnSesion()) {
+        if (ambiente.esColportor()) {
             log.debug("Entrando a Documentos como Colportor");
 
             Colportor colportor = colportorDao.obtiene(ambiente.obtieneUsuario().getId());
@@ -206,6 +205,8 @@ public class DocumentoController {
 
         List<Documento> lista = (List) params.get(Constantes.CONTAINSKEY_DOCUMENTOS);
         Iterator<Documento> iter = lista.iterator();
+        List<Temporada> listaTemporada = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
+
         Documento doc = null;
         BigDecimal totalBoletin = new BigDecimal("0");
         BigDecimal totalDiezmos = new BigDecimal("0");
@@ -283,7 +284,9 @@ public class DocumentoController {
         // termina paginado
         //        Codigo para Valdiar Pruebas
         log.debug("SizeDocumento" + lista.size());
+        log.debug("SizeTemporada" + listaTemporada.size());
         modelo.addAttribute("SizeDocumento", lista.size());
+//        modelo.addAttribute("SizeTemporada", listaTemporada.size());
         modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
 //        temporadaColportorDao.obtiene(temporadaColportorTmp.getId());
 //        request.setAttribute("claveTmp", temporadaColportorTmp.getColportor().getClave());

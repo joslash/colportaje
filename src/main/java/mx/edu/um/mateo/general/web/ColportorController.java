@@ -86,7 +86,7 @@ public class ColportorController extends BaseController {
             Model modelo) {
         log.debug("Mostrando lista de Asociado");
         Map<String, Object> params = new HashMap<>();
-        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
+        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)));
 
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
@@ -95,7 +95,7 @@ public class ColportorController extends BaseController {
             params.put(Constantes.CONTAINSKEY_ORDER, order);
             params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
-         if (StringUtils.isNotBlank(tipo)) {
+        if (StringUtils.isNotBlank(tipo)) {
             params.put("reporte", true);
             params = colportorDao.lista(params);
             try {
@@ -168,18 +168,20 @@ public class ColportorController extends BaseController {
         modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
         return Constantes.PATH_COLPORTOR_NUEVO;
     }
-/**
- * TODO 
- * @param request
- * @param response
- * @param colportores
- * @param bindingResult
- * @param errors
- * @param modelo
- * @param redirectAttributes
- * @return
- * @throws ParseException 
- */
+
+    /**
+     * TODO
+     *
+     * @param request
+     * @param response
+     * @param colportores
+     * @param bindingResult
+     * @param errors
+     * @param modelo
+     * @param redirectAttributes
+     * @return
+     * @throws ParseException
+     */
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
     public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Colportor colportores, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
@@ -187,10 +189,10 @@ public class ColportorController extends BaseController {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
         }
         if (bindingResult.hasErrors()) {
-            log.debug("Hubo algun error en la forma, regresando "+bindingResult.getFieldErrors());
+            log.debug("Hubo algun error en la forma, regresando " + bindingResult.getFieldErrors());
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
-        try{
+        try {
             switch (colportores.getTipoDeColportor()) {
                 case "0":
                     colportores.setTipoDeColportor(Constantes.TIEMPO_COMPLETO);
@@ -203,7 +205,7 @@ public class ColportorController extends BaseController {
                     break;
 
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
@@ -216,27 +218,27 @@ public class ColportorController extends BaseController {
         }
         String password = null;
         password = KeyGenerators.string().generateKey();
-        log.debug("passwordColportor"+password);
+        log.debug("passwordColportor" + password);
 
         try {
             String[] roles = request.getParameterValues("roles");
             log.debug("Asignando ROLE_COL por defecto");
             roles = new String[]{"ROLE_COL"};
             modelo.addAttribute("roles", roles);
-            colportores.setAsociacion((Asociacion)request.getSession().getAttribute("asociacionId"));
+            colportores.setAsociacion((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION));
             colportores.setPassword(password);
             colportores = colportorDao.crea(colportores, roles);
-            
-        
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getNombre()});
-        modelo.addAttribute("colportor", colportores);
-        return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
+
+
+            redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message");
+            redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getNombre()});
+            modelo.addAttribute("colportor", colportores);
+            return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
         } catch (Exception e) {
             log.error("No se pudo crear la colportor", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
-        
+
     }
 
     @RequestMapping("/edita/{id}")
@@ -271,7 +273,7 @@ public class ColportorController extends BaseController {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
             colportores.setFechaDeNacimiento(sdf.parse(request.getParameter("fechaDeNacimiento")));
-            log.debug("fechaNacimiento"+colportores.getFechaDeNacimiento());
+            log.debug("fechaNacimiento" + colportores.getFechaDeNacimiento());
         } catch (ConstraintViolationException e) {
             log.error("FechaDeNacimiento", e);
             return Constantes.PATH_COLPORTOR_EDITA;

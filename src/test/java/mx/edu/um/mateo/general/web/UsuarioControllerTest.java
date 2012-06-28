@@ -119,7 +119,7 @@ public class UsuarioControllerTest extends BaseTest{
         currentSession().save(usuario);
         }
         this.mockMvc.perform(get("/admin/usuario")
-                .sessionAttr("asociacionId", asociacion))
+                .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/admin/usuario/lista.jsp"))
                 .andExpect(model().attributeExists("usuarios"))
