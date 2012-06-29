@@ -268,17 +268,17 @@ public class TemporadaController {
         log.debug("Generando reporte {}", tipo);
         byte[] archivo = null;
         switch (tipo) {
-            case "PDF":
+            case Constantes.TIPO_DOCUMENTO_PDF:
                 archivo = generaPdf(temporadas);
                 response.setContentType("application/pdf");
                 response.addHeader("Content-Disposition", "attachment; filename=temporadas.pdf");
                 break;
-            case "CSV":
+            case Constantes.TIPO_DOCUMENTO_CSV:
                 archivo = generaCsv(temporadas);
                 response.setContentType("text/csv");
                 response.addHeader("Content-Disposition", "attachment; filename=temporadas.csv");
                 break;
-            case "XLS":
+            case Constantes.TIPO_DOCUMENTO_XLS:
                 archivo = generaXls(temporadas);
                 response.setContentType("application/vnd.ms-excel");
                 response.addHeader("Content-Disposition", "attachment; filename=temporadas.xls");
@@ -298,15 +298,15 @@ public class TemporadaController {
         byte[] archivo = null;
         String tipoContenido = null;
         switch (tipo) {
-            case "PDF":
+            case Constantes.TIPO_DOCUMENTO_PDF:
                 archivo = generaPdf(temporadas);
                 tipoContenido = "application/pdf";
                 break;
-            case "CSV":
+            case Constantes.TIPO_DOCUMENTO_CSV:
                 archivo = generaCsv(temporadas);
                 tipoContenido = "text/csv";
                 break;
-            case "XLS":
+            case Constantes.TIPO_DOCUMENTO_XLS:
                 archivo = generaXls(temporadas);
                 tipoContenido = "application/vnd.ms-excel";
         }

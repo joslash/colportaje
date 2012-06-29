@@ -70,7 +70,7 @@ public class PerfilController {
         for (String nombre : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
         }
-        Long asociacionId = new Long(request.getParameter("asociacion.id"));
+        Long asociacionId =  new Long(request.getParameter("asociacion.id"));
         Usuario usuario = ambiente.obtieneUsuario();
         usuarioDao.asignaAsociacion(usuario, asociacionId);
         ambiente.actualizaSesion(request);

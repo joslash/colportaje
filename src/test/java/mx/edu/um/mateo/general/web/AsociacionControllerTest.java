@@ -106,28 +106,30 @@ public class AsociacionControllerTest extends BaseTest {
     public void tearDown() {
     }
 
-//    @Test
-//    //PRUEBA PASO 100%
-//    public void debieraMostrarListaDeAsociacion() throws Exception {
-//        log.debug("Debiera monstrar lista de cuentas de asociacion");
-//
-//        Union union = new Union("test");
-//        union.setStatus(Constantes.STATUS_ACTIVO);
-//        currentSession().save(union);
-//        for (int i = 0; i < 20; i++) {
-//            Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
-//            asociacionDao.crea(asociacion);
-//            assertNotNull(asociacion);
-//        }
-//
-//        this.mockMvc.perform(get(Constantes.PATH_ASOCIACION))
-//                .andExpect(status().isOk())
-//                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIACION_LISTA + ".jsp"))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_ASOCIACIONES))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
-//    }
+
+    @Test
+    //PRUEBA PASO 100%
+    public void debieraMostrarListaDeAsociacion() throws Exception {
+        log.debug("Debiera monstrar lista de cuentas de asociacion");
+
+        Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        for (int i = 0; i < 20; i++) {
+            Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+            asociacionDao.crea(asociacion);
+            assertNotNull(asociacion);
+        }
+
+        this.mockMvc.perform(get(Constantes.PATH_ASOCIACION)
+                .sessionAttr(Constantes.SESSION_UNION, union.getId()))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIACION_LISTA + ".jsp"))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_ASOCIACIONES))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
+    }
 
     @Test
     //PRUEBA PASO 100%
@@ -170,8 +172,8 @@ public class AsociacionControllerTest extends BaseTest {
         this.authenticate(usuario, usuario.getPassword(), new ArrayList<GrantedAuthority>(usuario.getRoles()));
 
         this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_CREA)
-                .param("nombre", "test1")
-                .param("status", Constantes.STATUS_ACTIVO))
+                .param(Constantes.ADDATTRIBUTE_NOMBRE, "test1")
+                .param(Constantes.ADDATTRIBUTE_STATUS, Constantes.STATUS_ACTIVO))
                 .andExpect(status().isOk())
                 .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
                 .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.creada.message"));
@@ -186,7 +188,7 @@ public class AsociacionControllerTest extends BaseTest {
         Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
         asociacion = asociacionDao.crea(asociacion);
         assertNotNull(asociacion);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         rol = rolDao.crea(rol);
         Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
         usuario = usuarioDao.crea(usuario,asociacion.getId(), new String[]{rol.getAuthority()});
@@ -207,34 +209,34 @@ public class AsociacionControllerTest extends BaseTest {
     }
     
 
-//    @Test
-//    //PRUEBA PASO 100%
-//    public void debieraEliminarAsociacion() throws Exception {
-//        log.debug("Debiera eliminar  asociacion");
-//        Union union = new Union(Constantes.NOMBRE);
-//        currentSession().save(union);
-//        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
-//        asociacionDao.crea(asociacion);
-//        assertNotNull(asociacion);
-//        Rol rol = new Rol("ROLE_TEST");
-//        currentSession().save(rol);
-//        Set<Rol> roles = new HashSet<>();
-//        roles.add(rol);
-//        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
-//        usuario.setAsociacion(asociacion);
-//        usuario.setRoles(roles);
-//        currentSession().save(usuario);
-//        Long id = usuario.getId();
-//        assertNotNull(id);
-//        
-//        this.authenticate(usuario, usuario.getPassword(), new ArrayList<GrantedAuthority>(usuario.getRoles()));
-//
-//        this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_ELIMINA)
-//                .param("id", asociacion.getId().toString()))
-//                .andExpect(status().isOk())
-//                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-//                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.eliminada.message"));
-//    }
+    @Test
+    //PRUEBA PASO 100%
+    public void debieraEliminarAsociacion() throws Exception {
+        log.debug("Debiera eliminar  asociacion");
+        Union union = new Union(Constantes.NOMBRE);
+        currentSession().save(union);
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        asociacionDao.crea(asociacion);
+        assertNotNull(asociacion);
+        Rol rol = new Rol(Constantes.ROLE_TEST);
+        currentSession().save(rol);
+        Set<Rol> roles = new HashSet<>();
+        roles.add(rol);
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        usuario.setAsociacion(asociacion);
+        usuario.setRoles(roles);
+        currentSession().save(usuario);
+        Long id = usuario.getId();
+        assertNotNull(id);
+        
+        this.authenticate(usuario, usuario.getPassword(), new ArrayList<GrantedAuthority>(usuario.getRoles()));
+
+        this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_ELIMINA)
+                .param("id", asociacion.getId().toString()))
+                .andExpect(status().isOk());
+              // .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+              // .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociacion.eliminada.message"));
+    }
     
     
 }

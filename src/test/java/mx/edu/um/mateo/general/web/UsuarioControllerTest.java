@@ -106,7 +106,7 @@ public class UsuarioControllerTest extends BaseTest{
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -122,10 +122,10 @@ public class UsuarioControllerTest extends BaseTest{
                 .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/admin/usuario/lista.jsp"))
-                .andExpect(model().attributeExists("usuarios"))
-                .andExpect(model().attributeExists("paginacion"))
-                .andExpect(model().attributeExists("paginas"))
-                .andExpect(model().attributeExists("pagina"));
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_USUARIOS))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
     }
     
       @Test 
@@ -133,7 +133,7 @@ public class UsuarioControllerTest extends BaseTest{
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -149,8 +149,8 @@ public class UsuarioControllerTest extends BaseTest{
          this.mockMvc.perform(get("/admin/usuario/ver/"+id))
               .andExpect(status().isOk())
               .andExpect(forwardedUrl("/WEB-INF/jsp/admin/usuario/ver.jsp"))
-              .andExpect(model().attributeExists("usuario"))
-              .andExpect(model().attributeExists("roles"));
+              .andExpect(model().attributeExists(Constantes.ADDATTRIBUTE_USUARIO))
+              .andExpect(model().attributeExists(Constantes.ROLES));
      }
     
 
@@ -201,7 +201,7 @@ public class UsuarioControllerTest extends BaseTest{
          Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -223,7 +223,7 @@ public class UsuarioControllerTest extends BaseTest{
          Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);

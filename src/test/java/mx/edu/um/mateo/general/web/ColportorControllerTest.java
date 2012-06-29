@@ -83,7 +83,7 @@ public class ColportorControllerTest {
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_COL");
+        Rol rol = new Rol(Constantes.ROLE_COL);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -146,6 +146,8 @@ public class ColportorControllerTest {
         this.mockMvc.perform(post(Constantes.PATH_COLPORTOR_CREA)
                 .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion)
                 .param("roles", "ROLE_COL")
+                .param("roles", Constantes.ROLE_COL)
+
                 .param("username", "test@test.com")
                 .param("password", "test")
                 .param("nombre", "test")
@@ -164,7 +166,7 @@ public class ColportorControllerTest {
                 //.andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
                 //.andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message"))
                 
-                .andExpect(model().attributeExists("colportor"));
+                .andExpect(model().attributeExists(Constantes.ADDATTRIBUTE_COLPORTOR));
     }       
 ////    super(username, password, nombre, apellidoP, apellidoM); 
 ////       this.clave=clave;

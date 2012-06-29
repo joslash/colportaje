@@ -71,20 +71,20 @@ public class AsociacionDao {
             params = new HashMap<>();
         }
 
-        if (!params.containsKey("max")) {
-            params.put("max", 10);
+        if (!params.containsKey(Constantes.CONTAINSKEY_MAX)) {
+            params.put(Constantes.CONTAINSKEY_MAX, 10);
         } else {
-            params.put("max", Math.min((Integer) params.get("max"), 100));
+            params.put(Constantes.CONTAINSKEY_MAX, Math.min((Integer) params.get(Constantes.CONTAINSKEY_MAX), 100));
         }
 
-        if (params.containsKey("pagina")) {
-            Long pagina = (Long) params.get("pagina");
-            Long offset = (pagina - 1) * (Integer) params.get("max");
-            params.put("offset", offset.intValue());
+        if (params.containsKey(Constantes.CONTAINSKEY_PAGINA)) {
+            Long pagina = (Long) params.get(Constantes.CONTAINSKEY_PAGINA);
+            Long offset = (pagina - 1) * (Integer) params.get(Constantes.CONTAINSKEY_MAX);
+            params.put(Constantes.CONTAINSKEY_OFFSET, offset.intValue());
         }
 
-        if (!params.containsKey("offset")) {
-            params.put("offset", 0);
+        if (!params.containsKey(Constantes.CONTAINSKEY_OFFSET)) {
+            params.put(Constantes.CONTAINSKEY_OFFSET, 0);
         }
         Criteria criteria = currentSession().createCriteria(Asociacion.class);
         Criteria countCriteria = currentSession().createCriteria(Asociacion.class);
@@ -94,33 +94,33 @@ public class AsociacionDao {
             countCriteria.createCriteria(Constantes.ADDATTRIBUTE_UNION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_UNION)));
         }
 
-        if (params.containsKey("filtro")) {
-            String filtro = (String) params.get("filtro");
+        if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
+            String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";
             Disjunction propiedades = Restrictions.disjunction();
-            propiedades.add(Restrictions.ilike("nombre", filtro));
+            propiedades.add(Restrictions.ilike(Constantes.ADDATTRIBUTE_NOMBRE, filtro));
             propiedades.add(Restrictions.ilike("nombreCompleto", filtro));
             criteria.add(propiedades);
             countCriteria.add(propiedades);
         }
 
-        if (params.containsKey("order")) {
-            String campo = (String) params.get("order");
-            if (params.get("sort").equals("desc")) {
+        if (params.containsKey(Constantes.CONTAINSKEY_ORDER)) {
+            String campo = (String) params.get(Constantes.CONTAINSKEY_ORDER);
+            if (params.get(Constantes.CONTAINSKEY_SORT).equals(Constantes.CONTAINSKEY_DESC)) {
                 criteria.addOrder(Order.desc(campo));
             } else {
                 criteria.addOrder(Order.asc(campo));
             }
         }
 
-        if (!params.containsKey("reporte")) {
-            criteria.setFirstResult((Integer) params.get("offset"));
-            criteria.setMaxResults((Integer) params.get("max"));
+        if (!params.containsKey(Constantes.CONTAINSKEY_REPORTE)) {
+            criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
+            criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
-        params.put("asociaciones", criteria.list());
+        params.put(Constantes.CONTAINSKEY_ASOCIACIONES, criteria.list());
 
         countCriteria.setProjection(Projections.rowCount());
-        params.put("cantidad", (Long) countCriteria.list().get(0));
+        params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
 
         return params;
     }

@@ -69,7 +69,7 @@ public class TemporadaColportorDao {
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";
             Disjunction propiedades = Restrictions.disjunction();
-            propiedades.add(Restrictions.ilike("status", filtro));
+            propiedades.add(Restrictions.ilike(Constantes.ADDATTRIBUTE_STATUS, filtro));
 
             criteria.add(propiedades);
             countCriteria.add(propiedades);
