@@ -205,7 +205,7 @@ public class DocumentoController {
 
         List<Documento> lista = (List) params.get(Constantes.CONTAINSKEY_DOCUMENTOS);
         Iterator<Documento> iter = lista.iterator();
-        List<Temporada> listaTemporada = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
+//        List<Temporada> listaTemporada = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
 
         Documento doc = null;
         BigDecimal totalBoletin = new BigDecimal("0");
@@ -284,7 +284,7 @@ public class DocumentoController {
         // termina paginado
         //        Codigo para Valdiar Pruebas
         log.debug("SizeDocumento" + lista.size());
-        log.debug("SizeTemporada" + listaTemporada.size());
+//        log.debug("SizeTemporada" + listaTemporada.size());
         modelo.addAttribute("SizeDocumento", lista.size());
 //        modelo.addAttribute("SizeTemporada", listaTemporada.size());
         modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());

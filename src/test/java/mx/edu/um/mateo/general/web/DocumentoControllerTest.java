@@ -148,7 +148,6 @@ public class DocumentoControllerTest extends BaseTest {
         }
         this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA).sessionAttr("colportorTmp", colportorTmp)) //                .andExpect(request().sessionAttribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
                 .andExpect(model().attribute("SizeDocumento", 9))
-                .andExpect(model().attribute("SizeTemporada", 9))
                 .andExpect(model().attribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
                 .andExpect(status().isOk());
     }
