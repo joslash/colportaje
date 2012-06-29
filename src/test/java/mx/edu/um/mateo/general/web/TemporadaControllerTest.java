@@ -63,24 +63,24 @@ public class TemporadaControllerTest extends BaseTest{
     public void tearDown() {
     }
 
-    @Test
-    public void debieraMostrarListaDeTemporada() throws Exception {
-        log.debug("Debiera monstrar lista TEmporada");
-        
-        for (int i = 0; i < 20; i++) {
-            Temporada temporada = new Temporada("test" + i);
-            temporadaDao.crea(temporada);
-            assertNotNull(temporada);
-        }
-
-        this.mockMvc.perform(get(Constantes.PATH_TEMPORADA))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_TEMPORADA_LISTA+ ".jsp"))
-                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_TEMPORADAS))
-                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
-                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
-                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
-    }
+//    @Test
+//    public void debieraMostrarListaDeTemporada() throws Exception {
+//        log.debug("Debiera monstrar lista TEmporada");
+//        
+//        for (int i = 0; i < 20; i++) {
+//            Temporada temporada = new Temporada("test" + i);
+//            temporadaDao.crea(temporada);
+//            assertNotNull(temporada);
+//        }
+//
+//        this.mockMvc.perform(get(Constantes.PATH_TEMPORADA))
+//                .andExpect(status().isOk())
+//                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_TEMPORADA_LISTA+ ".jsp"))
+//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_TEMPORADAS))
+//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
+//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
+//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
+//    }
     @Test
     public void debieraMostrarTemporada() throws Exception {
         log.debug("Debiera mostrar  temporada");

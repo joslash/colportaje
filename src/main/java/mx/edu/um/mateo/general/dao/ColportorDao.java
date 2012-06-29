@@ -1,4 +1,4 @@
-/*
+  /*
  * The MIT License
  *
  * Copyright 2012 jdmr.
@@ -28,12 +28,10 @@ import java.util.HashMap;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociacion;
+import mx.edu.um.mateo.general.model.Asociado;
 import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.model.Usuario;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.criterion.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +39,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
+import mx.edu.um.mateo.general.utils.SpringSecurityUtils;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 /**
  *
  * @author wilbert
@@ -53,6 +52,12 @@ public class ColportorDao {
     private static final Logger log = LoggerFactory.getLogger(ColportorDao.class);
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private RolDao rolDao;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private SpringSecurityUtils springSecurityUtils;
 
     public ColportorDao() {
         log.info("Nueva instancia de ColportorDao");
@@ -131,97 +136,50 @@ public class ColportorDao {
         return params;
     }
 
-//    public Map<String, Object> lista(Map<String, Object> params) {
-//        log.debug("Buscando lista de colportor con params {}", params);
-//        if (params == null) {
-//            params = new HashMap<>();
-//        }
-//
-//        if (!params.containsKey(Constantes.CONTAINSKEY_MAX)) {
-//            params.put(Constantes.CONTAINSKEY_MAX, 10);
-//        } else {
-//            params.put(Constantes.CONTAINSKEY_MAX, Math.min((Integer) params.get(Constantes.CONTAINSKEY_MAX), 100));
-//        }
-//
-//        if (params.containsKey(Constantes.CONTAINSKEY_PAGINA)) {
-//            Long pagina = (Long) params.get(Constantes.CONTAINSKEY_PAGINA);
-//            Long offset = (pagina - 1) * (Integer) params.get(Constantes.CONTAINSKEY_MAX);
-//            params.put(Constantes.CONTAINSKEY_OFFSET, offset.intValue());
-//        }
-//
-//        if (!params.containsKey(Constantes.CONTAINSKEY_OFFSET)) {
-//            params.put(Constantes.CONTAINSKEY_OFFSET, 0);
-//        }
-//        Criteria criteria = currentSession().createCriteria(Colportor.class);
-//        Criteria countCriteria = currentSession().createCriteria(Colportor.class);
-//
-//
-//        
-//         if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
-//            criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
-//            countCriteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
-//        }
-//
-//        if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
-//            String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
-//            filtro = "%" + filtro + "%";
-//            Disjunction propiedades = Restrictions.disjunction();
-//            propiedades.add(Restrictions.ilike("status", filtro));
-//            propiedades.add(Restrictions.ilike("clave", filtro));
-//            criteria.add(propiedades);
-//            countCriteria.add(propiedades);
-//        }
-//
-//        if (params.containsKey(Constantes.CONTAINSKEY_ORDER)) {
-//            String campo = (String) params.get(Constantes.CONTAINSKEY_ORDER);
-//            if (params.get(Constantes.CONTAINSKEY_SORT).equals(Constantes.CONTAINSKEY_DESC)) {
-//                criteria.addOrder(Order.desc(campo));
-//            } else {
-//                criteria.addOrder(Order.asc(campo));
-//            }
-//        }
-//
-//        if (!params.containsKey(Constantes.CONTAINSKEY_REPORTE)) {
-//            criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
-//            criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
-//        }
-//        params.put(Constantes.CONTAINSKEY_COLPORTORES, criteria.list());
-//        countCriteria.setProjection(Projections.rowCount());
-//        params.put(Constantes.CONTAINSKEY_CANTIDAD, (long) countCriteria.list().size());
-//
-//        return params;
-//    }
-
     public Colportor obtiene(Long id) {
         log.debug("Obtiene colportor con id = {}", id);
         Colportor colportor = (Colportor) currentSession().get(Colportor.class, id);
         return colportor;
     }
     
-      public Object obtienePorUsuario(Long id) {
-        log.debug("Obtiene cuenta de colportor con id = {}", id);
-        String hql = "SELECT "
-                + "u.id, c.status, c.clave, c.telefono, c.calle, c.colonia, c.municipio "
-                + "FROM "
-                + "usuarios u, roles r, usuarios_roles ur, colportores c "
-                + "WHERE "
-                + "u.colportor_id = :id AND ur.rol_id = r.id AND r.authority = 'ROLE_COL'";
-        Query query = currentSession().createSQLQuery(hql);
-        query.setLong("id", id);
-        return query.uniqueResult();
+    public Colportor obtiene(String clave) {
+        log.debug("Obtiene colportor con clave = {}", clave);
+        Criteria criteria = currentSession().createCriteria(Colportor.class);
+        criteria.add(Restrictions.eq("clave", clave));
+        Colportor colportor = (Colportor) criteria.uniqueResult();
+        return colportor;
     }
     
-    
-    
-
-    public Colportor crea(Colportor colportor) {
+    public Colportor crea(Colportor colportor, String[] nombreDeRoles) {
         log.debug("Creando colportor : {}", colportor);
+        colportor.setPassword(passwordEncoder.encodePassword(colportor.getPassword(), colportor.getUsername()));
+        colportor.addRol(rolDao.obtiene("ROLE_COL"));
         colportor.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(colportor);
         currentSession().flush();
         return colportor;
     }
+        public Colportor actualiza(Colportor colportor, String[] nombreDeRoles) {
+        Colportor nuevoColportor= (Colportor) currentSession().get(Usuario.class, colportor.getId());
+        nuevoColportor.setVersion(colportor.getVersion());
+        nuevoColportor.setUsername(colportor.getUsername());
+        nuevoColportor.setNombre(colportor.getNombre());
+        nuevoColportor.setApellidoP(colportor.getApellidoP());
+        nuevoColportor.setApellidoM(colportor.getApellidoM());
+        
+        log.debug("password"+nuevoColportor.getPassword());
 
+
+        try {
+            currentSession().update(nuevoColportor);
+            currentSession().flush();
+        } catch (NonUniqueObjectException e) {
+            log.warn("Ya hay un objeto previamente cargado, intentando hacer merge", e);
+            currentSession().merge(nuevoColportor);
+            currentSession().flush();
+        }
+        return nuevoColportor;
+    }
     public Colportor actualiza(Colportor colportor) {
         log.debug("Actualizando colportor {}", colportor);
 
@@ -236,7 +194,7 @@ public class ColportorDao {
         return nuevo;
     }
 
-    public String elimina(Long id) {
+   public String elimina(Long id) {
         log.debug("Eliminando colportor {}", id);
 
         Colportor colportor = obtiene(id);

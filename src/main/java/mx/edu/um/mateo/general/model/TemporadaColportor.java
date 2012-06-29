@@ -40,7 +40,7 @@ public class TemporadaColportor implements Serializable{
     @ManyToOne
     private Asociacion asociacion;
     @ManyToOne
-    private Asociado asociado;
+    private Usuario asociado;
     @ManyToOne
     private Temporada temporada;
     @ManyToOne
@@ -51,10 +51,14 @@ public class TemporadaColportor implements Serializable{
     public TemporadaColportor() {
     }
     
-    public TemporadaColportor(Colportor colportor,Asociacion asociacion,Asociado asociado,Temporada temporada,Union union, Colegio colegio){
+    public TemporadaColportor(Colportor colportor,Asociacion asociacion,Usuario asociado,Temporada temporada,Union union, Colegio colegio) throws Exception{
         this.colportor = colportor;
         this.asociacion = asociacion;
-        this.asociado = asociado;
+        try{
+        this.asociado = (Asociado)asociado;
+        }catch(ClassCastException e){
+            throw new Exception("Se esperaba una clase Asociado pero llego una clase "+asociado.getClass());
+        }
         this.temporada = temporada;
         this.union = union;
         this.colegio = colegio;
@@ -76,7 +80,7 @@ public class TemporadaColportor implements Serializable{
         this.asociacion = asociacion;
     }
 
-    public Asociado getAsociado() {
+    public Usuario getAsociado() {
         return asociado;
     }
 

@@ -21,8 +21,10 @@ import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociacionDao;
 import mx.edu.um.mateo.general.dao.ColportorDao;
+import mx.edu.um.mateo.general.dao.RolDao;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Colportor;
+import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.Ambiente;
 import mx.edu.um.mateo.general.utils.ReporteException;
@@ -63,7 +65,7 @@ public class ColportorController extends BaseController {
     @Autowired
     private ColportorDao colportorDao;
     @Autowired
-    private AsociacionDao asociacionDao;
+    private RolDao rolDao;
     /*
      * DE AQUI @InitBinder public void initBinder(WebDataBinder binder) {
      *
@@ -84,7 +86,7 @@ public class ColportorController extends BaseController {
             Model modelo) {
         log.debug("Mostrando lista de Asociado");
         Map<String, Object> params = new HashMap<>();
-        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
+        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)));
 
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
@@ -94,29 +96,53 @@ public class ColportorController extends BaseController {
             params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
         if (StringUtils.isNotBlank(tipo)) {
-            params.put(Constantes.CONTAINSKEY_REPORTE, true);
+            params.put("reporte", true);
             params = colportorDao.lista(params);
             try {
-                generaReporte(tipo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), response, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
+                generaReporte(tipo, (List<Colportor>) params.get("colportores"), response);
                 return null;
-            } catch (ReporteException e) {
+            } catch (JRException | IOException e) {
                 log.error("No se pudo generar el reporte", e);
-                params.remove(Constantes.CONTAINSKEY_REPORTE);
-                //errors.reject("error.generar.reporte");
             }
         }
+
         if (StringUtils.isNotBlank(correo)) {
-            params.put(Constantes.CONTAINSKEY_REPORTE, true);
+            params.put("reporte", true);
             params = colportorDao.lista(params);
-            params.remove(Constantes.CONTAINSKEY_REPORTE);
+
+            params.remove("reporte");
             try {
-                enviaCorreo(correo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), request, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
-                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
-                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
-            } catch (ReporteException e) {
+                enviaCorreo(correo, (List<Colportor>) params.get("colportores"), request);
+                modelo.addAttribute("message", "lista.enviada.message");
+                modelo.addAttribute("messageAttrs", new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
+            } catch (JRException | MessagingException e) {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
+//        if (StringUtils.isNotBlank(tipo)) {
+//            params.put(Constantes.CONTAINSKEY_REPORTE, true);
+//            params = colportorDao.lista(params);
+//            try {
+//                generaReporte(tipo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), response, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
+//                return null;
+//            } catch (ReporteException e) {
+//                log.error("No se pudo generar el reporte", e);
+//                params.remove(Constantes.CONTAINSKEY_REPORTE);
+//                //errors.reject("error.generar.reporte");
+//            }
+//        }
+//        if (StringUtils.isNotBlank(correo)) {
+//            params.put(Constantes.CONTAINSKEY_REPORTE, true);
+//            params = colportorDao.lista(params);
+//            params.remove(Constantes.CONTAINSKEY_REPORTE);
+//            try {
+//                enviaCorreo(correo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), request, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
+//                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
+//                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
+//            } catch (ReporteException e) {
+//                log.error("No se pudo enviar el reporte por correo", e);
+//            }
+//        }
 
         params = colportorDao.lista(params);
         modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, params.get(Constantes.CONTAINSKEY_COLPORTORES));
@@ -142,18 +168,20 @@ public class ColportorController extends BaseController {
         modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
         return Constantes.PATH_COLPORTOR_NUEVO;
     }
-/**
- * TODO 
- * @param request
- * @param response
- * @param colportores
- * @param bindingResult
- * @param errors
- * @param modelo
- * @param redirectAttributes
- * @return
- * @throws ParseException 
- */
+
+    /**
+     * TODO
+     *
+     * @param request
+     * @param response
+     * @param colportores
+     * @param bindingResult
+     * @param errors
+     * @param modelo
+     * @param redirectAttributes
+     * @return
+     * @throws ParseException
+     */
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
     public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Colportor colportores, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
@@ -161,10 +189,10 @@ public class ColportorController extends BaseController {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
         }
         if (bindingResult.hasErrors()) {
-            log.debug("Hubo algun error en la forma, regresando "+bindingResult.getFieldErrors());
+            log.debug("Hubo algun error en la forma, regresando " + bindingResult.getFieldErrors());
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
-        try{
+        try {
             switch (colportores.getTipoDeColportor()) {
                 case "0":
                     colportores.setTipoDeColportor(Constantes.TIEMPO_COMPLETO);
@@ -177,7 +205,7 @@ public class ColportorController extends BaseController {
                     break;
 
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
@@ -188,31 +216,38 @@ public class ColportorController extends BaseController {
             log.error("FechaDeNacimiento", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
-String password = null;
- password = KeyGenerators.string().generateKey();
-        
+        String password = null;
+        password = KeyGenerators.string().generateKey();
+        log.debug("passwordColportor" + password);
+
         try {
-            colportores.setAsociacion((Asociacion)request.getSession().getAttribute("asociacionId"));
+            String[] roles = request.getParameterValues("roles");
+            log.debug("Asignando ROLE_COL por defecto");
+            roles = new String[]{"ROLE_COL"};
+            modelo.addAttribute("roles", roles);
+            colportores.setAsociacion((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION));
             colportores.setPassword(password);
-            colportores = colportorDao.crea(colportores);
-            
-        
-//        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message");
-//        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getColonia()});
-        modelo.addAttribute("colportor", colportores);
-        return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
+            colportores = colportorDao.crea(colportores, roles);
+
+
+            redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.creado.message");
+            redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getNombre()});
+            modelo.addAttribute("colportor", colportores);
+            return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
         } catch (Exception e) {
             log.error("No se pudo crear la colportor", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
-        
+
     }
 
     @RequestMapping("/edita/{id}")
     public String edita(@PathVariable Long id, Model modelo) {
         log.debug("Editar colportor {}", id);
+        Rol roles = rolDao.obtiene("ROLE_COL");
         Colportor colportores = colportorDao.obtiene(id);
         modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
+        modelo.addAttribute("roles", roles);
         return Constantes.PATH_COLPORTOR_EDITA;
     }
 
@@ -238,21 +273,26 @@ String password = null;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
             colportores.setFechaDeNacimiento(sdf.parse(request.getParameter("fechaDeNacimiento")));
+            log.debug("fechaNacimiento" + colportores.getFechaDeNacimiento());
         } catch (ConstraintViolationException e) {
             log.error("FechaDeNacimiento", e);
-            return Constantes.PATH_COLPORTOR_NUEVO;
+            return Constantes.PATH_COLPORTOR_EDITA;
         }
 
         try {
             log.debug("Colportor FechaDeNacimiento" + colportores.getFechaDeNacimiento());
-            colportores = colportorDao.actualiza(colportores);
+            String[] roles = request.getParameterValues("roles");
+            log.debug("Asignando ROLE_ASO por defecto");
+            roles = new String[]{"ROLE_ASO"};
+            modelo.addAttribute("roles", roles);
+            colportores = colportorDao.actualiza(colportores, roles);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear la colportor", e);
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
 
         redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.actualizado.message");
-        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getColonia()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{colportores.getNombre()});
 
         return "redirect:" + Constantes.PATH_COLPORTOR_VER + "/" + colportores.getId();
     }
@@ -263,9 +303,9 @@ String password = null;
         log.debug("Elimina colportor");
         try {
             String nombre = colportorDao.elimina(id);
-
             redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "colportor.eliminado.message");
             redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{nombre});
+
         } catch (Exception e) {
             log.error("No se pudo eliminar el colportor " + id, e);
             bindingResult.addError(new ObjectError(Constantes.ADDATTRIBUTE_COLPORTOR, new String[]{"colportor.no.eliminado.message"}, null, null));

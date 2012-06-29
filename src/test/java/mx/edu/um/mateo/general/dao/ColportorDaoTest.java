@@ -161,7 +161,8 @@ public class ColportorDaoTest {
         Colportor colportor = new Colportor("test@test.com","test", "test","test", "test" , "test", Constantes.STATUS_ACTIVO,
                    "8262652626",  "test", "test", "10706", "test", "test001", new Date());
         colportor.setAsociacion(asociacion);
-        Colportor colportor2 = colportorDao.crea(colportor);
+        currentSession().save(colportor);
+        Colportor colportor2 = colportorDao.obtiene(colportor.getId());
         assertNotNull(colportor2);
         assertNotNull(colportor2.getId());
 

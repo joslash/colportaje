@@ -52,8 +52,8 @@ public class ClienteController extends BaseController {
             Model modelo) {
         log.debug("Mostrando lista de Clientees");
         Map<String, Object> params = new HashMap<>();
-        Long unionId = ((Union) request.getSession().getAttribute(Constantes.UNION_ID)).getId();
-        params.put(Constantes.ADDATTRIBUTE_UNION, unionId);
+        Long unionId = ((Union) request.getSession().getAttribute(Constantes.SESSION_UNION)).getId();
+        params.put("union", unionId);
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }
