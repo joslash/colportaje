@@ -24,6 +24,7 @@
 package mx.edu.um.mateo.general.dao;
 
 import java.util.*;
+import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
@@ -37,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  * 
@@ -80,7 +82,7 @@ public class UsuarioDao {
             params.put("offset", 0);
         }
 
-        if (!params.containsKey("asociacion")) {
+        if (!params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
             params.put("usuarios", new ArrayList());
             params.put("cantidad", 0L);
 
@@ -90,36 +92,37 @@ public class UsuarioDao {
         Criteria criteria = currentSession().createCriteria(Usuario.class);
         Criteria countCriteria = currentSession().createCriteria(Usuario.class);
 
-        if (params.containsKey("asociacion")) {
+        
+        if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
             log.debug("valor de asociacion"+params.get("asociacion"));
-            criteria.createCriteria("asociacion").add(Restrictions.eq("id",((Asociacion)params.get("asociacion")).getId()));
-            countCriteria.createCriteria("asociacion").add(Restrictions.eq("id",((Asociacion)params.get("asociacion")).getId()));
+            criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.eq("id",((Asociacion)params.get(Constantes.ADDATTRIBUTE_ASOCIACION)).getId()));
+            countCriteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.eq("id",((Asociacion)params.get(Constantes.ADDATTRIBUTE_ASOCIACION)).getId()));
         }
 
-        if (params.containsKey("filtro")) {
-            String filtro = (String) params.get("filtro");
+        if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
+            String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             Disjunction propiedades = Restrictions.disjunction();
-            propiedades.add(Restrictions.ilike("username", filtro, MatchMode.ANYWHERE));
-            propiedades.add(Restrictions.ilike("nombre", filtro, MatchMode.ANYWHERE));
-            propiedades.add(Restrictions.ilike("apellido", filtro, MatchMode.ANYWHERE));
+            propiedades.add(Restrictions.ilike("username", Constantes.CONTAINSKEY_FILTRO, MatchMode.ANYWHERE));
+            propiedades.add(Restrictions.ilike("nombre", Constantes.CONTAINSKEY_FILTRO, MatchMode.ANYWHERE));
+            propiedades.add(Restrictions.ilike("apellido", Constantes.CONTAINSKEY_FILTRO, MatchMode.ANYWHERE));
             criteria.add(propiedades);
             countCriteria.add(propiedades);
         }
 
-        if (params.containsKey("order")) {
-            String campo = (String) params.get("order");
-            if (params.get("sort").equals("desc")) {
+        if (params.containsKey(Constantes.CONTAINSKEY_ORDER)) {
+            String campo = (String) params.get(Constantes.CONTAINSKEY_ORDER);
+            if (params.get(Constantes.CONTAINSKEY_SORT).equals(Constantes.CONTAINSKEY_DESC)) {
                 criteria.addOrder(Order.desc(campo));
             } else {
                 criteria.addOrder(Order.asc(campo));
             }
         }
 
-        if (!params.containsKey("reporte")) {
-            criteria.setFirstResult((Integer) params.get("offset"));
-            criteria.setMaxResults((Integer) params.get("max"));
+        if (!params.containsKey(Constantes.CONTAINSKEY_REPORTE)) {
+            criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
+            criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
-        params.put("usuarios", criteria.list());
+        params.put(Constantes.CONTAINSKEY_USUARIOS, criteria.list());
 
         countCriteria.setProjection(Projections.rowCount());
         params.put("cantidad", (Long) countCriteria.list().get(0));
@@ -141,7 +144,7 @@ public class UsuarioDao {
     public Usuario obtienePorOpenId(String openId) {
         log.debug("Buscando usuario por openId {}", openId);
         Query query = currentSession().createQuery("select u from Usuario u where u.openId = :openId");
-        query.setString("openId", openId);
+        query.setString(Constantes.OPEN_ID, openId);
         return (Usuario) query.uniqueResult();
     }
 
@@ -205,7 +208,7 @@ public class UsuarioDao {
         Usuario usuario = obtiene(id);
         Criteria criteria = currentSession().createCriteria(Usuario.class);
         criteria.setProjection(Projections.rowCount());
-        List resultados = criteria.createCriteria("asociacion").add(Restrictions.eq("id", usuario.getAsociacion().getId())).list();
+        List resultados = criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.eq("id", usuario.getAsociacion().getId())).list();
         Long cantidad = (Long) resultados.get(0);
         if (cantidad > 1) {
             String nombre = usuario.getUsername();
@@ -228,19 +231,19 @@ public class UsuarioDao {
 
     public List<Asociacion> obtieneAsociaciones() {
         List<Asociacion> asociaciones;
-        if (springSecurityUtils.ifAnyGranted("ROLE_ADMIN")) {
+        if (springSecurityUtils.ifAnyGranted(Constantes.ROL_ADMINISTRADOR)) {
             //Query query = currentSession().createQuery("select a from Almacen a order by a.empresa.organizacion, a.empresa, a.nombre");
             Query query = currentSession().createQuery("select a from Asociacion a order by a.union, a.nombre");
             asociaciones = query.list();
         } else if (springSecurityUtils.ifAnyGranted("ROLE_ORG")) {
             Usuario usuario = springSecurityUtils.obtieneUsuario();
             Query query = currentSession().createQuery("select a from Asociaciones a where a.union.id = :unionId order by a.asociacion, a.nombre");
-            query.setLong("unionId", usuario.getAsociacion().getUnion().getId());
+            query.setLong(Constantes.UNION_ID, usuario.getAsociacion().getUnion().getId());
             asociaciones = query.list();
         } else {
             Usuario usuario = springSecurityUtils.obtieneUsuario();
             Query query = currentSession().createQuery("select a from Asociaciones a where a.asociacion.id = :asociacionId order by a.nombre");
-            query.setLong("asociacionId", usuario.getAsociacion().getId());
+            query.setLong(Constantes.ASOCIACION_ID, usuario.getAsociacion().getId());
             asociaciones = query.list();
         }
         return asociaciones;

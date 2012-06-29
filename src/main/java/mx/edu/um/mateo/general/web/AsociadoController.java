@@ -61,7 +61,7 @@ public class AsociadoController extends BaseController {
         Map<String, Object> params = new HashMap<>();
         //Long asociacionId = (Long) request.getSession().getAttribute("asociacionId");
         //params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
-params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute("asociacionId"));
+params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute(Constantes.ASOCIACION_ID));
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }
@@ -124,8 +124,8 @@ params.put(Constantes.ADDATTRIBUTE_ASOCIACION, request.getSession().getAttribute
             asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
                    Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
                    Constantes.MUNICIPIO);
-                   Asociacion asociacion= (Asociacion)request.getSession().getAttribute("asociacionId");
-            usuario = usuarioDao.crea(asociado,asociacion.getId(),  new String[]{"ROLE_ASO"});
+                   Asociacion asociacion= (Asociacion)request.getSession().getAttribute(Constantes.ASOCIACION_ID);
+            usuario = usuarioDao.crea(asociado,asociacion.getId(),  new String[]{Constantes.ROLE_ASO});
         } catch(ConstraintViolationException e) {
             log.error("No se pudo crear al asociado", e);
             return Constantes.PATH_ASOCIADO_NUEVO;

@@ -87,7 +87,27 @@ public class Constantes {
     public static final String PERCENTAGE_PATTERN = "#.00%";
     /**
      * Valores para el los containsKey
+     * 
+     * ROLES *****
+     
+     
      */
+    public static final String ROL_ADMINISTRADOR = "ROLE_ADMIN";
+    public static final String ROLES = "roles";
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ASO = "ROLE_ASO";
+    public static final String ROLE_COL = "ROLE_COL";
+    public static final String ROLE_TEST = "ROLE_TEST";
+    
+    public static final String UNION_ID = "unionId";
+    public static final String ASOCIACION_ID = "asociacionId";
+    public static final String OPEN_ID = "openId";
+    public static final String ALMACEN_ID = "almacenId";
+    
+    public static final String TIPO_DOCUMENTO_PDF = "PDF";
+    public static final String TIPO_DOCUMENTO_CSV = "CSV";
+    public static final String TIPO_DOCUMENTO_XLS = "XLS";
+    
     public static final String CONTAINSKEY_MAX = "max";
     public static final String CONTAINSKEY_PAGINA = "pagina";
     public static final String CONTAINSKEY_PAGINAS = "paginas";
@@ -117,10 +137,12 @@ public class Constantes {
     public static final String CONTAINSKEY_PAISES = "paises";
     public static final String CONTAINSKEY_ESTADOS = "estados";
     public static final String CONTAINSKEY_CIUDADES = "ciudades";
+    public static final String CONTAINSKEY_USUARIOS = "usuarios";
+    public static final String CONTAINSKEY_TEMPORADACOLPORTOR = "temporadaColportor";
     /**
      * Valores para el los addAttribute para las clases
      */
-    public static final String ADDATTRIBUTE_USUARIO = "union";
+    public static final String ADDATTRIBUTE_USUARIO = "usuario";
     public static final String ADDATTRIBUTE_UNION = "union";
     public static final String ADDATTRIBUTE_COLPORTOR = "colportor";
     public static final String ADDATTRIBUTE_DOCUMENTO = "documento";
@@ -134,6 +156,11 @@ public class Constantes {
     public static final String ADDATTRIBUTE_PAIS = "pais";
     public static final String ADDATTRIBUTE_ESTADO = "estado";
     public static final String ADDATTRIBUTE_CIUDAD = "ciudad";
+    public static final String ADDATTRIBUTE_NOMBRE = "nombre";
+    public static final String ADDATTRIBUTE_CLAVE = "clave";
+    public static final String ADDATTRIBUTE_STATUS = "status";
+
+    
     /**
      * Valores para el los path's para las clases
      */

@@ -61,7 +61,7 @@ public class CiudadDao {
             String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             filtro = "%" + filtro + "%";
             Disjunction propiedades = Restrictions.disjunction();
-            propiedades.add(Restrictions.ilike("nombre", filtro));
+            propiedades.add(Restrictions.ilike(Constantes.ADDATTRIBUTE_NOMBRE, filtro));
             criteria.add(propiedades);
             countCriteria.add(propiedades);
         }

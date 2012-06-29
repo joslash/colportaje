@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.ClienteDao;
 import mx.edu.um.mateo.general.model.Cliente;
+import mx.edu.um.mateo.general.model.Union;
 import mx.edu.um.mateo.general.utils.ReporteException;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
@@ -51,8 +52,8 @@ public class ClienteController extends BaseController {
             Model modelo) {
         log.debug("Mostrando lista de Clientees");
         Map<String, Object> params = new HashMap<>();
-        Long unionId = (Long) request.getSession().getAttribute("unionId");
-        params.put("union", unionId);
+        Long unionId = ((Union) request.getSession().getAttribute(Constantes.UNION_ID)).getId();
+        params.put(Constantes.ADDATTRIBUTE_UNION, unionId);
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }

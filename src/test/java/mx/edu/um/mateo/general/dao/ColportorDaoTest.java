@@ -69,7 +69,7 @@ public class ColportorDaoTest {
             Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_COL");
+        Rol rol = new Rol(Constantes.ROLE_COL);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -87,7 +87,7 @@ public class ColportorDaoTest {
           
         }
         Map<String, Object> params = new HashMap();
-        params.put("asociacion",asociacion);
+        params.put(Constantes.ADDATTRIBUTE_ASOCIACION,asociacion);
         Map result = colportorDao.lista(params);
         assertNotNull(result.get(Constantes.CONTAINSKEY_COLPORTORES));
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
@@ -102,7 +102,7 @@ public class ColportorDaoTest {
             Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_COL");
+        Rol rol = new Rol(Constantes.ROLE_COL);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
