@@ -9,10 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
@@ -76,6 +73,7 @@ public class TemporadaController {
             Model modelo) {
         log.debug("Mostrando lista de Temporada");
         //filtrar temporadas por asociacion
+        
         Map<String, Object> params = new HashMap<>();
         Long asociacionId = (Long) request.getSession().getAttribute(Constantes.ASOCIACION_ID);
         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
@@ -118,9 +116,13 @@ public class TemporadaController {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
+
+        
         params = temporadaDao.lista(params);
         modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, params.get(Constantes.CONTAINSKEY_TEMPORADAS));
 
+        List<Temporada> lista = (List)params.get(Constantes.CONTAINSKEY_TEMPORADAS);
+        Iterator<Temporada> iter = lista.iterator();
         // inicia paginado
         Long cantidad = (Long) params.get(Constantes.CONTAINSKEY_CANTIDAD);
         Integer max = (Integer) params.get(Constantes.CONTAINSKEY_MAX);
@@ -138,6 +140,10 @@ public class TemporadaController {
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
         // termina paginado
 
+        log.debug("SizeLista " + lista.size());
+       
+        modelo.addAttribute("SizeTemporadas" + lista.size());
+        
         return Constantes.PATH_TEMPORADA_LISTA;
     }
 

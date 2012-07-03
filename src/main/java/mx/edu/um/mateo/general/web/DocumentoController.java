@@ -141,6 +141,7 @@ public class DocumentoController {
         List<Documento> lista = (List) params.get(Constantes.CONTAINSKEY_DOCUMENTOS);
         Iterator<Documento> iter = lista.iterator();
         Documento doc = null;
+        
         BigDecimal totalBoletin = new BigDecimal("0");
         BigDecimal totalDiezmos = new BigDecimal("0");
         BigDecimal totalDepositos = new BigDecimal("0");
