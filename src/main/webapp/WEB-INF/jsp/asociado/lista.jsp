@@ -39,6 +39,7 @@
             <c:if test="${asociado != null}">
                 <s:bind path="asociado.*">
                     <c:if test="${not empty status.errorMessages}">
+                        
                         <div class="alert alert-block alert-error fade in" role="status">
                             <a class="close" data-dismiss="alert">×</a>
                             <c:forEach var="error" items="${status.errorMessages}">
@@ -53,14 +54,13 @@
                 <thead>
                     <tr>
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="username" />
-                        </jsp:include>
-                       
-                      
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="asociacion" />
                         </jsp:include>
-                        
+
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="username" />
+                        </jsp:include>
+
                         <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
                             <jsp:param name="columna" value="nombre" />
                         </jsp:include>
@@ -93,9 +93,8 @@
                 <tbody>
                     <c:forEach items="${asociados}" var="asociado" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/asociado/ver/${asociado.id}' />">${asociado.username}</a></td>
-                            <td>${asociado.nombre}</td>
-                            <td>${asociado.asociacion.getNombre()}</td>
+                            <td><a href="<c:url value='/asociado/ver/${asociado.id}' />">${asociado.asociacion.getNombre()}</a></td>
+                            <td>${asociado.username}</td>
                             <td>${asociado.nombre}</td>
                             <td>${asociado.apellidoP}</td>
                             <td>${asociado.apellidoM}</td>

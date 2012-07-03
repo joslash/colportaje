@@ -14,15 +14,17 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.mail.util.ByteArrayDataSource;  
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
+import mx.edu.um.mateo.general.dao.ColportorDao;
 import mx.edu.um.mateo.general.dao.DocumentoDao;
 import mx.edu.um.mateo.general.dao.TemporadaColportorDao;
-import mx.edu.um.mateo.general.model.Documento;
-import mx.edu.um.mateo.general.model.Usuario;
+import mx.edu.um.mateo.general.dao.TemporadaDao;
+import mx.edu.um.mateo.general.model.*;
+import mx.edu.um.mateo.general.utils.Ambiente;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -31,6 +33,8 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +49,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import mx.edu.um.mateo.general.utils.Ambiente;
 
 /**
  *
@@ -60,13 +64,23 @@ public class DocumentoController {
     @Autowired
     private DocumentoDao DocumentoDao;
     @Autowired
-    private TemporadaColportorDao tempColportorDao;
-    @Autowired
     private JavaMailSender mailSender;
     @Autowired
     private ResourceBundleMessageSource messageSource;
     @Autowired
     private Ambiente ambiente;
+    @Autowired
+    private TemporadaColportorDao temporadaColportorDao;
+    @Autowired
+    private ColportorDao colportorDao;
+    @Autowired
+    private TemporadaDao temporadaDao;
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    private Session currentSession() {
+        return sessionFactory.getCurrentSession();
+    }
     /*
      * DE AQUI @InitBinder public void initBinder(WebDataBinder binder) {
      *
@@ -74,7 +88,7 @@ public class DocumentoController {
      * EnumEditor(TipoDocumento.class)); }
      */
 
-    @RequestMapping
+    @RequestMapping({"/lista", ""})
     public String lista(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(required = false) String filtro,
             @RequestParam(required = false) Long pagina,
@@ -82,6 +96,7 @@ public class DocumentoController {
             @RequestParam(required = false) String correo,
             @RequestParam(required = false) String order,
             @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String clave,
             Usuario usuario,
             Errors errors,
             Model modelo) {
@@ -101,9 +116,57 @@ public class DocumentoController {
             params.put(Constantes.CONTAINSKEY_ORDER, order);
             params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
-            
-    params.put("temporadaColportor",ambiente.getTemporadaColportorDeUsuarioEnSesion());
-    
+        TemporadaColportor temporadaColportorTmp = null;
+        if (ambiente.esAsociado() && request.getSession().getAttribute("colportorTmp") == null) {
+//            String clave1 = colportor1.getClave();
+            log.debug("Entrando a Documentos como Asociado sin Colportor");
+            log.debug("clave" + clave);
+//            log.debug("clave1" + clave1);
+            if (clave != null && !clave.isEmpty()) {
+                log.debug("clave" + colportorDao.obtiene(clave));
+                Colportor colportor = colportorDao.obtiene(clave);
+                request.getSession().setAttribute("colportorTmp", colportor);
+                log.debug("colportor" + colportor);
+                TemporadaColportor temporadaColportor = temporadaColportorDao.obtiene(colportor);
+                request.getSession().setAttribute("temporadaColportorTmp", temporadaColportor);
+                params.put("temporadaColportor", temporadaColportorTmp);
+                log.debug("temporadaColportor" + temporadaColportor);
+
+            } else {
+                return Constantes.PATH_DOCUMENTO_LISTA;
+            }
+        }
+
+        if (ambiente.esAsociado()) {
+            log.debug("Entrando a Documentos como Asociado con un Colportor");
+
+            temporadaColportorTmp = temporadaColportorDao.obtiene(((Colportor) request.getSession().getAttribute("colportorTmp")));
+            params.put("temporadaColportor", temporadaColportorTmp);
+        }
+
+        if (ambiente.esColportor()) {
+            log.debug("Entrando a Documentos como Colportor");
+
+            Colportor colportor = colportorDao.obtiene(ambiente.obtieneUsuario().getId());
+            log.debug("temporadaId" + request.getParameter("temporadaId"));
+            if (request.getParameter("temporadaId") == null) {
+                log.debug("Entrando a Documentos como Colportor con Temporada Activa");
+
+                temporadaColportorTmp = temporadaColportorDao.obtiene(colportor);
+                params.put("temporadaColportor", temporadaColportorTmp);
+//            log.debug("TemporadaColportor" + temporadaColportorTmp.getId().toString());
+            } else {
+                log.debug("Entrando a Documentos como Colportor con Temporada Inactiva");
+                Temporada temporada = temporadaDao.obtiene(Long.parseLong(request.getParameter("temporadaId")));
+                log.debug("temporada" + temporada.getId());
+                temporadaColportorTmp = temporadaColportorDao.obtiene(colportor, temporada);
+                params.put("temporadaColportor", temporadaColportorTmp);
+            }
+//          Codigo para validar prueba
+            modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
+//            params.put("temporadaColportor", temporadaColportorTmp);
+        }
+
         if (StringUtils.isNotBlank(tipo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = DocumentoDao.lista(params);
@@ -117,7 +180,7 @@ public class DocumentoController {
             }
         }
 
-        
+
         if (StringUtils.isNotBlank(correo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = DocumentoDao.lista(params);
@@ -131,15 +194,19 @@ public class DocumentoController {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
-    
-           
-           
-       
+
+
+
+
         params = DocumentoDao.lista(params);
+//        Codigo para Valdiar Pruebas
+
         modelo.addAttribute(Constantes.CONTAINSKEY_DOCUMENTOS, params.get(Constantes.CONTAINSKEY_DOCUMENTOS));
 
         List<Documento> lista = (List) params.get(Constantes.CONTAINSKEY_DOCUMENTOS);
         Iterator<Documento> iter = lista.iterator();
+//        List<Temporada> listaTemporada = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
+
         Documento doc = null;
         BigDecimal totalBoletin = new BigDecimal("0");
         BigDecimal totalDiezmos = new BigDecimal("0");
@@ -148,7 +215,7 @@ public class DocumentoController {
         BigDecimal fidelidad = new BigDecimal("0");
         BigDecimal alcanzado = new BigDecimal("0");
 
-  
+
 
         while (iter.hasNext()) {
             doc = iter.next();
@@ -215,12 +282,18 @@ public class DocumentoController {
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINACION, paginacion);
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
         // termina paginado
-
+        //        Codigo para Valdiar Pruebas
+        log.debug("SizeDocumento" + lista.size());
+//        log.debug("SizeTemporada" + listaTemporada.size());
+        modelo.addAttribute("SizeDocumento", lista.size());
+//        modelo.addAttribute("SizeTemporada", listaTemporada.size());
+        modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
+//        temporadaColportorDao.obtiene(temporadaColportorTmp.getId());
+//        request.setAttribute("claveTmp", temporadaColportorTmp.getColportor().getClave());
         return Constantes.PATH_DOCUMENTO_LISTA;
-    
- 
+
+
     }
- 
 
     @RequestMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
@@ -243,6 +316,7 @@ public class DocumentoController {
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
     public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Documento documentos, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
+        Map<String, Object> params = new HashMap<>();
         for (String folio : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", folio, request.getParameterMap().get(folio));
         }
@@ -282,7 +356,15 @@ public class DocumentoController {
 
         try {
             log.debug("Documento Fecha" + documentos.getFecha());
-   documentos.setTemporadaColporotor(ambiente.getTemporadaColportorDeUsuarioEnSesion());
+            //294 y 305
+            TemporadaColportor temporadaColportorTmp = temporadaColportorDao.obtiene((Colportor) ambiente.obtieneUsuario());
+            documentos.setTemporadaColportor(temporadaColportorTmp);
+            log.debug("temporadaColportorCrea" + temporadaColportorTmp.getId().toString());
+            params.put("temporadaColportor", temporadaColportorTmp.getId().toString());
+//            modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
+//            modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
+//            Codigo para validar prueba
+            request.getSession().setAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
             documentos = DocumentoDao.crea(documentos);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear el documento", e);
@@ -340,7 +422,7 @@ public class DocumentoController {
         }
 
         try {
-             documentos.setTemporadaColporotor(ambiente.getTemporadaColportorDeUsuarioEnSesion());
+            documentos.setTemporadaColportor(temporadaColportorDao.obtiene((Colportor) ambiente.obtieneUsuario()));
             log.debug("Documento Fecha" + documentos.getFecha());
             documentos = DocumentoDao.actualiza(documentos);
         } catch (ConstraintViolationException e) {

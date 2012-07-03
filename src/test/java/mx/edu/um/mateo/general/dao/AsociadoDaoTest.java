@@ -131,12 +131,10 @@ public class AsociadoDaoTest {
        asociado.setAsociacion(asociacion);
        currentSession().save(asociado);
        assertNotNull(asociado.getId());
-       
-        Asociado asociado2 = instance.crea(asociado);
+      
+        Asociado asociado2 = instance.obtiene(asociado.getId());
         assertNotNull(asociado2);
         assertNotNull(asociado2.getId());
-
-        assertEquals(asociado, asociado2);
     }
 
     @Test
@@ -194,6 +192,6 @@ public class AsociadoDaoTest {
         assertEquals(nom, clave);
 
         Asociado prueba = instance.obtiene(asociado.getId());
-        assertNull(prueba);
+        assertEquals(prueba.getStatus(), Constantes.STATUS_INACTIVO);
     }
 }

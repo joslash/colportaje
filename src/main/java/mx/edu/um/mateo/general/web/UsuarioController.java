@@ -37,8 +37,7 @@ import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.AsociadoDao;
 import mx.edu.um.mateo.general.dao.ColportorDao;
 import mx.edu.um.mateo.general.dao.UsuarioDao;
-import mx.edu.um.mateo.general.model.Asociado;
-import mx.edu.um.mateo.general.model.Colportor;
+import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
 import mx.edu.um.mateo.general.utils.Ambiente;
@@ -104,6 +103,7 @@ public class UsuarioController {
             Model modelo) {
         log.debug("Mostrando lista de usuarios");
         Map<String, Object> params = new HashMap<>();
+         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)));
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }
@@ -211,7 +211,7 @@ public class UsuarioController {
                 log.debug("Asignando ROLE_USER por defecto");
                 roles = new String[]{Constantes.ROLE_USER};
             }
-            Long asociacionId = (Long) request.getSession().getAttribute("asociacionId");
+            Long asociacionId = ((Asociacion)request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)).getId();
             password = KeyGenerators.string().generateKey();
             usuario.setPassword(password);
 
