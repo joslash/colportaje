@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.dao;
+
 import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
  *
  * @author gibrandemetrioo
@@ -27,15 +29,17 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration(locations = {"classpath:mateo.xml", "classpath:security.xml"})
 @Transactional
 public class TemporadaDaoTest {
-   private static final Logger log = LoggerFactory.getLogger(TemporadaDao.class);
+
+    private static final Logger log = LoggerFactory.getLogger(TemporadaDao.class);
     @Autowired
     private TemporadaDao instance;
     @Autowired
     private SessionFactory sessionFactory;
-   private Session currentSession() {
+
+    private Session currentSession() {
         return sessionFactory.getCurrentSession();
     }
-    
+
     /**
      * Test of lista method, of class TemporaDao.
      */
@@ -43,7 +47,7 @@ public class TemporadaDaoTest {
     public void debieraMostrarListaDeTemporada() {
         log.debug("Debiera mostrar lista Temporada");
         for (int i = 0; i < 20; i++) {
-           Temporada temporada = new Temporada("test"+i);
+            Temporada temporada = new Temporada("test" + i);
             currentSession().save(temporada);
             assertNotNull(temporada);
         }
@@ -54,6 +58,7 @@ public class TemporadaDaoTest {
         assertEquals(10, ((List<Temporada>) result.get(Constantes.CONTAINSKEY_TEMPORADAS)).size());
         assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
+
     @Test
     public void debieraObtenerTemporada() {
         log.debug("Debiera obtener Temporada");
@@ -116,9 +121,10 @@ public class TemporadaDaoTest {
         assertEquals(nom, nombre);
 
         Temporada prueba = instance.obtiene(temporada.getId());
-        assertNull(prueba);
+
+        if (prueba != null) {
+            fail("Fallo la prueba Eliminar");
+
+        }
     }
-    
 }
-
-

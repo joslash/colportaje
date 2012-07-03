@@ -61,25 +61,25 @@ public class AsociadoDaoTest {
 //            String apellidoM, String status, String clave, String telefono, String calle, 
 //            String colonia, String municipio)
         for (int i = 0; i < 10; i++) {
-           Asociado asociado = new Asociado("test"+i+"@test.com", "test", "test", "test", "test", 
-                   Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
-                   Constantes.MUNICIPIO);
+            Asociado asociado = new Asociado("test" + i + "@test.com", "test", "test", "test", "test",
+                    Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE, Constantes.COLONIA,
+                    Constantes.MUNICIPIO);
             asociado.setAsociacion(asociacion);
             currentSession().save(asociado);
             assertNotNull(asociado.getId());
-            
-              
+
+
 //            asociado.setRoles(roles);
             //usuario.setAsociado(asociado);
 //            currentSession().save(asociado);
-        
+
         }
         Map<String, Object> params = new HashMap();
         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacion);
         Map result = instance.lista(params);
         assertNotNull(result.get(Constantes.CONTAINSKEY_ASOCIADOS));
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
-        
+
         assertEquals(10, ((List<Asociado>) result.get(Constantes.CONTAINSKEY_ASOCIADOS)).size());
         assertEquals(10, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
@@ -97,9 +97,9 @@ public class AsociadoDaoTest {
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
         String nombre = Constantes.MUNICIPIO;
-        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
-                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,
-                Constantes.COLONIA,Constantes.MUNICIPIO);
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test",
+                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE,
+                Constantes.COLONIA, Constantes.MUNICIPIO);
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         assertNotNull(asociado.getId());
@@ -125,13 +125,13 @@ public class AsociadoDaoTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
-                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,
-                Constantes.COLONIA,Constantes.MUNICIPIO);
-       asociado.setAsociacion(asociacion);
-       currentSession().save(asociado);
-       assertNotNull(asociado.getId());
-       
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test",
+                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE,
+                Constantes.COLONIA, Constantes.MUNICIPIO);
+        asociado.setAsociacion(asociacion);
+        currentSession().save(asociado);
+        assertNotNull(asociado.getId());
+
         Asociado asociado2 = instance.crea(asociado);
         assertNotNull(asociado2);
         assertNotNull(asociado2.getId());
@@ -151,13 +151,13 @@ public class AsociadoDaoTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
-                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,
-                Constantes.COLONIA,Constantes.MUNICIPIO);
-       asociado.setAsociacion(asociacion);
-       currentSession().save(asociado);
-       assertNotNull(asociado.getId());
-       currentSession().save(asociado);
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test",
+                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE,
+                Constantes.COLONIA, Constantes.MUNICIPIO);
+        asociado.setAsociacion(asociacion);
+        currentSession().save(asociado);
+        assertNotNull(asociado.getId());
+        currentSession().save(asociado);
 
         String nombre = "colonia";
         asociado.setColonia(nombre);
@@ -183,17 +183,19 @@ public class AsociadoDaoTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
-                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,
-                Constantes.COLONIA,Constantes.MUNICIPIO);
-       asociado.setAsociacion(asociacion);
-       currentSession().save(asociado);
-       assertNotNull(asociado.getId());
-     
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test",
+                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE,
+                Constantes.COLONIA, Constantes.MUNICIPIO);
+        asociado.setAsociacion(asociacion);
+        currentSession().save(asociado);
+        assertNotNull(asociado.getId());
+
         String clave = instance.elimina(asociado.getId());
         assertEquals(nom, clave);
 
         Asociado prueba = instance.obtiene(asociado.getId());
-        assertNull(prueba);
+        if (prueba != null) {
+            fail("Fallo prueba Eliminar");
+        }
     }
 }

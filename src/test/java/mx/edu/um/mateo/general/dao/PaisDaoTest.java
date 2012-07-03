@@ -133,6 +133,9 @@ public class PaisDaoTest {
         String nombre = instance.elimina(pais.getId());
         assertEquals(nom, nombre);
         Pais prueba = instance.obtiene(pais.getId());
-        assertNull(prueba);
+
+        if(prueba != null){
+            fail("Fallo la prueba Eliminar");
+        }
     }
 }

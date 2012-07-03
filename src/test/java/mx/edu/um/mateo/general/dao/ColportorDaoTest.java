@@ -197,6 +197,7 @@ public class ColportorDaoTest {
       Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);   
+        
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
         Colportor colportor = new Colportor("test@test.com","test", "test","test", "test" , "test", Constantes.STATUS_ACTIVO,
@@ -209,6 +210,8 @@ public class ColportorDaoTest {
         assertEquals( colportor.getClave(), clave);
 
         colportor = colportorDao.obtiene(colportor.getId());
-        assertEquals(Constantes.STATUS_INACTIVO,( colportor).getStatus());
+        if((colportor).getStatus() != Constantes.STATUS_INACTIVO){
+            fail("Fallo prueba Eliminar");
+        }
     }
 }
