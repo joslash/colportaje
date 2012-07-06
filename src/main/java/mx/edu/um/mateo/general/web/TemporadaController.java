@@ -73,10 +73,12 @@ public class TemporadaController {
             Model modelo) {
         log.debug("Mostrando lista de Temporada");
         //filtrar temporadas por asociacion
-        
+
         Map<String, Object> params = new HashMap<>();
         Long asociacionId = (Long) request.getSession().getAttribute(Constantes.ASOCIACION_ID);
         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
+
+
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }
@@ -111,18 +113,18 @@ public class TemporadaController {
             try {
                 enviaCorreo(correo, (List<Temporada>) params.get(Constantes.CONTAINSKEY_TEMPORADAS), request);
                 modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
-                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("temporada.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
+                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, 
+                        new String[]{messageSource.getMessage("temporada.lista.label", 
+                        null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
             } catch (JRException | MessagingException e) {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
 
-        
+
         params = temporadaDao.lista(params);
         modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, params.get(Constantes.CONTAINSKEY_TEMPORADAS));
 
-        List<Temporada> lista = (List)params.get(Constantes.CONTAINSKEY_TEMPORADAS);
-        Iterator<Temporada> iter = lista.iterator();
         // inicia paginado
         Long cantidad = (Long) params.get(Constantes.CONTAINSKEY_CANTIDAD);
         Integer max = (Integer) params.get(Constantes.CONTAINSKEY_MAX);
@@ -140,10 +142,16 @@ public class TemporadaController {
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
         // termina paginado
 
+        params = temporadaDao.lista(params);
+
+        modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, params.get(Constantes.CONTAINSKEY_TEMPORADAS));
+
+        List<Temporada> lista = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
+        log.debug("SizeLista " + temporadas.size());
         log.debug("SizeLista " + lista.size());
-       
-        modelo.addAttribute("SizeTemporadas" + lista.size());
-        
+
+        modelo.addAttribute("SizeTemporadas" , lista.size());
+
         return Constantes.PATH_TEMPORADA_LISTA;
     }
 

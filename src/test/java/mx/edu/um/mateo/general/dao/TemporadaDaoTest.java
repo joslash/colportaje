@@ -49,7 +49,7 @@ public class TemporadaDaoTest {
         for (int i = 0; i < 20; i++) {
             Temporada temporada = new Temporada("test" + i);
             currentSession().save(temporada);
-            assertNotNull(temporada);
+            assertNotNull(temporada.getId());
         }
         Map<String, Object> params = null;
         Map result = instance.lista(params);

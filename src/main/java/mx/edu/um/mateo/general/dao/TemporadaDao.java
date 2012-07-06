@@ -103,7 +103,7 @@ public class TemporadaDao {
         params.put(Constantes.CONTAINSKEY_TEMPORADAS, criteria.list());
         countCriteria.setProjection(Projections.rowCount());
         params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
-
+        
         return params;
     }
 

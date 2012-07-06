@@ -88,11 +88,19 @@ public class TemporadaControllerTest extends BaseTest {
 
         for (int i = 0; i < 20; i++) {
             Temporada temporada = new Temporada("test" + i);
+            currentSession().save(temporada);
             temporadaDao.crea(temporada);
-            assertNotNull(temporada);
+            assertNotNull(temporada.getId());
         }
 
-        this.mockMvc.perform(get(Constantes.PATH_TEMPORADA)).andExpect(status().isOk()).andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_TEMPORADA_LISTA + ".jsp")).andExpect(model().attributeExists(Constantes.CONTAINSKEY_TEMPORADAS)).andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION)).andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS)).andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA)).andExpect(model().attribute("SizeTemporadas", 20));
+        this.mockMvc.perform(get(Constantes.PATH_TEMPORADA))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_TEMPORADA_LISTA + ".jsp"))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_TEMPORADAS))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
+                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA))
+                .andExpect(model().attribute("SizeTemporadas", 20));
 
     }
 
