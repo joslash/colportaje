@@ -26,7 +26,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
+ *
  * @author gibrandemetrioo
  */
 @Repository
@@ -99,23 +99,32 @@ public class TemporadaColportorDao {
         TemporadaColportor temporadacolportor = (TemporadaColportor) currentSession().get(TemporadaColportor.class, id);
         return temporadacolportor;
     }
-    
-     public TemporadaColportor obtiene(Colportor colportor) {
-        log.debug("Obtiene Temporada Colportor con Colportor = {}",colportor.getId());
+
+    public TemporadaColportor obtiene(Colportor colportor) {
+        log.debug("Obtiene Temporada Colportor con Colportor = {}", colportor.getId());
         Criteria sql = currentSession().createCriteria(TemporadaColportor.class);
-        sql.add(Restrictions.eq("colportor",colportor));
-        return (TemporadaColportor)sql.uniqueResult();
-              
+        sql.add(Restrictions.eq("colportor", colportor));
+        sql.add(Restrictions.eq("status", Constantes.STATUS_ACTIVO));
+        return (TemporadaColportor) sql.uniqueResult();
+
     }
-    
-    
+
+    public TemporadaColportor obtiene(Colportor colportor, Temporada temporada) {
+        log.debug("Obtiene Temporada Colportor con Colportor = {}", colportor.getId()+ "y Temporada"+ temporada.getId());
+        Criteria sql = currentSession().createCriteria(TemporadaColportor.class);
+        sql.add(Restrictions.eq("colportor", colportor));
+        sql.add(Restrictions.eq("temporada", temporada));
+        return (TemporadaColportor) sql.uniqueResult();
+
+    }
+
     public TemporadaColportor crea(TemporadaColportor temporadacolportor) {
         log.debug("Creando Temporada Colportor : {}", temporadacolportor);
         currentSession().save(temporadacolportor);
         currentSession().flush();
         return temporadacolportor;
     }
-    
+
     public TemporadaColportor actualiza(TemporadaColportor temporadacolportor) {
         log.debug("Actualizando Temporada Colportor {}", temporadacolportor);
         //trae el objeto de la DB 

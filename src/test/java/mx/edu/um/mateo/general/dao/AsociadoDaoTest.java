@@ -125,18 +125,18 @@ public class AsociadoDaoTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test",
-                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE,
-                Constantes.COLONIA, Constantes.MUNICIPIO);
-        asociado.setAsociacion(asociacion);
-        currentSession().save(asociado);
-        assertNotNull(asociado.getId());
 
-        Asociado asociado2 = instance.crea(asociado);
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
+                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,
+                Constantes.COLONIA,Constantes.MUNICIPIO);
+       asociado.setAsociacion(asociacion);
+       currentSession().save(asociado);
+       assertNotNull(asociado.getId());
+      
+        Asociado asociado2 = instance.obtiene(asociado.getId());
+
         assertNotNull(asociado2);
         assertNotNull(asociado2.getId());
-
-        assertEquals(asociado, asociado2);
     }
 
     @Test
@@ -194,7 +194,8 @@ public class AsociadoDaoTest {
         assertEquals(nom, clave);
 
         Asociado prueba = instance.obtiene(asociado.getId());
-        if (prueba != null) {
+
+        if (prueba.getStatus() != Constantes.STATUS_INACTIVO) {
             fail("Fallo prueba Eliminar");
         }
     }

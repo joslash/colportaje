@@ -34,7 +34,7 @@
             </p>
             <sec:authorize access="hasRole('ROLE_ASO')">
                 <p>
-                    <input name="filtro" type="text" class="input-medium search-query" value="${param.filtro}">
+                    <input name="clave" type="text" class="input-medium search-query" value="${clave}">
                     <button type="submit" class="btn"><s:message code="buscar.label" /></button>         
                 </p>
             </sec:authorize>

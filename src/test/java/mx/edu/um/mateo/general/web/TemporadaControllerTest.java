@@ -7,6 +7,7 @@ package mx.edu.um.mateo.general.web;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import mx.edu.um.mateo.Constantes;
+import mx.edu.um.mateo.general.dao.AsociacionDao;
 import mx.edu.um.mateo.general.dao.TemporadaDao;
 import mx.edu.um.mateo.general.dao.UnionDao;
 import mx.edu.um.mateo.general.model.Asociacion;
@@ -54,6 +55,8 @@ public class TemporadaControllerTest extends BaseTest {
     @Autowired
     private UnionDao unionDao;
     @Autowired
+    private AsociacionDao asociacionDao;
+    @Autowired
     private SessionFactory sessionFactory;
 
     private Session currentSession() {
@@ -84,25 +87,27 @@ public class TemporadaControllerTest extends BaseTest {
         union = unionDao.crea(union);
         
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
-        currentSession().save(asociacion);
+        asociacionDao.crea(asociacion);
 
         for (int i = 0; i < 20; i++) {
             Temporada temporada = new Temporada("test" + i);
+            temporada.setAsociacion(asociacion);
             currentSession().save(temporada);
-            temporadaDao.crea(temporada);
             assertNotNull(temporada.getId());
         }
 
-        this.mockMvc.perform(get(Constantes.PATH_TEMPORADA))
+        this.mockMvc.perform(get(Constantes.PATH_TEMPORADA)
+                .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_TEMPORADA_LISTA + ".jsp"))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_TEMPORADAS))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA))
-                .andExpect(model().attribute("SizeTemporadas", 20));
+                .andExpect(model().attribute("SizeTemporadas", 10));
 
     }
+
 
     @Test
     public void debieraMostrarTemporada() throws Exception {
@@ -118,7 +123,13 @@ public class TemporadaControllerTest extends BaseTest {
     public void debieraCrearTemporada() throws Exception {
         log.debug("Debiera crear temporada");
         SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
-        this.mockMvc.perform(post(Constantes.PATH_TEMPORADA_CREA).param("nombre", "test").param("fechaInicio", sdf.format(new Date())).param("fechaFinal", sdf.format(new Date()))).andExpect(status().isOk()).andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE)).andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporada.creada.message"));
+        this.mockMvc.perform(post(Constantes.PATH_TEMPORADA_CREA)
+                .param("nombre", "test")
+                .param("fechaInicio", sdf.format(new Date()))
+                .param("fechaFinal", sdf.format(new Date())))
+                .andExpect(status().isOk()).andExpect(flash()
+                .attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporada.creada.message"));
     }
 
     @Test

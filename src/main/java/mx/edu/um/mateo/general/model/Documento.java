@@ -36,7 +36,7 @@ public class Documento implements Serializable{
     private BigDecimal importe;
     @Column(length = 1000)
     private String observaciones;
-   @ManyToOne
+    @ManyToOne(optional = false)
     private TemporadaColportor temporadaColportor;
   
     
@@ -96,7 +96,7 @@ public class Documento implements Serializable{
         return temporadaColportor;
     }
 
-    public void setTemporadaColporotor(TemporadaColportor temporadaColporotor) {
+    public void setTemporadaColportor(TemporadaColportor temporadaColporotor) {
         this.temporadaColportor = temporadaColporotor;
     }
 

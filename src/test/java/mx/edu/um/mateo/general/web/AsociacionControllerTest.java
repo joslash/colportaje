@@ -106,6 +106,7 @@ public class AsociacionControllerTest extends BaseTest {
     public void tearDown() {
     }
 
+
     @Test
     //PRUEBA PASO 100%
     public void debieraMostrarListaDeAsociacion() throws Exception {
@@ -121,7 +122,7 @@ public class AsociacionControllerTest extends BaseTest {
         }
 
         this.mockMvc.perform(get(Constantes.PATH_ASOCIACION)
-                .sessionAttr("unionId", union.getId()))
+                .sessionAttr(Constantes.SESSION_UNION, union.getId()))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIACION_LISTA + ".jsp"))
                 .andExpect(model().attributeExists(Constantes.CONTAINSKEY_ASOCIACIONES))
@@ -197,7 +198,7 @@ public class AsociacionControllerTest extends BaseTest {
         this.authenticate(usuario, usuario.getPassword(), new ArrayList(usuario.getAuthorities()));
         
         this.mockMvc.perform(post(Constantes.PATH_ASOCIACION_ACTUALIZA)
-                .sessionAttr(Constantes.UNION_ID,union.getId().toString())
+                .sessionAttr(Constantes.SESSION_UNION,union)
                 .param("id", asociacion.getId().toString())
                 .param("version", asociacion.getVersion().toString())
                 .param("nombre", "test1")

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.dao.TemporadaDao;
+import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Temporada;
 import mx.edu.um.mateo.general.utils.Ambiente;
 import net.sf.jasperreports.engine.*;
@@ -75,7 +76,7 @@ public class TemporadaController {
         //filtrar temporadas por asociacion
 
         Map<String, Object> params = new HashMap<>();
-        Long asociacionId = (Long) request.getSession().getAttribute(Constantes.ASOCIACION_ID);
+        Long asociacionId = ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)).getId();
         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
 
 
@@ -125,7 +126,7 @@ public class TemporadaController {
         params = temporadaDao.lista(params);
         modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, params.get(Constantes.CONTAINSKEY_TEMPORADAS));
 
-        // inicia paginado
+ //        inicia paginado
         Long cantidad = (Long) params.get(Constantes.CONTAINSKEY_CANTIDAD);
         Integer max = (Integer) params.get(Constantes.CONTAINSKEY_MAX);
         Long cantidadDePaginas = cantidad / max;
@@ -140,7 +141,7 @@ public class TemporadaController {
         String[] paginacion = new String[]{primero.toString(), ultimo.toString(), cantidad.toString()};
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINACION, paginacion);
         modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
-        // termina paginado
+       //  termina paginado
 
         params = temporadaDao.lista(params);
 

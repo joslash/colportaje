@@ -69,18 +69,7 @@
                             <form:errors path="apellidoM" cssClass="alert alert-error" />
                         </div>
                     </s:bind>
-                    <s:bind path="asociado.roles">
-                        <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
-                            <label for="roles">
-                                <s:message code="authorities.label" />
-                                <span class="required-indicator">*</span>
-                            </label>
-                            <c:forEach items="${roles}" var="rol">
-                                <form:checkbox path="roles" value="${rol.authority}" /> <s:message code="${rol.authority}" />&nbsp;
-                            </c:forEach>
-                            <form:errors path="authorities" cssClass="errors" />
-                        </div>
-                    </s:bind>
+                  
                     
                        <s:bind path="asociado.status">
                         <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
