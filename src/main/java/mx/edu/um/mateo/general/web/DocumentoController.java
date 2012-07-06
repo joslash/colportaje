@@ -163,7 +163,11 @@ public class DocumentoController {
                 params.put("temporadaColportor", temporadaColportorTmp);
             }
 //          Codigo para validar prueba
-            modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
+            log.debug("temporadaColportorTmp" + temporadaColportorTmp);
+            log.debug("temporadaColportorTmpId" + temporadaColportorTmp.getId());
+            request.setAttribute("temporadaColportorTmp", temporadaColportorTmp);
+            modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp);
+            modelo.addAttribute("temporadaColportorPrueba", temporadaColportorTmp.getId().toString());
 //            params.put("temporadaColportor", temporadaColportorTmp);
         }
 
@@ -199,13 +203,19 @@ public class DocumentoController {
 
 
         params = DocumentoDao.lista(params);
+        params = temporadaDao.lista(params);
 //        Codigo para Valdiar Pruebas
 
         modelo.addAttribute(Constantes.CONTAINSKEY_DOCUMENTOS, params.get(Constantes.CONTAINSKEY_DOCUMENTOS));
+        modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, params.get(Constantes.CONTAINSKEY_TEMPORADAS));
 
         List<Documento> lista = (List) params.get(Constantes.CONTAINSKEY_DOCUMENTOS);
         Iterator<Documento> iter = lista.iterator();
-//        List<Temporada> listaTemporada = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
+
+        List<Temporada> listaTemporada = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
+
+        Map<String, Object> temporadas = temporadaDao.lista(null);
+        modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, temporadas.get(Constantes.CONTAINSKEY_TEMPORADAS));
 
         Documento doc = null;
         BigDecimal totalBoletin = new BigDecimal("0");
@@ -284,9 +294,9 @@ public class DocumentoController {
         // termina paginado
         //        Codigo para Valdiar Pruebas
         log.debug("SizeDocumento" + lista.size());
-//        log.debug("SizeTemporada" + listaTemporada.size());
+        log.debug("SizeTemporada" + listaTemporada.size());
         modelo.addAttribute("SizeDocumento", lista.size());
-//        modelo.addAttribute("SizeTemporada", listaTemporada.size());
+        modelo.addAttribute("SizeTemporada", listaTemporada.size());
         modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
 //        temporadaColportorDao.obtiene(temporadaColportorTmp.getId());
 //        request.setAttribute("claveTmp", temporadaColportorTmp.getColportor().getClave());
@@ -364,7 +374,8 @@ public class DocumentoController {
 //            modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
 //            modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
 //            Codigo para validar prueba
-            request.getSession().setAttribute("temporadaColportorTmp", temporadaColportorTmp.getId().toString());
+            request.getSession().setAttribute("temporadaColportorTmp", temporadaColportorTmp);
+            request.getSession().setAttribute("temporadaColportorPrueba", temporadaColportorTmp.getId().toString());
             documentos = DocumentoDao.crea(documentos);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear el documento", e);

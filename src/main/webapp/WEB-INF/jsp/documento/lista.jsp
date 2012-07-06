@@ -21,6 +21,7 @@
         <h1><s:message code="documento.lista.label" /></h1>
         <hr/>
 
+
         <form name="filtraLista" class="form-search" method="post" action="<c:url value='/documento' />">
             <input type="hidden" name="pagina" id="pagina" value="${pagina}" />
             <input type="hidden" name="tipo" id="tipo" value="" />
@@ -38,9 +39,17 @@
                     <button type="submit" class="btn"><s:message code="buscar.label" /></button>         
                 </p>
             </sec:authorize>
-
-
-
+            <fieldset>
+                <s:bind path="temporadaColportorTmp.temporada">
+                    <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
+                            <label for="temporada">
+                            <s:message code="temporada.label" />
+                            <span class="required-indicator">*</span>
+                            <form:select id="temporadaId" path="temporada.id" items="${temporadas}" itemLabel="nombre" itemValue="id" />
+                            <form:errors path="temporada" cssClass="alert alert-error" />
+                    </div>
+                </s:bind>
+            </fieldset>
             <c:if test="${not empty message}">
                 <div class="alert alert-block alert-success fade in" role="status">
                     <a class="close" data-dismiss="alert">×</a>
