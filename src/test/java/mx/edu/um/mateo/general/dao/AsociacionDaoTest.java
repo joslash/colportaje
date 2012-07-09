@@ -79,12 +79,12 @@ public class AsociacionDaoTest extends BaseTest {
         }
 
         Map<String, Object> params = new HashMap<>();
-        params.put("union", union.getId());
+        params.put(Constantes.ADDATTRIBUTE_UNION, union.getId());
         Map result = instance.lista(params);
-        assertNotNull(result.get("asociaciones"));
-        assertNotNull(result.get("cantidad"));
-        assertEquals(10, ((List<Asociacion>) result.get("asociaciones")).size());
-        assertEquals(20, ((Long) result.get("cantidad")).intValue());
+        assertNotNull(result.get(Constantes.CONTAINSKEY_ASOCIACIONES));
+        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
+        assertEquals(10, ((List<Asociacion>) result.get(Constantes.CONTAINSKEY_ASOCIACIONES)).size());
+        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
 
     /**
@@ -119,7 +119,7 @@ public class AsociacionDaoTest extends BaseTest {
         Union union = new Union("TEST01");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
@@ -152,7 +152,7 @@ public class AsociacionDaoTest extends BaseTest {
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
         assertNotNull(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         assertNotNull(rol);
         Set<Rol> roles = new HashSet<>();
@@ -197,7 +197,7 @@ public class AsociacionDaoTest extends BaseTest {
         Union union = new Union("TEST01");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Rol rol = new Rol("ROLE_TEST");
+        Rol rol = new Rol(Constantes.ROLE_TEST);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);

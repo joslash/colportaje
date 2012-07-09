@@ -637,6 +637,7 @@ public class DocumentoControllerTest extends BaseTest {
                 .sessionAttr("colportorTmp", colportorTmp))
                 .andExpect(request().sessionAttribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
                 .andExpect(status().isOk()).andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+
                 .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "documento.creado.message"));
 
     }

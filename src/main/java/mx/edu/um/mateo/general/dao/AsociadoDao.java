@@ -54,25 +54,25 @@ public class AsociadoDao {
             params = new HashMap<>();
         }
 
-        if (!params.containsKey("max")) {
-            params.put("max", 10);
+        if (!params.containsKey(Constantes.CONTAINSKEY_MAX)) {
+            params.put(Constantes.CONTAINSKEY_MAX, 10);
         } else {
-            params.put("max", Math.min((Integer) params.get("max"), 100));
+            params.put(Constantes.CONTAINSKEY_MAX, Math.min((Integer) params.get(Constantes.CONTAINSKEY_MAX), 100));
         }
 
-        if (params.containsKey("pagina")) {
-            Long pagina = (Long) params.get("pagina");
-            Long offset = (pagina - 1) * (Integer) params.get("max");
-            params.put("offset", offset.intValue());
+        if (params.containsKey(Constantes.CONTAINSKEY_PAGINA)) {
+            Long pagina = (Long) params.get(Constantes.CONTAINSKEY_PAGINA);
+            Long offset = (pagina - 1) * (Integer) params.get(Constantes.CONTAINSKEY_MAX);
+            params.put(Constantes.CONTAINSKEY_OFFSET, offset.intValue());
         }
 
-        if (!params.containsKey("offset")) {
-            params.put("offset", 0);
+        if (!params.containsKey(Constantes.CONTAINSKEY_OFFSET)) {
+            params.put(Constantes.CONTAINSKEY_OFFSET, 0);
         }
 
-        if (!params.containsKey("asociacion")) {
-            params.put("asociados", new ArrayList());
-            params.put("cantidad", 0L);
+        if (!params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
+            params.put(Constantes.CONTAINSKEY_ASOCIADOS, new ArrayList());
+            params.put(Constantes.CONTAINSKEY_CANTIDAD, 0L);
 
             return params;
         }
@@ -80,14 +80,14 @@ public class AsociadoDao {
         Criteria criteria = currentSession().createCriteria(Asociado.class);
         Criteria countCriteria = currentSession().createCriteria(Asociado.class);
 
-        if (params.containsKey("asociacion")) {
-            log.debug("valor de asociacion"+params.get("asociacion"));
-            criteria.createCriteria("asociacion").add(Restrictions.eq("id",((Asociacion)params.get("asociacion")).getId()));
-            countCriteria.createCriteria("asociacion").add(Restrictions.eq("id",((Asociacion)params.get("asociacion")).getId()));
+        if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
+            log.debug("valor de asociacion"+params.get(Constantes.ADDATTRIBUTE_ASOCIACION));
+            criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.eq("id",((Asociacion)params.get("asociacion")).getId()));
+            countCriteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.eq("id",((Asociacion)params.get("asociacion")).getId()));
         }
 
-        if (params.containsKey("filtro")) {
-            String filtro = (String) params.get("filtro");
+        if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
+            String filtro = (String) params.get(Constantes.CONTAINSKEY_FILTRO);
             Disjunction propiedades = Restrictions.disjunction();
             propiedades.add(Restrictions.ilike("username", filtro, MatchMode.ANYWHERE));
             propiedades.add(Restrictions.ilike("nombre", filtro, MatchMode.ANYWHERE));
@@ -96,23 +96,23 @@ public class AsociadoDao {
             countCriteria.add(propiedades);
         }
 
-        if (params.containsKey("order")) {
-            String campo = (String) params.get("order");
-            if (params.get("sort").equals("desc")) {
+        if (params.containsKey(Constantes.CONTAINSKEY_ORDER)) {
+            String campo = (String) params.get(Constantes.CONTAINSKEY_ORDER);
+            if (params.get(Constantes.CONTAINSKEY_SORT).equals(Constantes.CONTAINSKEY_DESC)) {
                 criteria.addOrder(Order.desc(campo));
             } else {
                 criteria.addOrder(Order.asc(campo));
             }
         }
 
-        if (!params.containsKey("reporte")) {
-            criteria.setFirstResult((Integer) params.get("offset"));
-            criteria.setMaxResults((Integer) params.get("max"));
+        if (!params.containsKey(Constantes.CONTAINSKEY_REPORTE)) {
+            criteria.setFirstResult((Integer) params.get(Constantes.CONTAINSKEY_OFFSET));
+            criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
-        params.put("asociados", criteria.list());
+        params.put(Constantes.CONTAINSKEY_ASOCIADOS, criteria.list());
 
         countCriteria.setProjection(Projections.rowCount());
-        params.put("cantidad", (Long) countCriteria.list().get(0));
+        params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
 
         return params;
     }

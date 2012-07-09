@@ -105,27 +105,27 @@ public class UsuarioController {
         Map<String, Object> params = new HashMap<>();
          params.put(Constantes.ADDATTRIBUTE_ASOCIACION, ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)));
         if (StringUtils.isNotBlank(filtro)) {
-            params.put("filtro", filtro);
+            params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }
         if (pagina != null) {
-            params.put("pagina", pagina);
-            modelo.addAttribute("pagina", pagina);
+            params.put(Constantes.CONTAINSKEY_PAGINA, pagina);
+            modelo.addAttribute(Constantes.CONTAINSKEY_PAGINA, pagina);
         } else {
             pagina = 1L;
-            modelo.addAttribute("pagina", pagina);
+            modelo.addAttribute(Constantes.CONTAINSKEY_PAGINA, pagina);
         }
         if (StringUtils.isNotBlank(order)) {
-            params.put("order", order);
-            params.put("sort", sort);
+            params.put(Constantes.CONTAINSKEY_ORDER, order);
+            params.put(Constantes.CONTAINSKEY_SORT, sort);
         }
 
         params.put("empresa", request.getSession().getAttribute("empresaId"));
 
         if (StringUtils.isNotBlank(tipo)) {
-            params.put("reporte", true);
+            params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = usuarioDao.lista(params);
             try {
-                generaReporte(tipo, (List<Usuario>) params.get("usuarios"), response);
+                generaReporte(tipo, (List<Usuario>) params.get(Constantes.CONTAINSKEY_USUARIOS), response);
                 return null;
             } catch (JRException | IOException e) {
                 log.error("No se pudo generar el reporte", e);
@@ -133,10 +133,10 @@ public class UsuarioController {
         }
 
         if (StringUtils.isNotBlank(correo)) {
-            params.put("reporte", true);
+            params.put(Constantes.CONTAINSKEY_REPORTE, true);
             params = usuarioDao.lista(params);
 
-            params.remove("reporte");
+            params.remove(Constantes.CONTAINSKEY_REPORTE);
             try {
                 enviaCorreo(correo, (List<Usuario>) params.get("usuarios"), request);
                 modelo.addAttribute("message", "lista.enviada.message");
@@ -146,23 +146,23 @@ public class UsuarioController {
             }
         }
         params = usuarioDao.lista(params);
-        modelo.addAttribute("usuarios", params.get("usuarios"));
+        modelo.addAttribute(Constantes.CONTAINSKEY_USUARIOS, params.get(Constantes.CONTAINSKEY_USUARIOS));
 
         // inicia paginado
-        Long cantidad = (Long) params.get("cantidad");
-        Integer max = (Integer) params.get("max");
+        Long cantidad = (Long) params.get(Constantes.CONTAINSKEY_CANTIDAD);
+        Integer max = (Integer) params.get(Constantes.CONTAINSKEY_MAX);
         Long cantidadDePaginas = cantidad / max;
         List<Long> paginas = new ArrayList<>();
         long i = 1;
         do {
             paginas.add(i);
         } while (i++ < cantidadDePaginas);
-        List<Usuario> usuarios = (List<Usuario>) params.get("usuarios");
+        List<Usuario> usuarios = (List<Usuario>) params.get(Constantes.CONTAINSKEY_USUARIOS);
         Long primero = ((pagina - 1) * max) + 1;
         Long ultimo = primero + (usuarios.size() - 1);
         String[] paginacion = new String[]{primero.toString(), ultimo.toString(), cantidad.toString()};
-        modelo.addAttribute("paginacion", paginacion);
-        modelo.addAttribute("paginas", paginas);
+        modelo.addAttribute(Constantes.CONTAINSKEY_PAGINACION, paginacion);
+        modelo.addAttribute(Constantes.CONTAINSKEY_PAGINAS, paginas);
         // termina paginado
 
         return "admin/usuario/lista";
@@ -199,24 +199,24 @@ public class UsuarioController {
         if (bindingResult.hasErrors()) {
             log.debug("Hubo algun error en la forma, regresando");
             List<Rol> roles = obtieneRoles();
-            modelo.addAttribute("roles", roles);
+            modelo.addAttribute(Constantes.ROLES, roles);
             return "admin/usuario/nuevo";
         }
 
         String password = null;
         try {
-            log.debug("Evaluando roles {}", request.getParameterValues("roles"));
-            String[] roles = request.getParameterValues("roles");
+            log.debug("Evaluando roles {}", request.getParameterValues(Constantes.ROLES));
+            String[] roles = request.getParameterValues(Constantes.ROLES);
             if (roles == null || roles.length == 0) {
                 log.debug("Asignando ROLE_USER por defecto");
-                roles = new String[]{"ROLE_USER"};
+                roles = new String[]{Constantes.ROLE_USER};
             }
             Long asociacionId = ((Asociacion)request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)).getId();
             password = KeyGenerators.string().generateKey();
             usuario.setPassword(password);
 
            
-            log.debug("Roles"+roles.toString());
+            log.debug(Constantes.ROLES+roles.toString());
 
             usuario = usuarioDao.crea(usuario, asociacionId, roles);
 
@@ -231,7 +231,7 @@ public class UsuarioController {
             log.error("No se pudo crear al usuario", e);
             errors.rejectValue("username", "campo.duplicado.message", new String[]{"username"}, null);
             List<Rol> roles = obtieneRoles();
-            modelo.addAttribute("roles", roles);
+            modelo.addAttribute(Constantes.ROLES, roles);
             return "admin/usuario/nuevo";
         } catch (MessagingException e) {
             log.error("No se pudo enviar la contrasena por correo", e);
@@ -242,19 +242,19 @@ public class UsuarioController {
             return "redirect:/admin/usuario/ver/" + usuario.getId();
         }
 
-        redirectAttributes.addFlashAttribute("message", "usuario.creado.message");
-        redirectAttributes.addFlashAttribute("messageAttrs", new String[]{usuario.getUsername()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "usuario.creado.message");
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{usuario.getUsername()});
 
         //validando roles
         Set<Rol> roles = usuario.getRoles();
 
         for (Iterator<Rol> rol = roles.iterator(); rol.hasNext();) {
             Rol r = rol.next();
-            if (r.getAuthority().equals("ROLE_ASO")) {
+            if (r.getAuthority().equals(Constantes.ROLE_ASO)) {
                 log.info("Rol Asociado");
                 modelo.addAttribute("usuario", usuario);
                 return "redirect:/asociado/edita/" + usuario.getAsociado().getId();
-            } else if (r.getAuthority().equals("ROLE_COL")) {
+            } else if (r.getAuthority().equals(Constantes.ROLE_COL)) {
                 log.info("Rol Colportor");
                 modelo.addAttribute("usuario", usuario);
                 return "redirect:/colportor/edita/" + usuario.getColportor().getId();
@@ -269,7 +269,7 @@ public class UsuarioController {
         List<Rol> roles = obtieneRoles();
         Usuario usuario = usuarioDao.obtiene(id);
         modelo.addAttribute("usuario", usuario);
-        modelo.addAttribute("roles", roles);
+        modelo.addAttribute(Constantes.ROLES, roles);
         return "admin/usuario/edita";
     }
 
@@ -279,27 +279,27 @@ public class UsuarioController {
         if (bindingResult.hasErrors()) {
             log.error("Hubo algun error en la forma, regresando");
             List<Rol> roles = obtieneRoles();
-            modelo.addAttribute("roles", roles);
+            modelo.addAttribute(Constantes.ROLES, roles);
             return "admin/usuario/edita";
         }
 
         try {
             String[] roles = request.getParameterValues("roles");
             if (roles == null || roles.length == 0) {
-                roles = new String[]{"ROLE_USER"};
+                roles = new String[]{Constantes.ROLE_USER};
             }
-            Long almacenId = (Long) request.getSession().getAttribute("almacenId");
+            Long almacenId = (Long) request.getSession().getAttribute(Constantes.ALMACEN_ID);
             usuario = usuarioDao.actualiza(usuario, almacenId, roles);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear al usuario", e);
             errors.rejectValue("username", "campo.duplicado.message", new String[]{"username"}, null);
             List<Rol> roles = obtieneRoles();
-            modelo.addAttribute("roles", roles);
+            modelo.addAttribute(Constantes.ROLES, roles);
             return "admin/usuario/nuevo";
         }
 
-        redirectAttributes.addFlashAttribute("message", "usuario.actualizado.message");
-        redirectAttributes.addFlashAttribute("messageAttrs", new String[]{usuario.getUsername()});
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "usuario.actualizado.message");
+        redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{usuario.getUsername()});
 
         return "redirect:/admin/usuario/ver/" + usuario.getId();
     }
@@ -310,19 +310,19 @@ public class UsuarioController {
         log.debug("Elimina usuario");
         try {
             String nombre = usuarioDao.elimina(id);
-            redirectAttributes.addFlashAttribute("message", "usuario.eliminado.message");
-            redirectAttributes.addFlashAttribute("messageAttrs", new String[]{nombre});
+            redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE, "usuario.eliminado.message");
+            redirectAttributes.addFlashAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{nombre});
         } catch (UltimoException e) {
             log.error("No se pudo eliminar el usuario " + id, e);
             bindingResult.addError(new ObjectError("usuario", new String[]{"ultimo.usuario.no.eliminado.message"}, null, null));
             List<Rol> roles = usuarioDao.roles();
-            modelo.addAttribute("roles", roles);
+            modelo.addAttribute(Constantes.ROLES, roles);
             return "admin/usuario/ver";
         } catch (Exception e) {
             log.error("No se pudo eliminar el usuario " + id, e);
             bindingResult.addError(new ObjectError("usuario", new String[]{"usuario.no.eliminado.message"}, null, null));
             List<Rol> roles = usuarioDao.roles();
-            modelo.addAttribute("roles", roles);
+            modelo.addAttribute(Constantes.ROLES, roles);
             return "admin/usuario/ver";
         }
 
@@ -331,15 +331,15 @@ public class UsuarioController {
 
     private List<Rol> obtieneRoles() {
         List<Rol> roles = usuarioDao.roles();
-        if (springSecurityUtils.ifAnyGranted("ROLE_ADMIN")) {
+        if (springSecurityUtils.ifAnyGranted(Constantes.ROL_ADMINISTRADOR)) {
             // no se hace nada
-        } else if (springSecurityUtils.ifAnyGranted("ROLE_ASO")) {
-            roles.remove(new Rol("ROLE_ADMIN"));
-            roles.remove(new Rol("ROLE_ASO"));
+        } else if (springSecurityUtils.ifAnyGranted(Constantes.ROLE_ASO)) {
+            roles.remove(new Rol(Constantes.ROL_ADMINISTRADOR));
+            roles.remove(new Rol(Constantes.ROLE_ASO));
         } else {
-            roles.remove(new Rol("ROLE_ADMIN"));
-            roles.remove(new Rol("ROLE_ASO"));
-            roles.remove(new Rol("ROLE_COL"));
+            roles.remove(new Rol(Constantes.ROL_ADMINISTRADOR));
+            roles.remove(new Rol(Constantes.ROLE_ASO));
+            roles.remove(new Rol(Constantes.ROLE_COL));
         }
 
         return roles;
