@@ -164,9 +164,9 @@ public class DocumentoController {
             }
 //          Codigo para validar prueba
             log.debug("temporadaColportorTmp" + temporadaColportorTmp);
-            log.debug("temporadaColportorTmpId" + temporadaColportorTmp.getId());
             request.setAttribute("temporadaColportorTmp", temporadaColportorTmp);
             modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp);
+            log.debug("temporadaColportorTmpId" + temporadaColportorTmp.getId());
             modelo.addAttribute("temporadaColportorPrueba", temporadaColportorTmp.getId().toString());
 //            params.put("temporadaColportor", temporadaColportorTmp);
         }

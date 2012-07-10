@@ -254,6 +254,7 @@ public class DocumentoControllerTest extends BaseTest {
         for (int i = 0; i < 20; i++) {
             Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,
                     new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
@@ -270,6 +271,7 @@ public class DocumentoControllerTest extends BaseTest {
         for (int i = 0; i < 20; i++) {
             Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,
                     new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
@@ -339,6 +341,7 @@ public class DocumentoControllerTest extends BaseTest {
         for (int i = 0; i < 20; i++) {
             Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,
                     new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
@@ -442,6 +445,7 @@ public class DocumentoControllerTest extends BaseTest {
         for (int i = 0; i < 20; i++) {
             Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,
                     new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
@@ -571,8 +575,40 @@ public class DocumentoControllerTest extends BaseTest {
     @Test
     public void debieraMostrarDocumento() throws Exception {
         log.debug("Debiera mostrar documento");
+         Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion); 
+        
+        Usuario colportor = new Colportor("test--1@test.com", "test", "test", "test", "test", "test", Constantes.STATUS_ACTIVO,
+                    "8262652626", "test", "test", "10706" , "test", "test001", new Date());
+        colportor.setAsociacion(asociacion);
+        currentSession().save(colportor);
+        
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
+                   Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
+                   Constantes.MUNICIPIO);
+        asociado.setAsociacion(asociacion);
+        currentSession().save(asociado);
+        
+        Temporada temporada = new Temporada ("test");
+        currentSession().save(temporada);
+        Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
+           TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"TEST","TEST");
+            temporadacolportor.setColportor((Colportor)colportor);
+            temporadacolportor.setAsociacion(asociacion);
+            temporadacolportor.setAsociado(asociado);
+            temporadacolportor.setTemporada(temporada);
+            temporadacolportor.setUnion(union);
+            temporadacolportor.setColegio(colegio);
+            currentSession().save(temporadacolportor);
+            assertNotNull(temporadacolportor);
         Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE, 
                 Constantes.OBSERVACIONES, null);
+        documento.setTemporadaColportor(temporadacolportor);
         documento = documentoDao.crea(documento);
         assertNotNull(documento);
 
@@ -708,8 +744,41 @@ public class DocumentoControllerTest extends BaseTest {
     @Test
     public void debieraEliminarDocumento() throws Exception {
         log.debug("Debiera eliminar documento");
+           Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion); 
+        
+        Usuario colportor = new Colportor("test--1@test.com", "test", "test", "test", "test", "test", Constantes.STATUS_ACTIVO,
+                    "8262652626", "test", "test", "10706" , "test", "test001", new Date());
+        colportor.setAsociacion(asociacion);
+        currentSession().save(colportor);
+        
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
+                   Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
+                   Constantes.MUNICIPIO);
+        asociado.setAsociacion(asociacion);
+        currentSession().save(asociado);
+        
+        Temporada temporada = new Temporada ("test");
+        currentSession().save(temporada);
+        Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
+           TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"TEST","TEST");
+            temporadacolportor.setColportor((Colportor)colportor);
+            temporadacolportor.setAsociacion(asociacion);
+            temporadacolportor.setAsociado(asociado);
+            temporadacolportor.setTemporada(temporada);
+            temporadacolportor.setUnion(union);
+            temporadacolportor.setColegio(colegio);
+            currentSession().save(temporadacolportor);
+            assertNotNull(temporadacolportor);
+        
         Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE, 
                 Constantes.OBSERVACIONES, null);
+        documento.setTemporadaColportor(temporadacolportor);
         documentoDao.crea(documento);
         assertNotNull(documento);
 

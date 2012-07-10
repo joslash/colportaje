@@ -63,7 +63,7 @@ public class ColegioDaoTest extends BaseTest {
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
 
         assertEquals(10, ((List<Colegio>) result.get(Constantes.CONTAINSKEY_COLEGIOS)).size());
-        assertEquals(21, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
+        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
     
     
