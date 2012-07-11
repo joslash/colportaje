@@ -174,6 +174,7 @@ public class TemporadaController {
 
     @Transactional
     @RequestMapping(value = "/crea", method = RequestMethod.POST)
+    
     public String crea(HttpServletRequest request, HttpServletResponse response, @Valid Temporada temporada, BindingResult bindingResult, Errors errors, Model modelo, RedirectAttributes redirectAttributes) throws ParseException {
         for (String nombre : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));

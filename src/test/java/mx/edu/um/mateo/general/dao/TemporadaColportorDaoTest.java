@@ -63,7 +63,9 @@ public class TemporadaColportorDaoTest extends BaseTest {
         currentSession().save(asociado);
 
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
+        
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
         for (int i = 0; i < 20; i++) {
@@ -108,6 +110,7 @@ public class TemporadaColportorDaoTest extends BaseTest {
 
         currentSession().save(asociado);
         Temporada test4 = new Temporada("test5");
+        test4.setAsociacion(asociacion);
         currentSession().save(test4);
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -152,6 +155,7 @@ public class TemporadaColportorDaoTest extends BaseTest {
         currentSession().save(asociado);
 
         Temporada test4 = new Temporada("test5");
+        test4.setAsociacion(asociacion);
         currentSession().save(test4);
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -193,7 +197,9 @@ public class TemporadaColportorDaoTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Temporada temporada= new Temporada ("test");
+        temporada.setAsociacion(asociacion);
         Temporada temporada2= new Temporada ("test");
+        temporada2.setAsociacion(asociacion);
         currentSession().save(temporada);
         currentSession().save(temporada2);
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
@@ -256,6 +262,7 @@ public class TemporadaColportorDaoTest extends BaseTest {
         currentSession().save(asociado);
 
         Temporada test4 = new Temporada("test5");
+        test4.setAsociacion(asociacion);
         currentSession().save(test4);
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -276,7 +283,7 @@ public class TemporadaColportorDaoTest extends BaseTest {
     }
 
     @Test
-    public void deberiaActualizarTemporadaColportor() {
+    public void deberiaActualizarTseemporadaColportor() {
         log.debug("Deberia actualizar Temporada Colportor");
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
@@ -297,6 +304,7 @@ public class TemporadaColportorDaoTest extends BaseTest {
         currentSession().save(asociado);
 
         Temporada test4 = new Temporada("test5");
+        test4.setAsociacion(asociacion);
         currentSession().save(test4);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -342,6 +350,7 @@ public class TemporadaColportorDaoTest extends BaseTest {
         currentSession().save(asociado);
 
         Temporada test4 = new Temporada("test5");
+        test4.setAsociacion(asociacion);
         currentSession().save(test4);
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);

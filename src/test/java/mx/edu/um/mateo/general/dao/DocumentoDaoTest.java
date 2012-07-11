@@ -258,7 +258,7 @@ public class DocumentoDaoTest extends BaseTest {
 //    }
 //
     @Test
-    public void deberiaEliminarDocumento() throws UltimoException {
+    public void deberiaEliminaralDocumento() throws UltimoException {
         log.debug("Debiera eliminar Documento");
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
@@ -279,6 +279,7 @@ public class DocumentoDaoTest extends BaseTest {
         currentSession().save(test3);
 
         Temporada test4 = new Temporada("test5");
+        test4.setAsociacion(test2);
         currentSession().save(test4);
         Colegio colegio = new Colegio(Constantes.NOMBRE, Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);

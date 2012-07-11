@@ -7,7 +7,9 @@ package mx.edu.um.mateo.general.dao;
 import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
+import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Temporada;
+import mx.edu.um.mateo.general.model.Union;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -39,15 +41,25 @@ public class TemporadaDaoTest {
     private Session currentSession() {
         return sessionFactory.getCurrentSession();
     }
-
+    @Autowired
+    private UnionDao unionDao;
+    @Autowired
+    private AsociacionDao asociacionDao;
     /**
      * Test of lista method, of class TemporaDao.
      */
     @Test
-    public void debieraMostrarListaDeTemporada() {
+    public void debieraMostrarListaDeTePpmorada() {
         log.debug("Debiera mostrar lista Temporada");
+        Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
         for (int i = 0; i < 20; i++) {
             Temporada temporada = new Temporada("test" + i);
+            temporada.setAsociacion(asociacion);
             currentSession().save(temporada);
             assertNotNull(temporada.getId());
         }
@@ -62,9 +74,18 @@ public class TemporadaDaoTest {
     @Test
     public void debieraObtenerTemporada() {
         log.debug("Debiera obtener Temporada");
+        
+        Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
 
         String nombre = "test";
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
+
         currentSession().save(temporada);
         assertNotNull(temporada.getId());
         Long id = temporada.getId();
@@ -80,7 +101,15 @@ public class TemporadaDaoTest {
     public void deberiaCrearTemporada() {
         log.debug("Deberia crear Temporada");
 
+        Union union = new Union("test");
+        union = unionDao.crea(union);
+        currentSession().save(union);
+        
+        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        asociacionDao.crea(asociacion);
+        
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         assertNotNull(temporada);
 
         Temporada temporada2 = instance.crea(temporada);
@@ -93,8 +122,15 @@ public class TemporadaDaoTest {
     @Test
     public void deberiaActualizarTemporada() {
         log.debug("Deberia actualizar Temporada");
+        Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
 
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
+
         assertNotNull(temporada);
         currentSession().save(temporada);
 
@@ -112,8 +148,16 @@ public class TemporadaDaoTest {
     public void deberiaEliminarTemporada() throws UltimoException {
         log.debug("Debiera eliminar Temporada");
 
+        Union union = new Union("test");
+        union = unionDao.crea(union);
+        currentSession().save(union);
+        
+        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        asociacionDao.crea(asociacion);
+        
         String nom = "test";
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         assertNotNull(temporada);
 
