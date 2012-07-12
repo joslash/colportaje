@@ -215,6 +215,7 @@ public class DocumentoController {
         List<Temporada> listaTemporada = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
 
         Map<String, Object> temporadas = temporadaDao.lista(null);
+        log.debug("Temporadas {}", temporadas.get(Constantes.CONTAINSKEY_TEMPORADAS) );
         modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, temporadas.get(Constantes.CONTAINSKEY_TEMPORADAS));
 
         Documento doc = null;

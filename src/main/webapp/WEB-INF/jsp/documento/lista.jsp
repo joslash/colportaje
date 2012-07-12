@@ -7,7 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -37,19 +38,20 @@
                 <p>
                     <input name="clave" type="text" class="input-medium search-query" value="${clave}">
                     <button type="submit" class="btn"><s:message code="buscar.label" /></button>  
-                <form:select id="temporadaId" path="temporada.id" items="${temporadas}" itemLabel="nombre" itemValue="id" />
             </p>
         </sec:authorize>
         <fieldset>
-            <s:bind path="temporadaColportorTmp.temporada">
-                <div class="control-group <c:if test='${not empty status.errorMessages}'>error</c:if>">
-                        <label for="temporada">
-                        <s:message code="temporada.label" />
-                        <span class="required-indicator">*</span>
-                        <form:select id="temporadaId" path="temporada.id" items="${temporadas}" itemLabel="nombre" itemValue="id" />
-                        <form:errors path="temporada" cssClass="alert alert-error" />
-                </div>
-            </s:bind>
+            <div class="control-group">
+                    <label for="temporada">
+                    <s:message code="temporada.label" />
+                    <span class="required-indicator">*</span>
+                    <select id="temporadaId" name="temporadaId">
+                        <c:forEach items="${temporadas}" var="temporada">
+                            <option value="${temporada.id}">${temporada.nombre}</option>
+                        </c:forEach>
+                    </select>
+                  <button type="submit" class="btn"><s:message code="buscar.label" /></button>    
+            </div>
         </fieldset>
         <c:if test="${not empty message}">
             <div class="alert alert-block alert-success fade in" role="status">
