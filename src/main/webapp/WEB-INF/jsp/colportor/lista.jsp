@@ -30,7 +30,6 @@
                 <a class="btn btn-primary" href="<s:url value='/colportor/nuevo'/>"><i class="icon-user icon-white"></i> <s:message code='colportor.nuevo.label' /></a>
                 <input name="filtro" type="text" class="input-medium search-query" value="${param.filtro}">
                 <button type="submit" class="btn"><s:message code="buscar.label" /></button>
-                <input type="text" data-provide="typeahead">
             
             </p>
             <c:if test="${not empty message}">

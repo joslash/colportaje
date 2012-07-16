@@ -7,7 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,6 +21,7 @@
 
         <h1><s:message code="documento.lista.label" /></h1>
         <hr/>
+
 
         <form name="filtraLista" class="form-search" method="post" action="<c:url value='/documento' />">
             <input type="hidden" name="pagina" id="pagina" value="${pagina}" />
@@ -35,79 +37,89 @@
             <sec:authorize access="hasRole('ROLE_ASO')">
                 <p>
                     <input name="clave" type="text" class="input-medium search-query" value="${clave}">
-                    <button type="submit" class="btn"><s:message code="buscar.label" /></button>         
-                </p>
-            </sec:authorize>
+                    <button type="submit" class="btn"><s:message code="buscar.label" /></button>  
+            </p>
+        </sec:authorize>
+        <fieldset>
+            <div class="control-group">
+                    <label for="temporada">
+                    <s:message code="temporada.label" />
+                    <span class="required-indicator">*</span>
+                    <select id="temporadaId" name="temporadaId">
+                        <c:forEach items="${temporadas}" var="temporada">
+                            <option value="${temporada.id}">${temporada.nombre}</option>
+                        </c:forEach>
+                    </select>
+                  <button type="submit" class="btn"><s:message code="buscar.label" /></button>    
+            </div>
+        </fieldset>
+        <c:if test="${not empty message}">
+            <div class="alert alert-block alert-success fade in" role="status">
+                <a class="close" data-dismiss="alert">×</a>
+                <s:message code="${message}" arguments="${messageAttrs}" />
+            </div>
+        </c:if>
+        <c:if test="${documento != null}">
+            <s:bind path="documento.*">
+                <c:if test="${not empty status.errorMessages}">
+                    <div class="alert alert-block alert-error fade in" role="status">
+                        <a class="close" data-dismiss="alert">×</a>
+                        <c:forEach var="error" items="${status.errorMessages}">
+                            <c:out value="${error}" escapeXml="false"/><br />
+                        </c:forEach>
+                    </div>
+                </c:if>
+            </s:bind>
+        </c:if>
 
-
-
-            <c:if test="${not empty message}">
-                <div class="alert alert-block alert-success fade in" role="status">
-                    <a class="close" data-dismiss="alert">×</a>
-                    <s:message code="${message}" arguments="${messageAttrs}" />
-                </div>
-            </c:if>
-            <c:if test="${documento != null}">
-                <s:bind path="documento.*">
-                    <c:if test="${not empty status.errorMessages}">
-                        <div class="alert alert-block alert-error fade in" role="status">
-                            <a class="close" data-dismiss="alert">×</a>
-                            <c:forEach var="error" items="${status.errorMessages}">
-                                <c:out value="${error}" escapeXml="false"/><br />
-                            </c:forEach>
-                        </div>
-                    </c:if>
-                </s:bind>
-            </c:if>
-
-            <table id="totales" class="table">
-                <tbody>
-                    <tr> 
-                        <td><b>Compras $ </b>${Total_Boletin}</td>
-                        <td><b>Objetivo $ </b>${Objetivo}</td>
-                        <td><b>Pct. Alcanzado </b>${Alcanzado} %</td>
-                        <td><b>Diezmos $ </b>${Total_Diezmos}</td>
-                        <td><b>Fidelidad </b>${Fidelidad} %</td>
-                        <td><b>Depositos $</b> ${Total_Depositos}</td>
+        <table id="totales" class="table">
+            <tbody>
+                <tr> 
+                    <td><b>Compras $ </b>${Total_Boletin}</td>
+                    <td><b>Objetivo $ </b>${Objetivo}</td>
+                    <td><b>Pct. Alcanzado </b>${Alcanzado} %</td>
+                    <td><b>Diezmos $ </b>${Total_Diezmos}</td>
+                    <td><b>Fidelidad </b>${Fidelidad} %</td>
+                    <td><b>Depositos $</b> ${Total_Depositos}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="lista" class="table">
+            <thead>
+                <tr>
+                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                        <jsp:param name="columna" value="tipoDeDocumento" />
+                    </jsp:include>
+                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                        <jsp:param name="columna" value="fecha" />
+                    </jsp:include>
+                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                        <jsp:param name="columna" value="folio" />
+                    </jsp:include>
+                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                        <jsp:param name="columna" value="importe" />
+                    </jsp:include>
+                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                        <jsp:param name="columna" value="observaciones" />
+                    </jsp:include>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${documentos}" var="documento" varStatus="status">
+                    <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
+                        <td><a href="<c:url value='/documento/ver/${documento.id}' />">${documento.tipoDeDocumento}</a></td>
+                        <td>${documento.fecha}</td>
+                        <td>${documento.folio}</td>
+                        <td>${documento.importe}</td>
+                        <td>${documento.observaciones}</td>
                     </tr>
-                </tbody>
-            </table>
-            <table id="lista" class="table">
-                <thead>
-                    <tr>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="tipoDeDocumento" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="fecha" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="folio" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="importe" />
-                        </jsp:include>
-                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                            <jsp:param name="columna" value="observaciones" />
-                        </jsp:include>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach items="${documentos}" var="documento" varStatus="status">
-                        <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><a href="<c:url value='/documento/ver/${documento.id}' />">${documento.tipoDeDocumento}</a></td>
-                            <td>${documento.fecha}</td>
-                            <td>${documento.folio}</td>
-                            <td>${documento.importe}</td>
-                            <td>${documento.observaciones}</td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-            <jsp:include page="/WEB-INF/jsp/paginacion.jsp" />
-        </form>        
-    <content>
-        <script src="<c:url value='/js/lista.js' />"></script>
-    </content>
+                </c:forEach>
+            </tbody>
+        </table>
+        <jsp:include page="/WEB-INF/jsp/paginacion.jsp" />
+    </form>        
+<content>
+    <script src="<c:url value='/js/lista.js' />"></script>
+</content>
 </body>
 </html>
