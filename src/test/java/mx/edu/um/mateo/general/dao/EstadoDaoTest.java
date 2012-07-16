@@ -66,7 +66,7 @@ public class EstadoDaoTest {
     @Test
     public void deberiaMostrarListaDeEstado() {
         log.debug("Debiera mostrar lista de Estados");
-        Pais pais = new Pais (Constantes.NOMBRE);
+        Pais pais = new Pais(Constantes.NOMBRE);
         currentSession().save(pais);
         for (int i = 0; i < 20; i++) {
             Estado estado = new Estado(Constantes.NOMBRE + i);
@@ -89,7 +89,7 @@ public class EstadoDaoTest {
     public void debieraObtenerEstado() {
         log.debug("Debiera obtener Estados");
         String nombre = "test";
-        Pais pais = new Pais (Constantes.NOMBRE);
+        Pais pais = new Pais(Constantes.NOMBRE);
         currentSession().save(pais);
         Estado estado = new Estado(Constantes.NOMBRE);
         estado.setPais(pais);
@@ -108,7 +108,7 @@ public class EstadoDaoTest {
     @Test
     public void deberiaCrearEstado() {
         log.debug("Deberia crear Estado");
-        Pais pais = new Pais (Constantes.NOMBRE);
+        Pais pais = new Pais(Constantes.NOMBRE);
         currentSession().save(pais);
         Estado estado = new Estado(Constantes.NOMBRE);
         estado.setPais(pais);
@@ -125,7 +125,7 @@ public class EstadoDaoTest {
     @Test
     public void deberiaActualizarEstado() {
         log.debug("Deberia actualizar Estados");
-        Pais pais = new Pais (Constantes.NOMBRE);
+        Pais pais = new Pais(Constantes.NOMBRE);
         currentSession().save(pais);
         Estado estado = new Estado("test");
         estado.setPais(pais);
@@ -146,7 +146,7 @@ public class EstadoDaoTest {
     public void deberiaEliminarEstado() throws UltimoException {
         log.debug("Debiera eliminar Estado");
         String nom = "test";
-        Pais pais = new Pais (Constantes.NOMBRE);
+        Pais pais = new Pais(Constantes.NOMBRE);
         currentSession().save(pais);
         Estado estado = new Estado(Constantes.NOMBRE);
         estado.setPais(pais);
@@ -155,6 +155,9 @@ public class EstadoDaoTest {
         String nombre = instance.elimina(estado.getId());
         assertEquals(nom, nombre);
         Estado prueba = instance.obtiene(estado.getId());
-        assertNull(prueba);
+
+        if (prueba != null) {
+            fail("Fallo la prueba Eliminar");
+        }
     }
 }

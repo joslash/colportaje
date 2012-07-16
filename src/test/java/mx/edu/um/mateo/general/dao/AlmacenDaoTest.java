@@ -74,7 +74,7 @@ public class AlmacenDaoTest extends BaseTest {
     @Test
     public void debieraObtenerAlmacen() {
         log.debug("Debiera obtener almacen");
-          Union union = new Union("test");
+        Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
         Asociacion test2 = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
@@ -97,7 +97,7 @@ public class AlmacenDaoTest extends BaseTest {
     @Test
     public void deberiaCrearAlmacen() {
         log.debug("Deberia crear Almacen");
-     Union union = new Union("test");
+        Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
         Asociacion test2 = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
@@ -157,6 +157,8 @@ public class AlmacenDaoTest extends BaseTest {
         assertEquals(cla, clave);
 
         Almacen prueba = instance.obtiene(almacen.getId());
-        assertNull(prueba);
+        if (prueba != null) {
+            fail("Fallo prueba Eliminar");
+        }
     }
 }

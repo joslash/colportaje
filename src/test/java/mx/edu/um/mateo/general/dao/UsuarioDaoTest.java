@@ -299,7 +299,9 @@ public class UsuarioDaoTest {
         assertEquals(usuario.getUsername(), nombre);
 
         Usuario result = instance.obtiene(id);
-        assertNull(result);
+        if(result != null){
+            fail("Fallo prueba Eliminar");
+        }
     }
 
 }

@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.dao;
+
 import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
@@ -35,24 +36,21 @@ public class ColegioDaoTest extends BaseTest {
     private ColegioDao instance;
     @Autowired
     private SessionFactory sessionFactory;
-    
-   private Session currentSession() {
+
+    private Session currentSession() {
         return sessionFactory.getCurrentSession();
     }
-    
-    
+
     /**
      * Test of lista method, of class ColegioDao.
      */
-   
-   
     @Test
     //PRUEBA PASO 100%
     public void deberiaMostrarListaDeColegio() {
         log.debug("Debiera mostrar lista de colegio");
 
         for (int i = 0; i < 20; i++) {
-            Colegio colegio = new Colegio(Constantes.NOMBRE+i, Constantes.STATUS_ACTIVO);
+            Colegio colegio = new Colegio(Constantes.NOMBRE + i, Constantes.STATUS_ACTIVO);
             currentSession().save(colegio);
             assertNotNull(colegio);
         }
@@ -65,8 +63,7 @@ public class ColegioDaoTest extends BaseTest {
         assertEquals(10, ((List<Colegio>) result.get(Constantes.CONTAINSKEY_COLEGIOS)).size());
         assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
-    
-    
+
     @Test
     //PRUEBA PASO 100%
     public void debieraObtenerColegio() {
@@ -84,8 +81,7 @@ public class ColegioDaoTest extends BaseTest {
 
         assertEquals(result, colegio);
     }
-    
-    
+
     @Test
     //PRUEBA PASO 100%
     public void deberiaCrearColegio() {
@@ -100,7 +96,6 @@ public class ColegioDaoTest extends BaseTest {
 
         assertEquals(colegio, colegio2);
     }
-    
 
     @Test
     //PRUEBA PASO 100%
@@ -120,7 +115,6 @@ public class ColegioDaoTest extends BaseTest {
 
         assertEquals(colegio, colegio2);
     }
-    
 
     @Test
     //PRUEBA PASO 100%
@@ -136,7 +130,8 @@ public class ColegioDaoTest extends BaseTest {
         assertEquals(nom, nombre);
 
         Colegio prueba = instance.obtiene(colegio.getId());
-        assertNull(prueba);
+        if (prueba != null) {
+            fail("Fallo prueba Eliminar");
+        }
     }
-    
 }

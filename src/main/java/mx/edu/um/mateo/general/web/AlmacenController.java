@@ -215,11 +215,14 @@ public class AlmacenController {
             return Constantes.PATH_ALMACEN_EDITA;
         }
         try {
-               Asociacion asociacion = asociacionDao.obtiene(almacenes.getAsociacion().getId());
+            Asociacion asociacion = asociacionDao.obtiene(almacenes.getAsociacion().getId());
+ //           almacenes.setAsociacion((Asociacion)request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)); //esta
+
             almacenes.setAsociacion(asociacion);
             almacenes = AlmacenDao.actualiza(almacenes);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo actualizar el almacen", e);
+  //          errors.rejectValue("almacen" , "Almacen no encontrada");                                          //y esta
             return Constantes.PATH_ALMACEN_NUEVO;
         }
         
