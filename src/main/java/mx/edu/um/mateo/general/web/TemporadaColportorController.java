@@ -175,7 +175,7 @@ public class TemporadaColportorController {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
         }
         if (bindingResult.hasErrors()) {
-            log.debug("Hubo algun error en la forma, regresando");
+            log.debug("Hubo algun error en la forma, regresando"+ bindingResult.getAllErrors());
             return Constantes.PATH_TEMPORADACOLPORTOR_NUEVA;
         }
         //try fechaInicio
