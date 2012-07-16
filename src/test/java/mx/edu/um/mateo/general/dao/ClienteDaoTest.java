@@ -159,6 +159,8 @@ public class ClienteDaoTest extends BaseTest {
         assertEquals(nom, nombre);
 
         Cliente prueba = instance.obtiene(cliente.getId());
-        assertNull(prueba);
+         if (prueba != null) {
+            fail("Fallo prueba Eliminar");
+        }
     }
 }

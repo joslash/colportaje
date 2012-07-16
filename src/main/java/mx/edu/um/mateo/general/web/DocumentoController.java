@@ -163,6 +163,7 @@ public class DocumentoController {
                 params.put("temporadaColportor", temporadaColportorTmp);
             }
 //          Codigo para validar prueba
+
             log.debug("temporadaColportorTmp" + temporadaColportorTmp);
             request.setAttribute("temporadaColportorTmp", temporadaColportorTmp);
             modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp);
@@ -219,6 +220,7 @@ public class DocumentoController {
         modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, temporadas.get(Constantes.CONTAINSKEY_TEMPORADAS));
 
         Documento doc = null;
+        
         BigDecimal totalBoletin = new BigDecimal("0");
         BigDecimal totalDiezmos = new BigDecimal("0");
         BigDecimal totalDepositos = new BigDecimal("0");

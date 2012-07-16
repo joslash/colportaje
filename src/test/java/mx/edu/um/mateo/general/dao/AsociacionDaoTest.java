@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 package mx.edu.um.mateo.general.dao;
+
 import java.util.*;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociacion;
@@ -64,8 +65,6 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of lista method, of class AsociacionDao.
      */
-    
-    
     @Test
     //PRUEBA PASO 100%
     public void debieraMostrarListaDeAsociaciones() {
@@ -90,8 +89,6 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of obtiene method, of class AsociacionDao.
      */
-    
-    
     @Test
     //PRUEBA PASO 100%
     public void debieraObtenerAsociacion() {
@@ -110,8 +107,6 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of crea method, of class AsociacionDao.
      */
-    
-    
     @Test
     //PRUEBA PASO 100%
     public void debieraCrearAsociacion() {
@@ -125,7 +120,7 @@ public class AsociacionDaoTest extends BaseTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("tst-01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test", "test");
         usuario.setAsociacion(asociacion);
         usuario.setRoles(roles);
         currentSession().save(usuario);
@@ -142,8 +137,6 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of actualiza method, of class AsociacionDao.
      */
-    
-    
     @Test
     //PRUEBA PASO 100%
     public void debieraActualizarAsociacion() {
@@ -160,7 +153,7 @@ public class AsociacionDaoTest extends BaseTest {
         Asociacion asociacion = new Asociacion("tst-01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
         assertNotNull(asociacion);
-        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test", "test");
         usuario.setAsociacion(asociacion);
         usuario.setRoles(roles);
         currentSession().save(usuario);
@@ -187,8 +180,6 @@ public class AsociacionDaoTest extends BaseTest {
     /**
      * Test of elimina method, of class AsociacionDao.
      */
-    
-    
     @Test
     //PRUEBA PASO 100%
     public void debieraEliminarAsociacion() {
@@ -203,7 +194,7 @@ public class AsociacionDaoTest extends BaseTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("tst-01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test", "test");
         usuario.setAsociacion(asociacion);
         usuario.setRoles(roles);
         currentSession().save(usuario);
@@ -223,6 +214,8 @@ public class AsociacionDaoTest extends BaseTest {
         assertEquals("tst-01", nombre);
 
         asociacion = instance.obtiene(id);
-        assertEquals(Constantes.STATUS_INACTIVO, asociacion.getStatus());
+        if (asociacion.getStatus() != Constantes.STATUS_INACTIVO) {
+            fail("Fallo prueba Eliminar");
+        }
     }
 }

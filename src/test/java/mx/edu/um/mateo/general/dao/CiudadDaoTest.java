@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package mx.edu.um.mateo.general.dao;
+
 import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
  *
  * @author gibrandemetrioo
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration(locations = {"classpath:mateo.xml", "classpath:security.xml"})
 @Transactional
 public class CiudadDaoTest {
+
     private static final Logger log = LoggerFactory.getLogger(CiudadDaoTest.class);
     @Autowired
     private CiudadDao instance;
@@ -63,7 +66,7 @@ public class CiudadDaoTest {
     @Test
     public void deberiaMostrarListaDeCiudad() {
         log.debug("Debiera mostrar lista de Ciudads");
-        Estado estado = new Estado (Constantes.NOMBRE);
+        Estado estado = new Estado(Constantes.NOMBRE);
         currentSession().save(estado);
         for (int i = 0; i < 20; i++) {
             Ciudad ciudad = new Ciudad(Constantes.NOMBRE + i);
@@ -85,7 +88,7 @@ public class CiudadDaoTest {
     @Test
     public void debieraObtenerCiudad() {
         log.debug("Debiera obtener Ciudads");
-        Estado estado = new Estado (Constantes.NOMBRE);
+        Estado estado = new Estado(Constantes.NOMBRE);
         currentSession().save(estado);
         String nombre = "test";
         Ciudad ciudad = new Ciudad(Constantes.NOMBRE);
@@ -105,7 +108,7 @@ public class CiudadDaoTest {
     @Test
     public void deberiaCrearCiudad() {
         log.debug("Deberia crear Ciudad");
-        Estado estado = new Estado (Constantes.NOMBRE);
+        Estado estado = new Estado(Constantes.NOMBRE);
         currentSession().save(estado);
         Ciudad ciudad = new Ciudad(Constantes.NOMBRE);
         ciudad.setEstado(estado);
@@ -122,7 +125,7 @@ public class CiudadDaoTest {
     @Test
     public void deberiaActualizarCiudad() {
         log.debug("Deberia actualizar Ciudads");
-        Estado estado = new Estado (Constantes.NOMBRE);
+        Estado estado = new Estado(Constantes.NOMBRE);
         currentSession().save(estado);
         Ciudad ciudad = new Ciudad("test");
         assertNotNull(ciudad);
@@ -142,7 +145,7 @@ public class CiudadDaoTest {
     @Test
     public void deberiaEliminarCiudad() throws UltimoException {
         log.debug("Debiera eliminar Ciudad");
-        Estado estado = new Estado (Constantes.NOMBRE);
+        Estado estado = new Estado(Constantes.NOMBRE);
         currentSession().save(estado);
         String nom = "test";
         Ciudad ciudad = new Ciudad(Constantes.NOMBRE);
@@ -152,7 +155,8 @@ public class CiudadDaoTest {
         String nombre = instance.elimina(ciudad.getId());
         assertEquals(nom, nombre);
         Ciudad prueba = instance.obtiene(ciudad.getId());
-        assertNull(prueba);
+        if (prueba != null) {
+            fail("Fallo prueba Eliminar");
+        }
     }
 }
-

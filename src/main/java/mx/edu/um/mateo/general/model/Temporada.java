@@ -29,7 +29,7 @@ public class Temporada implements Serializable{
     @Temporal(TemporalType.DATE)
     @Column(nullable = false, name = "fecha_final")
     private Date fechaFinal;
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = false)
     private Asociacion asociacion;
 
     
