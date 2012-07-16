@@ -145,10 +145,11 @@ public class AlmacenControllerTest extends BaseTest {
                 .param("version", almacen.getVersion().toString())
                 .param("clave", "test1")
                 .param("nombre", almacen.getNombre())
-                 .param("asociacion", asociacion.getId().toString()))
+                .param("asociacion", asociacion.getId().toString())
+                .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
                 .andExpect(status().isOk());
-                //.andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-                //.andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "almacen.actualizado.message"));
+              //  .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+              //  .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "almacen.actualizado.message"));
     }
 
     @Test

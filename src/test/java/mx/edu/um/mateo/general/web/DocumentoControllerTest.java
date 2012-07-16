@@ -12,12 +12,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import mx.edu.um.mateo.Constantes;
-import mx.edu.um.mateo.general.dao.AsociadoDao;
-import mx.edu.um.mateo.general.dao.DocumentoDao;
-import mx.edu.um.mateo.general.dao.RolDao;
-import mx.edu.um.mateo.general.dao.TemporadaColportorDao;
-import mx.edu.um.mateo.general.dao.UnionDao;
-import mx.edu.um.mateo.general.dao.UsuarioDao;
+import mx.edu.um.mateo.general.dao.*;
 import mx.edu.um.mateo.general.model.*;
 import mx.edu.um.mateo.general.test.BaseTest;
 import mx.edu.um.mateo.general.test.GenericWebXmlContextLoader;
@@ -69,6 +64,8 @@ public class DocumentoControllerTest extends BaseTest {
     @Autowired
     private AsociadoDao asociadoDao;
     @Autowired
+    private TemporadaDao temporadaDao;
+    @Autowired
     private SessionFactory sessionFactory;
 
     private Session currentSession() {
@@ -118,11 +115,14 @@ public class DocumentoControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Colportor colportorTmp = (Colportor) usuario;
+        
         TemporadaColportor temporadaColportor = null;
         Temporada temporada=null;
         for(int i =0; i< 9; i++){
                 temporada= new Temporada("test"+i);
-        currentSession().save(temporada);
+                temporada.setAsociacion(asociacion);
+                currentSession().save(temporada);
+
         }
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -179,8 +179,10 @@ public class DocumentoControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Colportor colportorTmp = (Colportor) usuario;
+        
         TemporadaColportor temporadaColportor = null;
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -231,10 +233,14 @@ public class DocumentoControllerTest extends BaseTest {
         Colportor colportorTmp = (Colportor) usuario;
         TemporadaColportor temporadaColportor = null;
         TemporadaColportor temporadaColportor2 = null;
+        
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Temporada temporada2 = new Temporada("test2");
+        temporada2.setAsociacion(asociacion);
         currentSession().save(temporada2);
+        
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
         colportorTmp.setAsociacion(asociacion);
@@ -291,7 +297,7 @@ public class DocumentoControllerTest extends BaseTest {
     }
 
     @Test
-    public void debieraMostrarListaDeDocumentoDeColportorQueSeCambiaAUnaTemporadaVasia() throws Exception {
+    public void debieraMostrarListaDeDocumentoDeColportorQueSeCambiaAUnaTemporadaVacia() throws Exception {
         log.debug("Debiera monstrar lista de documentos de un colportor qeu no esta en ninguna temporada");
         Union union = new Union("test");
         union = unionDao.crea(union);
@@ -319,8 +325,10 @@ public class DocumentoControllerTest extends BaseTest {
         TemporadaColportor temporadaColportor = null;
         TemporadaColportor temporadaColportor2 = null;
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Temporada temporada2 = new Temporada("test2");
+        temporada2.setAsociacion(asociacion);
         currentSession().save(temporada2);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -370,7 +378,7 @@ public class DocumentoControllerTest extends BaseTest {
     }
 
     @Test
-    public void debieraMostrarListaVasiaDeDocumentosDeColportorAlAsociado() throws Exception {
+    public void debieraMostrarListaVaciaDeDocumentosDeColportorAlAsociado() throws Exception {
         log.debug("Debiera monstrar lista de documentos de un colportor al asociado");
         Union union = new Union("test");
         union = unionDao.crea(union);
@@ -421,8 +429,10 @@ public class DocumentoControllerTest extends BaseTest {
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
         Colportor colportorTmp = null;
+        
         TemporadaColportor temporadaColportor = null;
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -432,6 +442,7 @@ public class DocumentoControllerTest extends BaseTest {
         colportorTmp.setAsociacion(asociacion);
         currentSession().save(colportorTmp);
         assertNotNull(colportorTmp.getId());
+        
         temporadaColportor = new TemporadaColportor(colportorTmp, asociacion, usuario, temporada, union, colegio);
         temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
         temporadaColportor.setObjetivo("Objetivo");
@@ -482,7 +493,9 @@ public class DocumentoControllerTest extends BaseTest {
         Colportor colportor = null;
         TemporadaColportor temporadaColportor = null;
         String clave = "12345";
+        
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -535,6 +548,7 @@ public class DocumentoControllerTest extends BaseTest {
         String clave = "12345";
         String clave2 = "12346";
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -647,8 +661,10 @@ public class DocumentoControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Colportor colportorTmp = (Colportor) usuario;
+        
         TemporadaColportor temporadaColportor = null;
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -704,8 +720,10 @@ public class DocumentoControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Colportor colportorTmp = (Colportor) usuario;
+        
         TemporadaColportor temporadaColportor = null;
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);

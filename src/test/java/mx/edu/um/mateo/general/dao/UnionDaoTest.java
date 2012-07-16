@@ -23,10 +23,10 @@
  */
 /**
  * TODO problemas con type long: user
- * 
+ *
  */
-
 package mx.edu.um.mateo.general.dao;
+
 import java.util.*;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociacion;
@@ -61,6 +61,7 @@ public class UnionDaoTest extends BaseTest {
     private UnionDao instance;
     @Autowired
     private SessionFactory sessionFactory;
+
     private Session currentSession() {
         return sessionFactory.getCurrentSession();
     }
@@ -74,11 +75,11 @@ public class UnionDaoTest extends BaseTest {
             union.setStatus(Constantes.STATUS_ACTIVO);
             currentSession().save(union);
         }
-        Map <String, Object> params = null;
+        Map<String, Object> params = null;
         Map result = instance.lista(params);
         assertNotNull(result.get(Constantes.CONTAINSKEY_UNIONES));
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
-        
+
         assertEquals(10, ((List<Union>) result.get(Constantes.CONTAINSKEY_UNIONES)).size());
         //assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
@@ -111,7 +112,7 @@ public class UnionDaoTest extends BaseTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test", "test");
         usuario.setAsociacion(asociacion);
         usuario.setRoles(roles);
         currentSession().save(usuario);
@@ -137,7 +138,7 @@ public class UnionDaoTest extends BaseTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test", "test");
         usuario.setAsociacion(asociacion);
         usuario.setRoles(roles);
         currentSession().save(usuario);
@@ -170,7 +171,7 @@ public class UnionDaoTest extends BaseTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
+        Usuario usuario = new Usuario("test@test.com", "test", "test", "test", "test");
         usuario.setAsociacion(asociacion);
         usuario.setRoles(roles);
         currentSession().save(usuario);
@@ -179,7 +180,7 @@ public class UnionDaoTest extends BaseTest {
         id = union.getId();
         currentSession().refresh(asociacion);
         currentSession().refresh(union);
-        
+
         authenticate(usuario, usuario.getPassword(), new ArrayList<GrantedAuthority>(usuario.getRoles()));
 
         union = new Union("TEST02");
@@ -190,6 +191,8 @@ public class UnionDaoTest extends BaseTest {
         assertEquals("TEST01", nombre);
 
         union = instance.obtiene(id);
-        assertEquals(Constantes.STATUS_INACTIVO, union.getStatus());
+        if (union.getStatus() != Constantes.STATUS_INACTIVO) {
+            fail("Fallo  prueba Eliminar");
+        }
     }
 }
