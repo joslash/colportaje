@@ -163,6 +163,7 @@ public class TemporadaController {
         modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADA, temporadas);
         return Constantes.PATH_TEMPORADA_VER;
     }
+    
 
     @RequestMapping("/nueva")
     public String nueva(Model modelo) {
@@ -202,10 +203,12 @@ public class TemporadaController {
 
         try {
             log.debug("Temporada FEcha Inicio" + temporada.getFechaInicio());
+            temporada.setAsociacion((Asociacion)request.getSession().getAttribute(Constantes.SESSION_ASOCIACION));
             log.debug("Temporada FEcha Inicio" + temporada.getFechaFinal());
             temporada = temporadaDao.crea(temporada);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear la temporada", e);
+            errors.rejectValue("asociacion" , "Asociacion no encontrada");
             return Constantes.PATH_TEMPORADA_NUEVA;
         }
 
@@ -248,10 +251,12 @@ public class TemporadaController {
         }
         try {
             log.debug("Temporada FEcha Inicio" + temporada.getFechaInicio());
+            temporada.setAsociacion((Asociacion)request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)); //esta
             log.debug("Temporada FEcha Inicio" + temporada.getFechaFinal());
             temporada = temporadaDao.actualiza(temporada);
         } catch (ConstraintViolationException e) {
             log.error("No se pudo crear al Temporada", e);
+            errors.rejectValue("asociacion" , "Asociacion no encontrada");                                          //y esta
             return Constantes.PATH_TEMPORADA_EDITA;
         }
 

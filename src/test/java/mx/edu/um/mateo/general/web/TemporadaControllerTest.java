@@ -122,7 +122,10 @@ public class TemporadaControllerTest extends BaseTest {
         temporada = temporadaDao.crea(temporada);
         assertNotNull(temporada);
 
-        this.mockMvc.perform(get(Constantes.PATH_TEMPORADA_VER + "/" + temporada.getId())).andExpect(status().isOk()).andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_TEMPORADA_VER + ".jsp")).andExpect(model().attributeExists(Constantes.ADDATTRIBUTE_TEMPORADA));
+        this.mockMvc.perform(get(Constantes.PATH_TEMPORADA_VER + "/" + temporada.getId())
+                .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
+                .andExpect(status().isOk())
+                .andExpect(view().name(Constantes.PATH_TEMPORADA_VER));
     }
 
     @Test
@@ -138,11 +141,11 @@ public class TemporadaControllerTest extends BaseTest {
         this.mockMvc.perform(post(Constantes.PATH_TEMPORADA_CREA)
                 .param("nombre", "test")
                 .param("fechaInicio", sdf.format(new Date()))
-                .param("fechaFinal", sdf.format(new Date())))
-                .andExpect(status().isOk());
-               // .andExpect(flash())
-               // .attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-               // .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporada.creada.message"));
+                .param("fechaFinal", sdf.format(new Date()))
+                .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporada.creada.message"));
     }
 
     @Test
@@ -164,10 +167,11 @@ public class TemporadaControllerTest extends BaseTest {
                 .param("version", temporada.getVersion().toString())
                 .param("nombre", "test1")
                 .param("fechaInicio", sdf.format(new Date()))
-                .param("fechaFinal", sdf.format(new Date())))
-                .andExpect(status().isOk());
-//                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE));
-//                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporada.actualizada.message"));
+                .param("fechaFinal", sdf.format(new Date()))
+                .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporada.actualizada.message"));
     }
 
     @Test
@@ -183,6 +187,11 @@ public class TemporadaControllerTest extends BaseTest {
         temporadaDao.crea(temporada);
         assertNotNull(temporada);
 
-        this.mockMvc.perform(post(Constantes.PATH_TEMPORADA_ELIMINA).param("id", temporada.getId().toString())).andExpect(status().isOk()).andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE)).andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporada.eliminada.message"));
+        this.mockMvc.perform(post(Constantes.PATH_TEMPORADA_ELIMINA)
+                .param("id", temporada.getId().toString())
+                .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporada.eliminada.message"));
     }
 }
