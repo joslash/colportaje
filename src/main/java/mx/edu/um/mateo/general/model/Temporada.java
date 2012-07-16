@@ -116,7 +116,9 @@ public class Temporada implements Serializable{
 
     @Override
     public String toString() {
-        return "Temporada{" + "nombre=" + nombre + '}';
+        return "Temporada{" + "id=" + id + ", version=" + version + ", nombre=" + nombre + ", fechaInicio=" + fechaInicio + ", fechaFinal=" + fechaFinal + ", asociacion=" + asociacion + '}';
     }
+
+    
     
 }
