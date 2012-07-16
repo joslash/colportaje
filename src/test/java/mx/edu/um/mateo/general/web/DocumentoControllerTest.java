@@ -122,8 +122,8 @@ public class DocumentoControllerTest extends BaseTest {
         Temporada temporada=null;
         for(int i =0; i< 9; i++){
                 temporada= new Temporada("test"+i);
-        }
         currentSession().save(temporada);
+        }
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
         colportorTmp.setAsociacion(asociacion);
@@ -146,9 +146,10 @@ public class DocumentoControllerTest extends BaseTest {
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
-        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA).sessionAttr("colportorTmp", colportorTmp)) //                .andExpect(request().sessionAttribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
+        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA).sessionAttr("colportorTmp", colportorTmp)) //                .andExpect(request().sessionAttribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
                 .andExpect(model().attribute("SizeDocumento", 9))
-                .andExpect(model().attribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
+                .andExpect(model().attribute("SizeTemporada", 9))
+                .andExpect(model().attribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
                 .andExpect(status().isOk());
     }
 
@@ -198,7 +199,7 @@ public class DocumentoControllerTest extends BaseTest {
         this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA)
                 .param("temporadaId", temporada.getId().toString())
                 .sessionAttr("colportorTmp", colportorTmp))
-                .andExpect(model().attribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
+                .andExpect(model().attribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
                 .andExpect(status().isOk());
     }
 
@@ -253,6 +254,7 @@ public class DocumentoControllerTest extends BaseTest {
         for (int i = 0; i < 20; i++) {
             Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,
                     new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
@@ -269,19 +271,20 @@ public class DocumentoControllerTest extends BaseTest {
         for (int i = 0; i < 20; i++) {
             Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,
                     new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
         this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA)
                 .sessionAttr("colportorTmp", colportorTmp))
-                .andExpect(model().attribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
+                .andExpect(model().attribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
                 .andExpect(status().isOk());
         log.debug("terminaPrimerLlamada");
 
         this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA)
                 .param("temporadaId", temporada2.getId().toString())
                 .sessionAttr("colportorTmp", colportorTmp))
-                .andExpect(model().attribute("temporadaColportorTmp", temporadaColportor2.getId().toString()))
+                .andExpect(model().attribute("temporadaColportorPrueba", temporadaColportor2.getId().toString()))
                 .andExpect(status().isOk());
         log.debug("terminaSegundaLlamada");
 
@@ -338,6 +341,7 @@ public class DocumentoControllerTest extends BaseTest {
         for (int i = 0; i < 20; i++) {
             Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,
                     new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
@@ -353,14 +357,14 @@ public class DocumentoControllerTest extends BaseTest {
 
         this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA)
                 .sessionAttr("colportorTmp", colportorTmp))
-                .andExpect(model().attribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
+                .andExpect(model().attribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
                 .andExpect(status().isOk());
         log.debug("terminaPrimerLlamada");
 
         this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA)
                 .param("temporadaId", temporada2.getId().toString())
                 .sessionAttr("colportorTmp", colportorTmp)).andExpect(model()
-                .attribute("temporadaColportorTmp", temporadaColportor2.getId().toString()))
+                .attribute("temporadaColportorPrueba", temporadaColportor2.getId().toString()))
                 .andExpect(status().isOk());
         log.debug("terminaSegundaLlamada");
     }
@@ -441,6 +445,7 @@ public class DocumentoControllerTest extends BaseTest {
         for (int i = 0; i < 20; i++) {
             Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO,
                     new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
             documentoDao.crea(documento);
             assertNotNull(documento);
         }
@@ -502,15 +507,6 @@ public class DocumentoControllerTest extends BaseTest {
                 .andExpect(request().sessionAttribute("temporadaColportorTmp", temporadaColportor))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp"));
-
-
-//                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp"));
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_DOCUMENTOS))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINACION))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINAS))
-//                .andExpect(model().attributeExists(Constantes.CONTAINSKEY_PAGINA));
-
-
     }
 
     @Test
@@ -558,11 +554,20 @@ public class DocumentoControllerTest extends BaseTest {
             assertNotNull(temporadaColportor);
             log.debug("TemporadaColportor" + temporadaColportor);
         }
-        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO).param("clave", clave)).andExpect(request().sessionAttribute("temporadaColportorTmp", temporadaColportor)).andExpect(status().isOk()).andExpect(model().attribute("claveTmp", clave)).andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp"));
+        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO)
+                .param("clave", clave))
+                .andExpect(request().sessionAttribute("temporadaColportorTmp", temporadaColportor))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("claveTmp", clave))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp"));
         log.debug("termino Primera llamada");
 
 
-        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO).param("clave", clave2)).andExpect(request().sessionAttribute("temporadaColportorTmp", temporadaColportor)).andExpect(status().isOk()).andExpect(model().attribute("claveTmp", clave2)).andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp"));
+        this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO)
+                .param("clave", clave2)).andExpect(request()
+                .sessionAttribute("temporadaColportorTmp", temporadaColportor))
+                .andExpect(status().isOk()).andExpect(model().attribute("claveTmp", clave2))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_DOCUMENTO_LISTA + ".jsp"));
         log.debug("termino Segunda llamada");
 
     }
@@ -570,7 +575,40 @@ public class DocumentoControllerTest extends BaseTest {
     @Test
     public void debieraMostrarDocumento() throws Exception {
         log.debug("Debiera mostrar documento");
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+         Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion); 
+        
+        Usuario colportor = new Colportor("test--1@test.com", "test", "test", "test", "test", "test", Constantes.STATUS_ACTIVO,
+                    "8262652626", "test", "test", "10706" , "test", "test001", new Date());
+        colportor.setAsociacion(asociacion);
+        currentSession().save(colportor);
+        
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
+                   Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
+                   Constantes.MUNICIPIO);
+        asociado.setAsociacion(asociacion);
+        currentSession().save(asociado);
+        
+        Temporada temporada = new Temporada ("test");
+        currentSession().save(temporada);
+        Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
+           TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"TEST","TEST");
+            temporadacolportor.setColportor((Colportor)colportor);
+            temporadacolportor.setAsociacion(asociacion);
+            temporadacolportor.setAsociado(asociado);
+            temporadacolportor.setTemporada(temporada);
+            temporadacolportor.setUnion(union);
+            temporadacolportor.setColegio(colegio);
+            currentSession().save(temporadacolportor);
+            assertNotNull(temporadacolportor);
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE, 
+                Constantes.OBSERVACIONES, null);
+        documento.setTemporadaColportor(temporadacolportor);
         documento = documentoDao.crea(documento);
         assertNotNull(documento);
 
@@ -633,7 +671,7 @@ public class DocumentoControllerTest extends BaseTest {
                 param("fecha", "05/05/2010").
                 param("observaciones", Constantes.OBSERVACIONES)
                 .sessionAttr("colportorTmp", colportorTmp))
-                .andExpect(request().sessionAttribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
+                .andExpect(request().sessionAttribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
                 .andExpect(status().isOk()).andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
 
                 .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "documento.creado.message"));
@@ -682,7 +720,8 @@ public class DocumentoControllerTest extends BaseTest {
         temporadaColportorDao.crea(temporadaColportor);
         assertNotNull(temporadaColportor);
         log.debug("TemporadaColportor" + temporadaColportor.getId().toString());
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE, 
+                Constantes.OBSERVACIONES, null);
         documento.setTemporadaColportor(temporadaColportor);
         documento = documentoDao.crea(documento);
         assertNotNull(documento);
@@ -697,7 +736,7 @@ public class DocumentoControllerTest extends BaseTest {
                 .sessionAttr("colportorTmp", colportorTmp))
                 .andExpect(status().isOk())
                 .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-                .andExpect(request().sessionAttribute("temporadaColportorTmp", temporadaColportor.getId().toString()))
+                .andExpect(request().sessionAttribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
                 .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "documento.creado.message"));
 
     }
@@ -705,10 +744,48 @@ public class DocumentoControllerTest extends BaseTest {
     @Test
     public void debieraEliminarDocumento() throws Exception {
         log.debug("Debiera eliminar documento");
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE, Constantes.OBSERVACIONES, null);
+           Union union = new Union("test");
+        union.setStatus(Constantes.STATUS_ACTIVO);
+        currentSession().save(union);
+        
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion); 
+        
+        Usuario colportor = new Colportor("test--1@test.com", "test", "test", "test", "test", "test", Constantes.STATUS_ACTIVO,
+                    "8262652626", "test", "test", "10706" , "test", "test001", new Date());
+        colportor.setAsociacion(asociacion);
+        currentSession().save(colportor);
+        
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
+                   Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
+                   Constantes.MUNICIPIO);
+        asociado.setAsociacion(asociacion);
+        currentSession().save(asociado);
+        
+        Temporada temporada = new Temporada ("test");
+        currentSession().save(temporada);
+        Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
+           TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"TEST","TEST");
+            temporadacolportor.setColportor((Colportor)colportor);
+            temporadacolportor.setAsociacion(asociacion);
+            temporadacolportor.setAsociado(asociado);
+            temporadacolportor.setTemporada(temporada);
+            temporadacolportor.setUnion(union);
+            temporadacolportor.setColegio(colegio);
+            currentSession().save(temporadacolportor);
+            assertNotNull(temporadacolportor);
+        
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE, 
+                Constantes.OBSERVACIONES, null);
+        documento.setTemporadaColportor(temporadacolportor);
         documentoDao.crea(documento);
         assertNotNull(documento);
 
-        this.mockMvc.perform(post(Constantes.PATH_DOCUMENTO_ELIMINA).param("id", documento.getId().toString())).andExpect(status().isOk()).andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE)).andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "documento.eliminado.message"));
+        this.mockMvc.perform(post(Constantes.PATH_DOCUMENTO_ELIMINA)
+                .param("id", documento.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "documento.eliminado.message"));
     }
 }

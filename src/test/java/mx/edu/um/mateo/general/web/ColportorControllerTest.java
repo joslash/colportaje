@@ -98,6 +98,7 @@ public class ColportorControllerTest {
         }
 
         this.mockMvc.perform(get(Constantes.PATH_COLPORTOR)
+                .param("filtro", "test2")
                 .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_COLPORTOR_LISTA + ".jsp"))

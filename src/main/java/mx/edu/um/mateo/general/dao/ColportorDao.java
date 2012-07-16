@@ -110,7 +110,9 @@ public class ColportorDao {
             Disjunction propiedades = Restrictions.disjunction();
             propiedades.add(Restrictions.ilike("username", filtro, MatchMode.ANYWHERE));
             propiedades.add(Restrictions.ilike("nombre", filtro, MatchMode.ANYWHERE));
-            propiedades.add(Restrictions.ilike("apellido", filtro, MatchMode.ANYWHERE));
+            propiedades.add(Restrictions.ilike("apellidoP", filtro, MatchMode.ANYWHERE));
+            propiedades.add(Restrictions.ilike("apellidoM", filtro, MatchMode.ANYWHERE));
+            propiedades.add(Restrictions.ilike("clave", filtro, MatchMode.ANYWHERE));
             criteria.add(propiedades);
             countCriteria.add(propiedades);
         }
