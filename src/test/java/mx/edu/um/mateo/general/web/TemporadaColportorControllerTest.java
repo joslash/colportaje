@@ -147,8 +147,9 @@ public class TemporadaColportorControllerTest extends BaseTest {
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
+          TemporadaColportor temporadaColportor =null;
         for (int i = 0; i < 20; i++) {
-            TemporadaColportor temporadaColportor = new TemporadaColportor(Constantes.STATUS_ACTIVO+i,"TEST","TEST");
+            temporadaColportor = new TemporadaColportor(Constantes.STATUS_ACTIVO+i,"TEST","TEST");
             temporadaColportor.setColportor((Colportor)colportor);
             temporadaColportor.setAsociacion(asociacion);
             temporadaColportor.setAsociado(asociado);
@@ -157,18 +158,17 @@ public class TemporadaColportorControllerTest extends BaseTest {
             temporadaColportor.setColegio(colegio);
             temporadaColportorDao.crea(temporadaColportor);
             assertNotNull(temporadaColportor);
-
+        }
         this.mockMvc.perform(get(Constantes.PATH_TEMPORADACOLPORTOR_VER +"/"+ temporadaColportor.getId()))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_TEMPORADACOLPORTOR_VER + ".jsp"))
                 .andExpect(model()
                 .attributeExists(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR));
-    }
+    
     }
     @Test
     public void debieraCrearTemporadaColportor() throws Exception {
         log.debug("Debiera crear cuenta de Temporada Colportor");
-        
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
@@ -186,21 +186,20 @@ public class TemporadaColportorControllerTest extends BaseTest {
         Temporada temporada = new Temporada("test");
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
         colegioDao.crea(colegio);
-        assertNotNull(colegio.getId());
-        TemporadaColportor temporadacolportor = new TemporadaColportor(colportor, asociacion, asociado, temporada, union, colegio);
-        temporadacolportor.setObjetivo("objetivo");
-        temporadacolportor.setObservaciones("observaciones");
-        temporadacolportor.setStatus("A");
-        temporadacolportor.setVersion(1);
-        temporadacolportor.setFecha(new Date());
-        currentSession().save(temporadacolportor);
-        assertNotNull(temporadacolportor.getId());
-        temporadaColportorDao.crea(temporadacolportor);
-        assertNotNull(temporadacolportor.getId());
-        
-        this.authenticate(colportor, colportor.getPassword(), new ArrayList(colportor.getAuthorities()));
-      
+        log.debug("colegio"+colegio);
+        TemporadaColportor temporadaColportor = null;
+        temporadaColportor = new TemporadaColportor(Constantes.STATUS_ACTIVO, "TEST", "TEST");
+        temporadaColportor.setColportor((Colportor) colportor);
+        temporadaColportor.setAsociacion(asociacion);
+        temporadaColportor.setAsociado((Asociado)asociado);
+        temporadaColportor.setTemporada(temporada);
+        temporadaColportor.setUnion(union);
+        temporadaColportor.setColegio((Colegio)colegio);
+        temporadaColportorDao.crea(temporadaColportor);
+        assertNotNull(temporadaColportor);
+       this.authenticate(asociado, asociado.getPassword(), new ArrayList(asociado.getAuthorities()));
         
         SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
         this.mockMvc.perform(
@@ -209,37 +208,27 @@ public class TemporadaColportorControllerTest extends BaseTest {
                 .param("fecha", sdf.format(new Date()))
                 .param("objetivo", "test")
                 .param("observaciones", "test")
-                .param("temporada", temporada.getId().toString())
-                .param("colportor", colportor.getId().toString())
-                .param("colegio", colegio.getId().toString()))
-                .andExpect(status().isOk());
-//                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-//                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporadaColportor.creada.message"));
+                .param("temporada.id", temporada.getId().toString())
+                .param("colportor.id", colportor.getId().toString())
+                .param("asociado.id", asociado.getId().toString())
+                .param("colegio.id", colegio.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporadaColportor.creada.message"));
     }
     @Test
     public void debieraActualizarTemporadaColportor() throws Exception {
         log.debug("Debiera actualizar  temporada Colportor");
-        Union union = new Union("test");
+         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Usuario usuario = new Usuario("test@test.com", "test", "test", "test","test");
-        Long asociacionId = 0l;
-        Rol rol = new Rol("ROLE_TEST");
-        rol = rolDao.crea(rol);
-        usuario = usuarioDao.crea(usuario, asociacionId, new String[]{rol.getAuthority()});
-        Long id = usuario.getId();
-        actualizaUsuario:
-        for (Asociacion asociacion : union.getAsociaciones()) {
-            asociacionId = asociacion.getId();
-            break actualizaUsuario;
-        }
         Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
         Colportor colportor = new Colportor("test01@test.com", "test", "test", "test", "test", "test", Constantes.STATUS_ACTIVO,
                 "8262652626", "test", "test", "10706", "test", "test001", new Date());
         colportor.setAsociacion(asociacion);
         currentSession().save(colportor);
-         Asociado asociado=  new Asociado("test@test.com", "test", "test", "test", "test",
+        Usuario asociado = new Asociado("test@test.com", "test", "test", "test", "test",
                 Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE, Constantes.COLONIA,
                 Constantes.MUNICIPIO);
         asociado.setAsociacion(asociacion);
@@ -248,20 +237,16 @@ public class TemporadaColportorControllerTest extends BaseTest {
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
-        union = unionDao.crea(union);
-        assertNotNull(id);
-        
-        this.authenticate(usuario, usuario.getPassword(), new ArrayList(usuario.getAuthorities()));
-        TemporadaColportor temporadaColportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"TEST","TEST");
-        temporadaColportor.setColportor(colportor);
+        TemporadaColportor temporadaColportor = new TemporadaColportor(Constantes.STATUS_ACTIVO, "TEST", "TEST");
+        temporadaColportor.setColportor((Colportor) colportor);
         temporadaColportor.setAsociacion(asociacion);
-        temporadaColportor.setAsociado(asociado);
+        temporadaColportor.setAsociado((Asociado)asociado);
         temporadaColportor.setTemporada(temporada);
         temporadaColportor.setUnion(union);
         temporadaColportor.setColegio(colegio);
-        temporadaColportor = temporadaColportorDao.crea(temporadaColportor);
+        temporadaColportorDao.crea(temporadaColportor);
         assertNotNull(temporadaColportor);
-        
+        this.authenticate(asociado, asociado.getPassword(), new ArrayList(asociado.getAuthorities()));
         SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
         this.mockMvc.perform(post(Constantes.PATH_TEMPORADACOLPORTOR_ACTUALIZA)
                 .param("id",temporadaColportor.getId().toString())
@@ -270,47 +255,51 @@ public class TemporadaColportorControllerTest extends BaseTest {
                 .param("status", Constantes.STATUS_ACTIVO)
                 .param("objetivo", "test")
                 .param("observaciones","test")
-                .param("temporada", temporada.getId().toString())
-                .param("asociado", asociado.getId().toString())
-                .param("colportor", colportor.getId().toString())
-                .param("colegio", colegio.getId().toString()))
-                .andExpect(status().isOk());
-//                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-//                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporadaColportor.actualizada.message"));
+                .param("temporada.id", temporada.getId().toString())
+                .param("asociado.id", asociado.getId().toString())
+                .param("colportor.id", colportor.getId().toString())
+                .param("colegio.id", colegio.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporadaColportor.actualizada.message"));
     }
     @Test
     public void debieraEliminarTemporadaColportor() throws Exception {
         log.debug("Debiera eliminar  temporada Colportor");
-        Usuario colportor = new Usuario("test", Constantes.STATUS_ACTIVO, "8262652626", "test", "1070666");
-        currentSession().save(colportor);
-        Union union = new Union("test");
+                 Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        Asociacion test2 = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
-        currentSession().save(test2);
-//        Asociado test3 = new Asociado(Constantes.CLAVE,Constantes.TELEFONO, Constantes.STATUS_ACTIVO,Constantes.COLONIA,Constantes.MUNICIPIO,Constantes.CALLE);
-//        currentSession().save(test3);
-        Temporada test4 = new Temporada("test");
-        currentSession().save(test4);
+        Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+        Colportor colportor = new Colportor("test01@test.com", "test", "test", "test", "test", "test", Constantes.STATUS_ACTIVO,
+                "8262652626", "test", "test", "10706", "test", "test001", new Date());
+        colportor.setAsociacion(asociacion);
+        currentSession().save(colportor);
+        Usuario asociado = new Asociado("test@test.com", "test", "test", "test", "test",
+                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE, Constantes.COLONIA,
+                Constantes.MUNICIPIO);
+        asociado.setAsociacion(asociacion);
+        currentSession().save(asociado);
+        Temporada temporada = new Temporada("test");
+        currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
-        TemporadaColportor temporadaColportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"TEST","TEST");
-        //temporadaColportor.setColportor(colportor);
-        temporadaColportor.setAsociacion(test2);
-//        temporadaColportor.setAsociado(test3);
-        temporadaColportor.setTemporada(test4);
+        TemporadaColportor temporadaColportor = new TemporadaColportor(Constantes.STATUS_ACTIVO, "TEST", "TEST");
+        temporadaColportor.setColportor((Colportor) colportor);
+        temporadaColportor.setAsociacion(asociacion);
+        temporadaColportor.setAsociado((Asociado)asociado);
+        temporadaColportor.setTemporada(temporada);
         temporadaColportor.setUnion(union);
         temporadaColportor.setColegio(colegio);
         temporadaColportorDao.crea(temporadaColportor);
         assertNotNull(temporadaColportor);
-
+        this.authenticate(asociado, asociado.getPassword(), new ArrayList(asociado.getAuthorities()));
+        SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);
         this.mockMvc.perform(post(
                 Constantes.PATH_TEMPORADACOLPORTOR_ELIMINA)
                 .param("id", temporadaColportor.getId().toString()))
                 .andExpect(status().isOk())
-                .andExpect(flash()
-                .attributeExists(Constantes.CONTAINSKEY_MESSAGE))
-                .andExpect(flash()
-                .attribute(Constantes.CONTAINSKEY_MESSAGE, "temporadaColportor.eliminada.message"));
+                .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "temporadaColportor.eliminada.message"));
     }
 }

@@ -173,7 +173,9 @@ public class TemporadaColportorController {
         log.info("creando TC");
         for (String nombre : request.getParameterMap().keySet()) {
             log.debug("Param: {} : {}", nombre, request.getParameterMap().get(nombre));
+            
         }
+        log.debug("temoporadaColportor"+modelo);
         if (bindingResult.hasErrors()) {
             log.debug("Hubo algun error en la forma, regresando"+ bindingResult.getAllErrors());
             return Constantes.PATH_TEMPORADACOLPORTOR_NUEVA;
@@ -194,10 +196,10 @@ public class TemporadaColportorController {
             
             Temporada temporada = temporadaDao.obtiene(temporadaColportor.getTemporada().getId());
             temporadaColportor.setTemporada(temporada);
-            Asociado asociado = asociadoDao.obtiene(temporadaColportor.getAsociado().getId());
-            temporadaColportor.setAsociado(asociado);
             Colportor colportor = colportorDao.obtiene(temporadaColportor.getColportor().getId());
             temporadaColportor.setColportor(colportor);
+            Asociado asociado = asociadoDao.obtiene(ambiente.obtieneUsuario().getId());
+            temporadaColportor.setAsociado(asociado);
             Colegio colegio = colegioDao.obtiene(temporadaColportor.getColegio().getId());
             temporadaColportor.setColegio(colegio);
             temporadaColportor = temporadaColportorDao.crea(temporadaColportor);
@@ -250,7 +252,7 @@ public class TemporadaColportorController {
             
             Temporada temporada = temporadaDao.obtiene(temporadaColportor.getTemporada().getId());
             temporadaColportor.setTemporada(temporada);
-            Asociado asociado = asociadoDao.obtiene(temporadaColportor.getAsociado().getId());
+            Asociado asociado = asociadoDao.obtiene(ambiente.obtieneUsuario().getId());
             temporadaColportor.setAsociado(asociado);
             Colportor colportor = colportorDao.obtiene(temporadaColportor.getColportor().getId());
             temporadaColportor.setColportor(colportor);
