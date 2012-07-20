@@ -5,6 +5,7 @@
 package mx.edu.um.mateo.general.dao;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Temporada;
@@ -72,8 +73,8 @@ public class TemporadaDao {
         Criteria countCriteria = currentSession().createCriteria(Temporada.class);
         
         if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
-            criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
-            countCriteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
+            criteria.add(Restrictions.eq("asociacion",params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
+            countCriteria.add(Restrictions.eq("asociacion",params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
         }
         
         if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
@@ -101,6 +102,7 @@ public class TemporadaDao {
             criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
         params.put(Constantes.CONTAINSKEY_TEMPORADAS, criteria.list());
+//        log.debug("Temporadas***"+((List)params.get(Constantes.CONTAINSKEY_TEMPORADAS)).size());
         countCriteria.setProjection(Projections.rowCount());
         params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
         

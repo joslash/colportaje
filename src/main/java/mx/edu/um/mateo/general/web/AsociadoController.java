@@ -100,6 +100,7 @@ public class AsociadoController extends BaseController {
         }
 
         params = asociadoDao.lista(params);
+        log.debug("Asociados"+((List)params.get(Constantes.CONTAINSKEY_ASOCIADOS)).size());
         modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, params.get(Constantes.CONTAINSKEY_ASOCIADOS));
 
         this.pagina(params, modelo, Constantes.CONTAINSKEY_ASOCIADOS, pagina);

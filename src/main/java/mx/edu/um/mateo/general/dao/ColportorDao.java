@@ -25,12 +25,14 @@ package mx.edu.um.mateo.general.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Asociado;
 import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.model.Usuario;
+import mx.edu.um.mateo.general.utils.FaltaAsociacionException;
 import org.hibernate.*;
 import org.hibernate.criterion.*;
 import org.slf4j.Logger;
@@ -67,7 +69,7 @@ public class ColportorDao {
         return sessionFactory.getCurrentSession();
     }
     
-     public Map<String, Object> lista(Map<String, Object> params) {
+     public Map<String, Object> lista(Map<String, Object> params) throws FaltaAsociacionException{
         log.debug("Buscando lista de colportores con params {}", params);
         if (params == null) {
             params = new HashMap<>();
@@ -93,7 +95,7 @@ public class ColportorDao {
             params.put(Constantes.CONTAINSKEY_COLPORTORES, new ArrayList());
             params.put(Constantes.CONTAINSKEY_CANTIDAD, 0L);
 
-            return params;
+               throw new FaltaAsociacionException("Asociacion No Encontrada");
         }
         
         Criteria criteria = currentSession().createCriteria(Colportor.class);
@@ -131,7 +133,8 @@ public class ColportorDao {
             criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
         params.put(Constantes.CONTAINSKEY_COLPORTORES, criteria.list());
-
+        log.debug("colportores***"+((List) params.get(Constantes.CONTAINSKEY_COLPORTORES)).size());
+               
         countCriteria.setProjection(Projections.rowCount());
         params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
 

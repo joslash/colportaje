@@ -6,10 +6,10 @@ package mx.edu.um.mateo.general.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List; 
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.*;
+import mx.edu.um.mateo.general.utils.FaltaAsociacionException;
 import org.hibernate.*;
 import org.hibernate.criterion.*;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class AsociadoDao {
         return sessionFactory.getCurrentSession();
     }
 
-    public Map<String, Object> lista(Map<String, Object> params) {
+    public Map<String, Object> lista(Map<String, Object> params) throws FaltaAsociacionException{
         log.debug("Buscando lista de asociado con params {}", params);
               if (params == null) {
             params = new HashMap<>();
@@ -73,8 +73,7 @@ public class AsociadoDao {
         if (!params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
             params.put(Constantes.CONTAINSKEY_ASOCIADOS, new ArrayList());
             params.put(Constantes.CONTAINSKEY_CANTIDAD, 0L);
-
-            return params;
+            throw new FaltaAsociacionException("Asociacion No Encontrada");
         }
         
         Criteria criteria = currentSession().createCriteria(Asociado.class);
@@ -113,7 +112,7 @@ public class AsociadoDao {
 
         countCriteria.setProjection(Projections.rowCount());
         params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
-
+        log.debug("params"+params);
         return params;
     }
 

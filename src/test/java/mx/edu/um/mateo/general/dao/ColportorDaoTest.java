@@ -73,7 +73,7 @@ public class ColportorDaoTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
 
             Colportor colportor = new Colportor("test" + i + "@test.com", "test", "test", "test", "test", "test", Constantes.STATUS_ACTIVO,
                     "8262652626", "test", "test", "10706" + i, "test", "test001", new Date());
@@ -91,7 +91,7 @@ public class ColportorDaoTest {
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
 
         assertEquals(10, ((List<Colportor>) result.get(Constantes.CONTAINSKEY_COLPORTORES)).size());
-        assertEquals(10, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
+        assertEquals(20, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
 
     public void debieraBuscarUnColportorYMostrarLaListaDeColportores() {
