@@ -105,6 +105,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Temporada temporada = new Temporada ("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -146,6 +147,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Temporada temporada = new Temporada ("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -186,6 +188,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -236,6 +239,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
@@ -283,6 +287,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
