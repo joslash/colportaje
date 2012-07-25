@@ -24,8 +24,10 @@
 package mx.edu.um.mateo.general.dao;
 
 import java.util.*;
+import java.util.logging.Level;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.*;
+import mx.edu.um.mateo.general.utils.FaltaAsociacionException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import static org.junit.Assert.*;
@@ -86,7 +88,12 @@ public class ColportorDaoTest {
         }
         Map<String, Object> params = new HashMap();
         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacion);
-        Map result = colportorDao.lista(params);
+        Map result=null;
+        try {
+            result = colportorDao.lista(params);
+        } catch (FaltaAsociacionException ex) {
+            log.error("Falta asociacion", ex);
+        }
         assertNotNull(result.get(Constantes.CONTAINSKEY_COLPORTORES));
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
 
@@ -119,7 +126,12 @@ public class ColportorDaoTest {
         String filtro="test2";
         Map<String, Object> params = new HashMap();
         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacion);
-        Map result = colportorDao.lista(params);
+        Map result=null;
+        try {
+            result = colportorDao.lista(params);
+        } catch (FaltaAsociacionException ex) {
+            log.error("Falta asociacion", ex);
+        }
         params.put("filtro", filtro);
         
         assertNotNull(result.get(Constantes.CONTAINSKEY_COLPORTORES));
@@ -128,7 +140,10 @@ public class ColportorDaoTest {
         assertEquals(10, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
     }
 
-    @Test
+    /**
+     * Cuadno no hay una asociacion en session
+     */
+    @Test    
     public void debieraMostrarListaVasiaDeColportor() {
         log.debug("Debiera mostrar lista vasia de Colportor");
         Union union = new Union("test");
@@ -152,13 +167,13 @@ public class ColportorDaoTest {
 
         }
         Map<String, Object> params = null;
-        Map result = colportorDao.lista(params);
-        assertNotNull(result.get(Constantes.CONTAINSKEY_COLPORTORES));
-        assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
-
-        assertEquals(0, ((List<Colportor>) result.get(Constantes.CONTAINSKEY_COLPORTORES)).size());
-        assertEquals(0, ((Long) result.get(Constantes.CONTAINSKEY_CANTIDAD)).intValue());
-    }
+        Map result=null;
+        try {
+            result = colportorDao.lista(params);
+            fail("La prueba debio haber regresado al excepcion de Falta Asociacion");
+        } catch (FaltaAsociacionException ex) {
+            log.error("Paso con exito", ex);
+        }}
 
     @Test
     public void debieraObtenerColportor() {

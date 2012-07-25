@@ -71,6 +71,7 @@ public class ColportorDao {
     
      public Map<String, Object> lista(Map<String, Object> params) throws FaltaAsociacionException{
         log.debug("Buscando lista de colportores con params {}", params);
+        log.debug("params"+params);
         if (params == null) {
             params = new HashMap<>();
         }

@@ -268,7 +268,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
     @Test
     public void debieraEliminarTemporadaColportor() throws Exception {
         log.debug("Debiera eliminar  temporada Colportor");
-                 Union union = new Union("test");
+        Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
         Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
@@ -333,7 +333,7 @@ public class TemporadaColportorControllerTest extends BaseTest {
         }
 
         for (int i = 0; i < 10; i++) {
-            Colegio colegio = new Colegio(Constantes.NOMBRE + i, Constantes.STATUS_ACTIVO);
+            Colegio colegio = new Colegio(Constantes.NOMBRE+"--" + i, Constantes.STATUS_ACTIVO);
             currentSession().save(colegio);
             assertNotNull(colegio);
         }
@@ -343,14 +343,19 @@ public class TemporadaColportorControllerTest extends BaseTest {
             currentSession().save(temporada);
             assertNotNull(temporada.getId());
         }
-           this.mockMvc.perform(post(
+    TemporadaColportor temporadaColportor =new TemporadaColportor();
+        this.mockMvc.perform(post(
                 Constantes.PATH_TEMPORADACOLPORTOR_NUEVA)
                    .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
                    .andExpect(model().attribute("sizeTemporada", 10))
                    .andExpect(model().attribute("sizeColportor", 10))
                    .andExpect(model().attribute("sizeAsociado", 10))
                    .andExpect(model().attribute("sizeColegios", 10))
-                   .andExpect(status().isOk());
+                   .andExpect(model().attribute("temporadaColportor", temporadaColportor))
+                   .andExpect(status().isOk())
+                   .andExpect(view().name(Constantes.PATH_TEMPORADACOLPORTOR_NUEVA));
+        
     }
 }
+
 

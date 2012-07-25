@@ -160,24 +160,30 @@ public class TemporadaColportorController {
     @RequestMapping("/nueva")
     public String nueva(Model modelo, HttpServletRequest request) {
         Map<String, Object> params = new HashMap<>();
-//        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)));
         log.debug("Nueva Temporada Colportor");
         TemporadaColportor temporadaColportor = new TemporadaColportor();
+        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)).getId());
         params.put(Constantes.SESSION_ASOCIACION, request.getSession().getAttribute(Constantes.SESSION_ASOCIACION));
-        log.debug("asocicacion***"+request.getSession().getAttribute(Constantes.SESSION_ASOCIACION));
+        log.debug("asocicacion***" + request.getSession().getAttribute(Constantes.SESSION_ASOCIACION));
+
         params = temporadaDao.lista(params);
         List<Temporada> listaTemporadas = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
         log.debug("Temporadas***" + listaTemporadas.size());
+        modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, listaTemporadas);
+      
         params = colegioDao.lista(params);
         List<Documento> listaColegios = (List) params.get(Constantes.CONTAINSKEY_COLEGIOS);
+        modelo.addAttribute(Constantes.CONTAINSKEY_COLEGIOS, listaColegios);
+            log.debug("listaColegios***" + listaColegios.size());
         try {
-                    log.debug("listaColegios***"+listaColegios.size());
             params = colportorDao.lista(params);
         } catch (FaltaAsociacionException ex) {
             log.error("Falta asociacion", ex);
         }
         List<Colportor> listaColportores = (List) params.get(Constantes.CONTAINSKEY_COLPORTORES);
         log.debug("listaColportores***" + listaColportores.size());
+        modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, listaColportores);
+        
         try {
             params = asociadoDao.lista(params);
         } catch (FaltaAsociacionException ex) {
@@ -185,33 +191,46 @@ public class TemporadaColportorController {
         }
         List<Asociado> listaAsociados = (List) params.get(Constantes.CONTAINSKEY_ASOCIADOS);
         log.debug("listaAsociados" + listaAsociados.size());
+        modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, listaAsociados);
 //        Map<String, Object> temporadas = temporadaDao.lista(null);
+//        params = temporadaDao.lista(null);
 //        modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, temporadas.get(Constantes.CONTAINSKEY_TEMPORADAS));
+//        modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, params.get(Constantes.CONTAINSKEY_TEMPORADAS));
+//
 //        Map<String, Object> asociados = null;
 //        try {
 //            asociados = asociadoDao.lista(null);
+//            params = asociadoDao.lista(null);
 //        } catch (FaltaAsociacionException ex) {
 //            log.error("Falta asociacion", ex);
 //        }
 //        List<Asociado> lista = (List) asociados.get(Constantes.CONTAINSKEY_ASOCIADOS);
 //        log.debug("asociados" + lista.size());
 //        modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, lista);
+//        modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, asociados.get(Constantes.CONTAINSKEY_ASOCIADOS));
+//        modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, params.get(Constantes.CONTAINSKEY_ASOCIADOS));
+//
 //        Map<String, Object> colportores = null;
 //        try {
 //            colportores = colportorDao.lista(null);
+//            params = colportorDao.lista(null);
 //        } catch (FaltaAsociacionException ex) {
 //            log.error("Falta asociacion", ex);
 //        }
 //        modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, colportores.get(Constantes.CONTAINSKEY_COLPORTORES));
+//        modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, params.get(Constantes.CONTAINSKEY_COLPORTORES));
 //
 //        Map<String, Object> colegios = colegioDao.lista(null);
+//        params = colegioDao.lista(null);
 //        modelo.addAttribute(Constantes.CONTAINSKEY_COLEGIOS, colegios.get(Constantes.CONTAINSKEY_COLEGIOS));
-//        modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR, temporadaColportor);
-//        log.debug("Colegios" + colegios.size());
+//        modelo.addAttribute(Constantes.CONTAINSKEY_COLEGIOS, params.get(Constantes.CONTAINSKEY_COLEGIOS));
+        modelo.addAttribute(Constantes.ADDATTRIBUTE_TEMPORADACOLPORTOR, temporadaColportor);
+
         modelo.addAttribute("sizeTemporada", listaTemporadas.size());
         modelo.addAttribute("sizeColportor", listaAsociados.size());
         modelo.addAttribute("sizeAsociado", listaColportores.size());
         modelo.addAttribute("sizeColegios", listaColegios.size());
+
         return Constantes.PATH_TEMPORADACOLPORTOR_NUEVA;
     }
 

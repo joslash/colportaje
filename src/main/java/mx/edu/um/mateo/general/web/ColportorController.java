@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
@@ -25,6 +26,7 @@ import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
+import mx.edu.um.mateo.general.utils.FaltaAsociacionException;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -92,7 +94,11 @@ public class ColportorController extends BaseController {
         }
         if (StringUtils.isNotBlank(tipo)) {
             params.put("reporte", true);
-            params = colportorDao.lista(params);
+            try {
+                params = colportorDao.lista(params);
+            } catch (FaltaAsociacionException ex) {
+                log.error("Falta asociacion", ex);
+            }
             try {
                 generaReporte(tipo, (List<Colportor>) params.get("colportores"), response);
                 return null;
@@ -103,7 +109,11 @@ public class ColportorController extends BaseController {
 
         if (StringUtils.isNotBlank(correo)) {
             params.put("reporte", true);
-            params = colportorDao.lista(params);
+            try {
+                params = colportorDao.lista(params);
+            } catch (FaltaAsociacionException ex) {
+                log.error("Falta asociacion", ex);
+            }
 
             params.remove("reporte");
             try {
@@ -114,8 +124,11 @@ public class ColportorController extends BaseController {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
-
-        params = colportorDao.lista(params);
+        try {
+            params = colportorDao.lista(params);
+        } catch (FaltaAsociacionException ex) {
+            log.error("Falta asociacion", ex);
+        }
         modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, params.get(Constantes.CONTAINSKEY_COLPORTORES));
         this.pagina(params, modelo, Constantes.CONTAINSKEY_COLPORTORES, pagina);
 

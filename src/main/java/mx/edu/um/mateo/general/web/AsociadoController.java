@@ -7,6 +7,7 @@ package mx.edu.um.mateo.general.web;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Asociado;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
+import mx.edu.um.mateo.general.utils.FaltaAsociacionException;
 import mx.edu.um.mateo.general.utils.ReporteException;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
@@ -76,7 +78,11 @@ public class AsociadoController extends BaseController {
         }
         if (StringUtils.isNotBlank(tipo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
-            params = asociadoDao.lista(params);
+            try {
+                params = asociadoDao.lista(params);
+            } catch (FaltaAsociacionException ex) {
+                log.error("Falta asociacion", ex);
+            }
             try {
                 generaReporte(tipo, (List<Asociado>) params.get(Constantes.CONTAINSKEY_ASOCIADOS), response, Constantes.CONTAINSKEY_ASOCIADOS, Constantes.ASO, null);
                 return null;
@@ -88,7 +94,11 @@ public class AsociadoController extends BaseController {
         }
         if (StringUtils.isNotBlank(correo)) {
             params.put(Constantes.CONTAINSKEY_REPORTE, true);
-            params = asociadoDao.lista(params);
+            try {
+                params = asociadoDao.lista(params);
+            } catch (FaltaAsociacionException ex) {
+                java.util.logging.Logger.getLogger(AsociadoController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             params.remove(Constantes.CONTAINSKEY_REPORTE);
             try {
                 enviaCorreo(correo, (List<Asociado>) params.get(Constantes.CONTAINSKEY_ASOCIADOS), request, Constantes.CONTAINSKEY_ASOCIADOS, Constantes.ASO, null);
@@ -98,9 +108,12 @@ public class AsociadoController extends BaseController {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
-
-        params = asociadoDao.lista(params);
-        log.debug("Asociados"+((List)params.get(Constantes.CONTAINSKEY_ASOCIADOS)).size());
+        try {
+            params = asociadoDao.lista(params);
+        } catch (FaltaAsociacionException ex) {
+            log.error("Falta asociacion", ex);
+        }
+        log.debug("Asociados" + ((List) params.get(Constantes.CONTAINSKEY_ASOCIADOS)).size());
         modelo.addAttribute(Constantes.CONTAINSKEY_ASOCIADOS, params.get(Constantes.CONTAINSKEY_ASOCIADOS));
 
         this.pagina(params, modelo, Constantes.CONTAINSKEY_ASOCIADOS, pagina);

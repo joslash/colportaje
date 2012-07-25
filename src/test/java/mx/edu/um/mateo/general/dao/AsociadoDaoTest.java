@@ -5,11 +5,13 @@
 package mx.edu.um.mateo.general.dao;
 
 import java.util.*;
+import java.util.logging.Level;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Asociado;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Union;
+import mx.edu.um.mateo.general.utils.FaltaAsociacionException;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -67,7 +69,12 @@ public class AsociadoDaoTest {
         }
         Map<String, Object> params = new HashMap();
         params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacion);
-        Map result = instance.lista(params);
+        Map result=null;
+        try {
+            result = instance.lista(params);
+        } catch (FaltaAsociacionException ex) {
+            log.error("Falta asociacion", ex);
+        }
         assertNotNull(result.get(Constantes.CONTAINSKEY_ASOCIADOS));
         assertNotNull(result.get(Constantes.CONTAINSKEY_CANTIDAD));
 
