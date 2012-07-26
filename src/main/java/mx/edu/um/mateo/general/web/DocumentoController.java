@@ -102,6 +102,8 @@ public class DocumentoController {
             Model modelo) {
         log.debug("Mostrando lista de documentos");
         Map<String, Object> params = new HashMap<>();
+        
+        Integer max = 100;
         if (StringUtils.isNotBlank(filtro)) {
             params.put(Constantes.CONTAINSKEY_FILTRO, filtro);
         }
@@ -112,6 +114,9 @@ public class DocumentoController {
             pagina = 1L;
             modelo.addAttribute(Constantes.CONTAINSKEY_PAGINA, pagina);
         }
+        
+        params.put(Constantes.CONTAINSKEY_MAX, 100);
+        
         if (StringUtils.isNotBlank(order)) {
             params.put(Constantes.CONTAINSKEY_ORDER, order);
             params.put(Constantes.CONTAINSKEY_SORT, sort);
@@ -164,7 +169,7 @@ public class DocumentoController {
             }
 //          Codigo para validar prueba
 
-            log.debug("temporadaColportorTmp" + temporadaColportorTmp);
+            log.debug("temporadaColportorTmp" + temporadaColportorTmp.getId());
             request.setAttribute("temporadaColportorTmp", temporadaColportorTmp);
             modelo.addAttribute("temporadaColportorTmp", temporadaColportorTmp);
             log.debug("temporadaColportorTmpId" + temporadaColportorTmp.getId());
@@ -216,15 +221,15 @@ public class DocumentoController {
         List<Temporada> listaTemporada = (List) params.get(Constantes.CONTAINSKEY_TEMPORADAS);
 
         Map<String, Object> temporadas = temporadaDao.lista(null);
-        log.debug("Temporadas {}", temporadas.get(Constantes.CONTAINSKEY_TEMPORADAS) );
+        log.debug("Temporadas {}", temporadas.get(Constantes.CONTAINSKEY_TEMPORADAS));
         modelo.addAttribute(Constantes.CONTAINSKEY_TEMPORADAS, temporadas.get(Constantes.CONTAINSKEY_TEMPORADAS));
 
         Documento doc = null;
-        
+
         BigDecimal totalBoletin = new BigDecimal("0");
         BigDecimal totalDiezmos = new BigDecimal("0");
         BigDecimal totalDepositos = new BigDecimal("0");
-        BigDecimal objetivo = new BigDecimal("11250");
+        BigDecimal objetivo = new BigDecimal(temporadaColportorTmp.getObjetivo());
         BigDecimal fidelidad = new BigDecimal("0");
         BigDecimal alcanzado = new BigDecimal("0");
 
@@ -234,27 +239,37 @@ public class DocumentoController {
             doc = iter.next();
             switch (doc.getTipoDeDocumento()) {
                 case Constantes.BOLETIN: {
+//                    log.debug("importe {}", doc.getImporte());
                     totalBoletin = totalBoletin.add(doc.getImporte());
+//                    log.debug("totalBoletin{}" + totalBoletin, totalBoletin);
                     break;
 
                 }
 
                 case Constantes.DIEZMO: {
+                    log.debug("importe {}", doc.getImporte());
                     totalDiezmos = totalDiezmos.add(doc.getImporte());
+                    log.debug("totalDiezmos {}", totalDiezmos);
                     break;
                 }
 
                 case Constantes.DEPOSITO_CAJA: {
+//                    log.debug("importe {}", doc.getImporte());
                     totalDepositos = totalDepositos.add(doc.getImporte());
+//                   log.debug("totalDepositos {}", totalDepositos);
                     break;
                 }
 
                 case Constantes.DEPOSITO_BANCO: {
+//                    log.debug("importe {}", doc.getImporte());
                     totalDepositos = totalDepositos.add(doc.getImporte());
+//                   log.debug("totalDepositos {}", totalDepositos);
                     break;
                 }
                 case Constantes.NOTAS_DE_COMPRA: {
+//                    log.debug("importe {}", doc.getImporte());
                     totalDepositos = totalDepositos.add(doc.getImporte());
+//                    log.debug("totalDepositos {}", totalDepositos);
                     break;
 
                 }
@@ -263,27 +278,28 @@ public class DocumentoController {
 
         }
 
-
         modelo.addAttribute(Constantes.TOTALBOLETIN, totalBoletin);
         modelo.addAttribute(Constantes.TOTALDIEZMOS, totalDiezmos);
         modelo.addAttribute(Constantes.TOTALDEPOSITOS, totalDepositos);
         modelo.addAttribute(Constantes.OBJETIVO, objetivo);
+        log.debug("diezmos {}", totalDiezmos);
+//        log.debug("boletin", totalBoletin);
         if (objetivo.compareTo(new BigDecimal("0")) > 0) {
             alcanzado = totalBoletin.divide(objetivo, 6, RoundingMode.HALF_EVEN).multiply(new BigDecimal("100"));
         }
         if (totalBoletin.compareTo(new BigDecimal("0")) > 0) {
             fidelidad = totalDiezmos.divide(totalBoletin.movePointLeft(1), 6, RoundingMode.HALF_EVEN).multiply(new BigDecimal("100"));
         }
-        modelo.addAttribute(Constantes.ALCANZADO, alcanzado);
-        modelo.addAttribute(Constantes.FIDELIDAD, fidelidad);
-
+        modelo.addAttribute(Constantes.ALCANZADO, alcanzado.setScale(2, BigDecimal.ROUND_HALF_EVEN));
+        modelo.addAttribute(Constantes.FIDELIDAD, fidelidad.setScale(2, BigDecimal.ROUND_HALF_EVEN));
+        log.debug("fidelidad" + fidelidad);
 
 
         // inicia paginado
         Long cantidad = (Long) params.get(Constantes.CONTAINSKEY_CANTIDAD);
-        Integer max = (Integer) params.get(Constantes.CONTAINSKEY_MAX);
         Long cantidadDePaginas = cantidad / max;
         List<Long> paginas = new ArrayList<>();
+        
         long i = 1;
         do {
             paginas.add(i);
@@ -300,6 +316,11 @@ public class DocumentoController {
         log.debug("SizeTemporada" + listaTemporada.size());
         modelo.addAttribute("SizeDocumento", lista.size());
         modelo.addAttribute("SizeTemporada", listaTemporada.size());
+
+        log.debug("clave", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()));
+        log.debug("clave", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()));
+        log.debug("clave", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor());
+        log.debug("clave", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
         modelo.addAttribute("claveTmp", temporadaColportorDao.obtiene(temporadaColportorTmp.getId()).getColportor().getClave());
 //        temporadaColportorDao.obtiene(temporadaColportorTmp.getId());
 //        request.setAttribute("claveTmp", temporadaColportorTmp.getColportor().getClave());

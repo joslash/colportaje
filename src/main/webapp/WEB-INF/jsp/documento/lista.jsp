@@ -29,97 +29,106 @@
             <input type="hidden" name="observaciones" id="observaciones" value="" />
             <input type="hidden" name="order" id="order" value="${param.order}" />
             <input type="hidden" name="sort" id="sort" value="${param.sort}" />
+
+
             <p class="well">
                 <a class="btn btn-primary" href="<s:url value='/documento/nuevo'/>"><i class="icon-user icon-white"></i> <s:message code='documento.nuevo.label' /></a>
                 <input name="filtro" type="text" class="input-medium search-query" value="${param.filtro}">
                 <button type="submit" class="btn"><s:message code="buscar.label" /></button>
+
             </p>
+            <h3>  ${temporadaColportor.colportor.clave}   ${temporadaColportor.colportor.nombre} ${temporadaColportor.colportor.apellidoP} ${temporadaColportor.colportor.apellidoM}  </h3>
+            <h3>  ${temporadaColportorTmp.colportor.clave}   ${temporadaColportorTmp.colportor.nombre} ${temporadaColportorTmp.colportor.apellidoP} ${temporadaColportorTmp.colportor.apellidoM}  </h3>
+
             <sec:authorize access="hasRole('ROLE_ASO')">
                 <p>
+                    <b> Buscar Colportor por Clave</b>
                     <input name="clave" type="text" class="input-medium search-query" value="${clave}">
                     <button type="submit" class="btn"><s:message code="buscar.label" /></button>  
-            </p>
-        </sec:authorize>
-        <fieldset>
-            <div class="control-group">
-                    <label for="temporada">
-                    <s:message code="temporada.label" />
-                    <span class="required-indicator">*</span>
-                    <select id="temporadaId" name="temporadaId">
-                        <c:forEach items="${temporadas}" var="temporada">
-                            <option value="${temporada.id}">${temporada.nombre}</option>
-                        </c:forEach>
-                    </select>
-                  <button type="submit" class="btn"><s:message code="buscar.label" /></button>    
-            </div>
-        </fieldset>
-        <c:if test="${not empty message}">
-            <div class="alert alert-block alert-success fade in" role="status">
-                <a class="close" data-dismiss="alert">×</a>
-                <s:message code="${message}" arguments="${messageAttrs}" />
-            </div>
-        </c:if>
-        <c:if test="${documento != null}">
-            <s:bind path="documento.*">
-                <c:if test="${not empty status.errorMessages}">
-                    <div class="alert alert-block alert-error fade in" role="status">
-                        <a class="close" data-dismiss="alert">×</a>
-                        <c:forEach var="error" items="${status.errorMessages}">
-                            <c:out value="${error}" escapeXml="false"/><br />
-                        </c:forEach>
-                    </div>
-                </c:if>
-            </s:bind>
-        </c:if>
+                </p>
 
-        <table id="totales" class="table">
-            <tbody>
-                <tr> 
-                    <td><b>Compras $ </b>${Total_Boletin}</td>
-                    <td><b>Objetivo $ </b>${Objetivo}</td>
-                    <td><b>Pct. Alcanzado </b>${Alcanzado} %</td>
-                    <td><b>Diezmos $ </b>${Total_Diezmos}</td>
-                    <td><b>Fidelidad </b>${Fidelidad} %</td>
-                    <td><b>Depositos $</b> ${Total_Depositos}</td>
-                </tr>
-            </tbody>
-        </table>
-        <table id="lista" class="table">
-            <thead>
-                <tr>
-                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                        <jsp:param name="columna" value="tipoDeDocumento" />
-                    </jsp:include>
-                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                        <jsp:param name="columna" value="fecha" />
-                    </jsp:include>
-                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                        <jsp:param name="columna" value="folio" />
-                    </jsp:include>
-                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                        <jsp:param name="columna" value="importe" />
-                    </jsp:include>
-                    <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
-                        <jsp:param name="columna" value="observaciones" />
-                    </jsp:include>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach items="${documentos}" var="documento" varStatus="status">
-                    <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
-                        <td><a href="<c:url value='/documento/ver/${documento.id}' />">${documento.tipoDeDocumento}</a></td>
-                        <td>${documento.fecha}</td>
-                        <td>${documento.folio}</td>
-                        <td>${documento.importe}</td>
-                        <td>${documento.observaciones}</td>
+            </sec:authorize>
+            <h3>   ${temporadaColportor.nombre}  </h3>
+            <fieldset>
+                <div class="control-group">
+                    <label for="temporada">
+                        <s:message code="temporada.label" />
+                        <span class="required-indicator">*</span>
+                        <select id="temporadaId" name="temporadaId">
+                            <c:forEach items="${temporadas}" var="temporada">
+                                <option value="${temporada.id}">${temporada.nombre}</option>
+                            </c:forEach>
+                        </select>
+                        <button type="submit" class="btn"><s:message code="buscar.label" /></button>    
+                </div>
+            </fieldset>
+            <c:if test="${not empty message}">
+                <div class="alert alert-block alert-success fade in" role="status">
+                    <a class="close" data-dismiss="alert">×</a>
+                    <s:message code="${message}" arguments="${messageAttrs}" />
+                </div>
+            </c:if>
+            <c:if test="${documento != null}">
+                <s:bind path="documento.*">
+                    <c:if test="${not empty status.errorMessages}">
+                        <div class="alert alert-block alert-error fade in" role="status">
+                            <a class="close" data-dismiss="alert">×</a>
+                            <c:forEach var="error" items="${status.errorMessages}">
+                                <c:out value="${error}" escapeXml="false"/><br />
+                            </c:forEach>
+                        </div>
+                    </c:if>
+                </s:bind>
+            </c:if>
+
+            <table id="totales" class="table">
+                <tbody>
+                    <tr> 
+                        <td><b>Compras $ </b>${Total_Boletin}</td>
+                        <td><b>Objetivo $ </b>${temporadaColportor.objetivo}</td>
+                        <td><b>Pct. Alcanzado </b>${Alcanzado} %</td>
+                        <td><b>Diezmos $ </b>${Total_Diezmos}</td>
+                        <td><b>Fidelidad </b>${Fidelidad} %</td>
+                        <td><b>Depositos $</b> ${Total_Depositos}</td>
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-        <jsp:include page="/WEB-INF/jsp/paginacion.jsp" />
-    </form>        
-<content>
-    <script src="<c:url value='/js/lista.js' />"></script>
-</content>
+                </tbody>
+            </table>
+            <table id="lista" class="table">
+                <thead>
+                    <tr>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="tipoDeDocumento" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="fecha" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="folio" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="importe" />
+                        </jsp:include>
+                        <jsp:include page="/WEB-INF/jsp/columnaOrdenada.jsp" >
+                            <jsp:param name="columna" value="observaciones" />
+                        </jsp:include>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${documentos}" var="documento" varStatus="status">
+                        <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
+                            <td><a href="<c:url value='/documento/ver/${documento.id}' />">${documento.tipoDeDocumento}</a></td>
+                            <td>${documento.fecha}</td>
+                            <td>${documento.folio}</td>
+                            <td>${documento.importe}</td>
+                            <td>${documento.observaciones}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+            <jsp:include page="/WEB-INF/jsp/paginacion.jsp" />
+        </form>        
+    <content>
+        <script src="<c:url value='/js/lista.js' />"></script>
+    </content>
 </body>
 </html>

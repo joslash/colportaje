@@ -7,6 +7,8 @@
  */
 package mx.edu.um.mateo.general.web;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -131,7 +133,7 @@ public class DocumentoControllerTest extends BaseTest {
         assertNotNull(colportorTmp.getId());
         temporadaColportor = new TemporadaColportor(colportorTmp, asociacion, asociado, temporada, union, colegio);
         temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
-        temporadaColportor.setObjetivo("Objetivo");
+        temporadaColportor.setObjetivo("11250");
         temporadaColportor.setObservaciones("Observaciones");
         temporadaColportor.setFecha(new Date());
         temporadaColportorDao.crea(temporadaColportor);
@@ -191,7 +193,7 @@ public class DocumentoControllerTest extends BaseTest {
         assertNotNull(colportorTmp.getId());
         temporadaColportor = new TemporadaColportor(colportorTmp, asociacion, asociado, temporada, union, colegio);
         temporadaColportor.setStatus(Constantes.STATUS_INACTIVO);
-        temporadaColportor.setObjetivo("Objetivo");
+        temporadaColportor.setObjetivo("11250");
         temporadaColportor.setObservaciones("Observaciones");
         temporadaColportor.setFecha(new Date());
         temporadaColportorDao.crea(temporadaColportor);
@@ -248,7 +250,7 @@ public class DocumentoControllerTest extends BaseTest {
         assertNotNull(colportorTmp.getId());
         temporadaColportor = new TemporadaColportor(colportorTmp, asociacion, asociado, temporada, union, colegio);
         temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
-        temporadaColportor.setObjetivo("Objetivo");
+        temporadaColportor.setObjetivo("11250");
         temporadaColportor.setObservaciones("Observaciones");
         temporadaColportor.setFecha(new Date());
         temporadaColportorDao.crea(temporadaColportor);
@@ -266,7 +268,7 @@ public class DocumentoControllerTest extends BaseTest {
         }
         temporadaColportor2 = new TemporadaColportor(colportorTmp, asociacion, asociado, temporada2, union, colegio);
         temporadaColportor2.setStatus(Constantes.STATUS_INACTIVO);
-        temporadaColportor2.setObjetivo("Objetivo");
+        temporadaColportor2.setObjetivo("11250");
         temporadaColportor2.setObservaciones("Observaciones");
         temporadaColportor2.setFecha(new Date());
         temporadaColportorDao.crea(temporadaColportor2);
@@ -337,7 +339,7 @@ public class DocumentoControllerTest extends BaseTest {
         assertNotNull(colportorTmp.getId());
         temporadaColportor = new TemporadaColportor(colportorTmp, asociacion, asociado, temporada, union, colegio);
         temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
-        temporadaColportor.setObjetivo("Objetivo");
+        temporadaColportor.setObjetivo("11250");
         temporadaColportor.setObservaciones("Observaciones");
         temporadaColportor.setFecha(new Date());
         temporadaColportorDao.crea(temporadaColportor);
@@ -355,7 +357,7 @@ public class DocumentoControllerTest extends BaseTest {
         }
         temporadaColportor2 = new TemporadaColportor(colportorTmp, asociacion, asociado, temporada2, union, colegio);
         temporadaColportor2.setStatus(Constantes.STATUS_INACTIVO);
-        temporadaColportor2.setObjetivo("Objetivo");
+        temporadaColportor2.setObjetivo("11250");
         temporadaColportor2.setObservaciones("Observaciones");
         temporadaColportor2.setFecha(new Date());
         temporadaColportorDao.crea(temporadaColportor2);
@@ -445,7 +447,7 @@ public class DocumentoControllerTest extends BaseTest {
         
         temporadaColportor = new TemporadaColportor(colportorTmp, asociacion, usuario, temporada, union, colegio);
         temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
-        temporadaColportor.setObjetivo("Objetivo");
+        temporadaColportor.setObjetivo("11250");
         temporadaColportor.setObservaciones("Observaciones");
         temporadaColportor.setFecha(new Date());
         temporadaColportorDao.crea(temporadaColportor);
@@ -508,7 +510,7 @@ public class DocumentoControllerTest extends BaseTest {
             assertNotNull(colportor.getId());
             temporadaColportor = new TemporadaColportor(colportor, asociacion, usuario, temporada, union, colegio);
             temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
-            temporadaColportor.setObjetivo("Objetivo");
+            temporadaColportor.setObjetivo("11250");
             temporadaColportor.setObservaciones("Observaciones");
             temporadaColportor.setFecha(new Date());
             temporadaColportorDao.crea(temporadaColportor);
@@ -561,7 +563,7 @@ public class DocumentoControllerTest extends BaseTest {
             assertNotNull(colportor.getId());
             temporadaColportor = new TemporadaColportor(colportor, asociacion, usuario, temporada, union, colegio);
             temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
-            temporadaColportor.setObjetivo("Objetivo");
+            temporadaColportor.setObjetivo("11250");
             temporadaColportor.setObservaciones("Observaciones");
             temporadaColportor.setFecha(new Date());
             temporadaColportorDao.crea(temporadaColportor);
@@ -612,7 +614,7 @@ public class DocumentoControllerTest extends BaseTest {
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
-           TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"TEST","TEST");
+           TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"11250","TEST");
             temporadacolportor.setColportor((Colportor)colportor);
             temporadacolportor.setAsociacion(asociacion);
             temporadacolportor.setAsociado(asociado);
@@ -674,7 +676,7 @@ public class DocumentoControllerTest extends BaseTest {
         assertNotNull(colportorTmp.getId());
         temporadaColportor = new TemporadaColportor(colportorTmp, asociacion, asociado, temporada, union, colegio);
         temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
-        temporadaColportor.setObjetivo("Objetivo");
+        temporadaColportor.setObjetivo("11250");
         temporadaColportor.setObservaciones("Observaciones");
         temporadaColportor.setFecha(new Date());
         temporadaColportorDao.crea(temporadaColportor);
@@ -733,7 +735,7 @@ public class DocumentoControllerTest extends BaseTest {
         assertNotNull(colportorTmp.getId());
         temporadaColportor = new TemporadaColportor(colportorTmp, asociacion, asociado, temporada, union, colegio);
         temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
-        temporadaColportor.setObjetivo("Objetivo");
+        temporadaColportor.setObjetivo("11250");
         temporadaColportor.setObservaciones("Observaciones");
         temporadaColportor.setFecha(new Date());
         temporadaColportorDao.crea(temporadaColportor);
@@ -763,40 +765,40 @@ public class DocumentoControllerTest extends BaseTest {
     @Test
     public void debieraEliminarDocumento() throws Exception {
         log.debug("Debiera eliminar documento");
-           Union union = new Union("test");
+        Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
-        
+
         Asociacion asociacion = new Asociacion("test", Constantes.STATUS_ACTIVO, union);
-        currentSession().save(asociacion); 
-        
+        currentSession().save(asociacion);
+
         Usuario colportor = new Colportor("test--1@test.com", "test", "test", "test", "test", "test", Constantes.STATUS_ACTIVO,
-                    "8262652626", "test", "test", "10706" , "test", "test001", new Date());
+                "8262652626", "test", "test", "10706", "test", "test001", new Date());
         colportor.setAsociacion(asociacion);
         currentSession().save(colportor);
-        
-        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test", 
-                   Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO,Constantes.CALLE,Constantes.COLONIA,
-                   Constantes.MUNICIPIO);
+
+        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test",
+                Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE, Constantes.COLONIA,
+                Constantes.MUNICIPIO);
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
-        
-        Temporada temporada = new Temporada ("test");
+
+        Temporada temporada = new Temporada("test");
         temporada.setAsociacion(asociacion);
         currentSession().save(temporada);
         Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
         currentSession().save(colegio);
-           TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO,"TEST","TEST");
-            temporadacolportor.setColportor((Colportor)colportor);
-            temporadacolportor.setAsociacion(asociacion);
-            temporadacolportor.setAsociado(asociado);
-            temporadacolportor.setTemporada(temporada);
-            temporadacolportor.setUnion(union);
-            temporadacolportor.setColegio(colegio);
-            currentSession().save(temporadacolportor);
-            assertNotNull(temporadacolportor);
-        
-        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE, 
+        TemporadaColportor temporadacolportor = new TemporadaColportor(Constantes.STATUS_ACTIVO, "11250", "TEST");
+        temporadacolportor.setColportor((Colportor) colportor);
+        temporadacolportor.setAsociacion(asociacion);
+        temporadacolportor.setAsociado(asociado);
+        temporadacolportor.setTemporada(temporada);
+        temporadacolportor.setUnion(union);
+        temporadacolportor.setColegio(colegio);
+        currentSession().save(temporadacolportor);
+        assertNotNull(temporadacolportor);
+
+        Documento documento = new Documento(Constantes.TIPO_DOCUMENTO, Constantes.FOLIO, new Date(), Constantes.IMPORTE,
                 Constantes.OBSERVACIONES, null);
         documento.setTemporadaColportor(temporadacolportor);
         documentoDao.crea(documento);
@@ -807,5 +809,92 @@ public class DocumentoControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))
                 .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "documento.eliminado.message"));
+    }
+    @Test
+    public void deberiaProbarTablaDeTotales() throws Exception{
+        log.debug("Deberia probar tabla de resultados de acuerdo a los documentos creados");
+   
+          Union union = new Union("test");
+        union = unionDao.crea(union);
+        Rol rol = new Rol("ROLE_ASO");
+        rol = rolDao.crea(rol);
+        Usuario usuario = new Asociado("test@um.edu.mx", "test", "test", "test", "test", "A", "98745", "8262630900", "test", "test", "tset");
+        Long asociacionId = 0l;
+        actualizaUsuario:
+        for (Asociacion asociacion : union.getAsociaciones()) {
+            asociacionId = asociacion.getId();
+            break actualizaUsuario;
+        }
+        usuario = usuarioDao.crea(usuario, asociacionId, new String[]{rol.getAuthority()});
+        Long id = usuario.getId();
+        assertNotNull(id);
+        this.authenticate(usuario, usuario.getPassword(), new ArrayList(usuario.getAuthorities()));
+
+        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(asociacion);
+        Colportor colportorTmp = null;
+        
+        TemporadaColportor temporadaColportor = null;
+        Temporada temporada = new Temporada("test");
+        temporada.setAsociacion(asociacion);
+        currentSession().save(temporada);
+        Colegio colegio = new Colegio("test3", Constantes.STATUS_ACTIVO);
+        currentSession().save(colegio);
+        colportorTmp = new Colportor("test@test.com", "test", "test", "test",
+                "test", "1234", Constantes.STATUS_ACTIVO, "8262652626", "test", "test",
+                "10706", "test", "test001", new Date());
+        colportorTmp.setAsociacion(asociacion);
+        currentSession().save(colportorTmp);
+        assertNotNull(colportorTmp.getId());
+        
+        temporadaColportor = new TemporadaColportor(colportorTmp, asociacion, usuario, temporada, union, colegio);
+        temporadaColportor.setStatus(Constantes.STATUS_ACTIVO);
+        temporadaColportor.setObjetivo("11250");
+        temporadaColportor.setObservaciones("Observaciones");
+        temporadaColportor.setFecha(new Date());
+        temporadaColportorDao.crea(temporadaColportor);
+        assertNotNull(temporadaColportor);
+        log.debug("TemporadaColportor" + temporadaColportor);
+        
+            for (int i = 0; i < 20; i++) {
+            Documento documento = new Documento(Constantes.BOLETIN, Constantes.FOLIO,
+                    new Date(), new BigDecimal("500"), Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
+            documentoDao.crea(documento);
+            }
+            
+            for (int i = 0; i < 20; i++) {
+            Documento documento = new Documento(Constantes.DIEZMO, Constantes.FOLIO,
+                    new Date(), new BigDecimal("50"), Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
+            documentoDao.crea(documento);
+            }
+            
+            for (int i = 0; i < 20; i++) {
+            Documento documento = new Documento(Constantes.DEPOSITO_CAJA, Constantes.FOLIO,
+                    new Date(), new BigDecimal("100"), Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
+            documentoDao.crea(documento);
+            }
+            
+            for (int i = 0; i < 20; i++) {
+            Documento documento = new Documento(Constantes.DEPOSITO_BANCO, Constantes.FOLIO,
+                    new Date(), new BigDecimal("100"), Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
+            documentoDao.crea(documento);
+            }
+
+            for (int i = 0; i < 20; i++) {
+            Documento documento = new Documento(Constantes.NOTAS_DE_COMPRA, Constantes.FOLIO,
+                    new Date(), new BigDecimal("100"), Constantes.OBSERVACIONES, null);
+            documento.setTemporadaColportor(temporadaColportor);
+            documentoDao.crea(documento);
+            }
+            this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA)
+                .sessionAttr("colportorTmp", colportorTmp)) //                .andExpect(request().sessionAttribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
+                .andExpect(model().attribute(Constantes.FIDELIDAD, new BigDecimal("100.000000")))
+                .andExpect(model().attribute(Constantes.ALCANZADO,new BigDecimal("88.888888").setScale(2, BigDecimal.ROUND_HALF_EVEN) ))
+                .andExpect(view().name(Constantes.PATH_DOCUMENTO_LISTA))    
+                .andExpect(status().isOk());
     }
 }
