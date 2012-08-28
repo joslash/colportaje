@@ -138,23 +138,24 @@ public class AsociadoControllerTest extends BaseTest {
     @Test
     public void debieraCrearAsociado() throws Exception {
         log.debug("Debiera crear asociado");
-        Union union = new Union("test");
+        Union union = new Union("Union Mexicana del Norte");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
         Rol rol = new Rol(Constantes.ROLE_ASO);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
-        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(rol);
+        Asociacion asociacion = new Asociacion("Seccion del Noreste", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
         this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_CREA)
                 .sessionAttr("asociacionId", asociacion)
                 .param(Constantes.ROLES, Constantes.ROLE_ASO)
-                .param("username", "test@test.com")
-                .param("password", "test")
-                .param("nombre", "test")
-                .param("apellidoP", "test")
-                .param("apellidoM", "test")
+                .param("username", "jalvaradol52@gmail.com")
+//                .param("password", "test")
+                .param("nombre", "Jesus")
+                .param("apellidoP", "Alvarado")
+                .param("apellidoM", "Lopez")
                 .param("status", Constantes.STATUS_ACTIVO)
                 .param("clave", Constantes.CLAVE)
                 .param("telefono", Constantes.TELEFONO)

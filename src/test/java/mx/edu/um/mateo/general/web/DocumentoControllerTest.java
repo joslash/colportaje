@@ -892,7 +892,7 @@ public class DocumentoControllerTest extends BaseTest {
             }
             this.mockMvc.perform(get(Constantes.PATH_DOCUMENTO_LISTA)
                 .sessionAttr("colportorTmp", colportorTmp)) //                .andExpect(request().sessionAttribute("temporadaColportorPrueba", temporadaColportor.getId().toString()))
-                .andExpect(model().attribute(Constantes.FIDELIDAD, new BigDecimal("100.000000")))
+                .andExpect(model().attribute(Constantes.FIDELIDAD, new BigDecimal("100.000000").setScale(2, BigDecimal.ROUND_HALF_EVEN)))
                 .andExpect(model().attribute(Constantes.ALCANZADO,new BigDecimal("88.888888").setScale(2, BigDecimal.ROUND_HALF_EVEN) ))
                 .andExpect(view().name(Constantes.PATH_DOCUMENTO_LISTA))    
                 .andExpect(status().isOk());

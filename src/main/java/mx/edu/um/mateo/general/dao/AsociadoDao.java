@@ -126,6 +126,7 @@ public class AsociadoDao {
     public Asociado crea(Asociado asociado, String[] nombreDeRoles) {
         log.debug("Creando cuenta de asociado : {}", asociado);
         asociado.setPassword(passwordEncoder.encodePassword(asociado.getPassword(), asociado.getUsername()));
+        log.debug("password"+asociado.getPassword());
         asociado.addRol(rolDao.obtiene("ROLE_ASO"));
         currentSession().save(asociado);
         currentSession().flush();

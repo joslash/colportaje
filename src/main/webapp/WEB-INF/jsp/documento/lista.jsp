@@ -38,9 +38,8 @@
 
             </p>
             <h3>  ${temporadaColportor.colportor.clave}   ${temporadaColportor.colportor.nombre} ${temporadaColportor.colportor.apellidoP} ${temporadaColportor.colportor.apellidoM}  </h3>
-            <h3>  ${temporadaColportorTmp.colportor.clave}   ${temporadaColportorTmp.colportor.nombre} ${temporadaColportorTmp.colportor.apellidoP} ${temporadaColportorTmp.colportor.apellidoM}  </h3>
-
             <sec:authorize access="hasRole('ROLE_ASO')">
+            <h3>  ${temporadaColportorTmp.colportor.clave}   ${temporadaColportorTmp.colportor.nombre} ${temporadaColportorTmp.colportor.apellidoP} ${temporadaColportorTmp.colportor.apellidoM}  </h3>
                 <p>
                     <b> Buscar Colportor por Clave</b>
                     <input name="clave" type="text" class="input-medium search-query" value="${clave}">
@@ -48,7 +47,6 @@
                 </p>
 
             </sec:authorize>
-            <h3>   ${temporadaColportor.nombre}  </h3>
             <fieldset>
                 <div class="control-group">
                     <label for="temporada">

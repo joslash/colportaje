@@ -159,6 +159,7 @@ public class ColportorDao {
     public Colportor crea(Colportor colportor, String[] nombreDeRoles) {
         log.debug("Creando colportor : {}", colportor);
         colportor.setPassword(passwordEncoder.encodePassword(colportor.getPassword(), colportor.getUsername()));
+        log.debug("password"+colportor.getPassword());
         colportor.addRol(rolDao.obtiene("ROLE_COL"));
         colportor.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(colportor);
