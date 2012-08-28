@@ -11,7 +11,7 @@
 <%
 	PreparedStatement pstmt2 = null;
 	String COMANDO = "SELECT * from documento_colportor ";
-	PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
+	PreparedStatement pstmt = conexion_origen.prepareStatement(COMANDO);
 	ResultSet rset = pstmt.executeQuery();
 String tipoDocumento=null;
 	while (rset.next())
@@ -38,10 +38,10 @@ String tipoDocumento=null;
         }
             
 		COMANDO = "INSERT INTO DOCUMENTOS ";
-		COMANDO += "(id, fecha, folio, importe, observaciones, tipodedocumento, version)";
+		COMANDO += "(id, fecha, folio, importe, observaciones, tipodedocumento, version, temporadacolportor_id)";
 		COMANDO += "VALUES ";
-		COMANDO += "(?, ?, ?, ?, ?, ?, ?) ";
-		pstmt2 = conexion.prepareStatement(COMANDO);
+		COMANDO += "(?, ?, ?, ?, ?, ?, ?, ?) ";
+		pstmt2 = conexion_destino.prepareStatement(COMANDO);
 		pstmt2.setInt(1, rset.getInt("id"));
 		pstmt2.setDate(2, rset.getDate("fecha"));
 		pstmt2.setString(3, rset.getString("folio"));
@@ -49,13 +49,14 @@ String tipoDocumento=null;
                 pstmt2.setString(5, rset.getString("observaciones"));
                 pstmt2.setString(6, tipoDocumento);
                 pstmt2.setInt(7, rset.getInt("version"));
+                pstmt2.setInt(8, rset.getInt("temporada_colportor_id"));
                 pstmt2.execute();
 		pstmt2.close();
 	}
 	rset.close();
 	pstmt.close();
-        conexion_real.close();
-        conexion.close();
+        conexion_origen.close();
+        conexion_destino.close();
         
 %>
 

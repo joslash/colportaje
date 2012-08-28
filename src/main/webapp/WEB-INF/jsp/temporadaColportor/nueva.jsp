@@ -49,7 +49,7 @@
                                 <label for="asociado">
                                 <s:message code="asociado.label" />
                                 <span class="required-indicator">*</span>
-                                <form:select id="asociadoId" path="asociado" items="${usuarios}" itemLabel="username" itemValue="id" />
+                                <form:select id="asociadoId" path="asociado" items="${asociados}" itemLabel="nombre" itemValue="id" />
                                 <form:errors path="asociado" cssClass="alert alert-error" />
                         </div>
                     </s:bind>
@@ -58,7 +58,7 @@
                                 <label for="colportor">
                                 <s:message code="colportor.label" />
                                 <span class="required-indicator">*</span>
-                                <form:select id="colportorId" path="colportor.id" items="${usuarios}" itemLabel="username" itemValue="id" />
+                                <form:select id="colportorId" path="colportor.id" items="${colportores}" itemLabel="nombre" itemValue="id" />
                                 <form:errors path="colportor" cssClass="alert alert-error" />
                         </div>
                     </s:bind>

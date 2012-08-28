@@ -10,16 +10,16 @@
 <% PreparedStatement pstmt2 = null;
     String COMANDO = "SELECT * FROM colegio ";
     COMANDO += "ORDER BY ID";
-    PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
+    PreparedStatement pstmt = conexion_origen.prepareStatement(COMANDO);
     ResultSet rset = pstmt.executeQuery();
     
     while (rset.next()) {
         out.println(rset.getString("nombre"));
-        COMANDO = "INSERT INTO colegios ";
+        COMANDO = "INSERT INTO colegios";
         COMANDO += "(id, nombre, status, version) ";
-        COMANDO += "VALUES ";
+        COMANDO += "VALUES ";         
         COMANDO += "(?, ?, ?, ?) ";
-        pstmt2 = conexion.prepareStatement(COMANDO);
+        pstmt2 = conexion_destino.prepareStatement(COMANDO);
         pstmt2.setInt(1, rset.getInt("id"));
         pstmt2.setString(2, rset.getString("nombre"));
         pstmt2.setString(3, rset.getString("status").toUpperCase());
@@ -30,8 +30,8 @@
     
     rset.close();
     pstmt.close();
-    conexion.close();
-    conexion_real.close();
+    conexion_origen.close();
+    conexion_destino.close();
 %>
 <html>
     <head>

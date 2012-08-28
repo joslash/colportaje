@@ -46,7 +46,7 @@
                         <p class="navbar-text pull-right">
                             <s:message code="mensaje.bienvenida" /> <a href="<c:url value='/perfil' />"><%= request.getUserPrincipal().getName()%></a> 
                             <a href="<c:url value='/salir' />"><i class="icon-off icon-white"></i></a></p>
-                        <p class="navbar-text pull-right" style="padding-right: 10px;"><a href="<c:url value='/perfil' />">${sessionScope.unionId.nombre} | ${sessionScope.asociacionId.nombre}</a></p>
+                        <p class="navbar-text pull-right" style="padding-right: 10px;"><a href="<c:url value='/perfil' />">${sessionScope.union.nombre} | ${sessionScope.asociacion.nombre}</a></p>
                     </div><!--/.nav-collapse -->
                 </div>
             </div>

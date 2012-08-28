@@ -11,17 +11,17 @@
 <%
 	PreparedStatement pstmt2 = null;
 	String COMANDO = "SELECT * FROM app_user";
-	PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
+	PreparedStatement pstmt = conexion_origen.prepareStatement(COMANDO);
 	ResultSet rset = pstmt.executeQuery();
 
 	while (rset.next())
 	{
             
 		COMANDO = "INSERT INTO USUARIOS ";
-		COMANDO += "(id, account_expired, account_locked, apellidom, apellidop,credentials_expired, enabled, nombre, password, username, version, asociacion_id, asociado_id)";
+		COMANDO += "(id, account_expired, account_locked, apellidom, apellidop,credentials_expired, enabled, nombre, password, username, version, asociacion_id, entity_tipe)";
 		COMANDO += "VALUES ";
-		COMANDO += "(?, ?, ?, '.', ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
-		pstmt2 = conexion.prepareStatement(COMANDO);
+		COMANDO += "(?, ?, ?, '.', ?, ?, ?, ?, ?, ?, ?, ?, ?, user) ";
+		pstmt2 = conexion_destino.prepareStatement(COMANDO);
 		pstmt2.setInt(1, rset.getInt("id"));
 		pstmt2.setBoolean(2, rset.getBoolean("account_expired"));
 		pstmt2.setBoolean(3, rset.getBoolean("account_locked"));
@@ -40,8 +40,8 @@
 	}
 	rset.close();
 	pstmt.close();
-        conexion_real.close();
-        conexion.close();
+        conexion_origen.close();
+        conexion_destino.close();
         
 %>
 

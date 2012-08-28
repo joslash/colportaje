@@ -10,7 +10,7 @@
 <% PreparedStatement pstmt2 = null;
     String COMANDO = "SELECT * FROM asociacion ";
     COMANDO += "ORDER BY ID";
-    PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
+    PreparedStatement pstmt = conexion_origen.prepareStatement(COMANDO);
     ResultSet rset = pstmt.executeQuery();
     
     while (rset.next()) {
@@ -18,8 +18,8 @@
         COMANDO = "INSERT INTO asociaciones ";
         COMANDO += "(id, nombre, status, version, union_id) ";
         COMANDO += "VALUES ";
-        COMANDO += "(?, ?, 'A', ?, 1) ";
-        pstmt2 = conexion.prepareStatement(COMANDO);
+        COMANDO += "(?, ?, 'A', ?, 1294) ";
+        pstmt2 = conexion_destino.prepareStatement(COMANDO);
         pstmt2.setInt(1, rset.getInt("id"));
         pstmt2.setString(2, rset.getString("nombre"));
         pstmt2.setInt(3, rset.getInt("version"));
@@ -29,8 +29,8 @@
     
     rset.close();
     pstmt.close();
-    conexion.close();
-    conexion_real.close();
+    conexion_origen.close();
+    conexion_destino.close();
 %>
 <html>
     <head>

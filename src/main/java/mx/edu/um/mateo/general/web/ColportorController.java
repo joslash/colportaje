@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
@@ -19,15 +20,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import mx.edu.um.mateo.Constantes;
-import mx.edu.um.mateo.general.dao.AsociacionDao;
 import mx.edu.um.mateo.general.dao.ColportorDao;
 import mx.edu.um.mateo.general.dao.RolDao;
 import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Colportor;
 import mx.edu.um.mateo.general.model.Rol;
 import mx.edu.um.mateo.general.model.Usuario;
-import mx.edu.um.mateo.general.utils.Ambiente;
-import mx.edu.um.mateo.general.utils.ReporteException;
+import mx.edu.um.mateo.general.utils.FaltaAsociacionException;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -40,8 +39,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Controller;
@@ -97,7 +94,11 @@ public class ColportorController extends BaseController {
         }
         if (StringUtils.isNotBlank(tipo)) {
             params.put("reporte", true);
-            params = colportorDao.lista(params);
+            try {
+                params = colportorDao.lista(params);
+            } catch (FaltaAsociacionException ex) {
+                log.error("Falta asociacion", ex);
+            }
             try {
                 generaReporte(tipo, (List<Colportor>) params.get("colportores"), response);
                 return null;
@@ -108,7 +109,11 @@ public class ColportorController extends BaseController {
 
         if (StringUtils.isNotBlank(correo)) {
             params.put("reporte", true);
-            params = colportorDao.lista(params);
+            try {
+                params = colportorDao.lista(params);
+            } catch (FaltaAsociacionException ex) {
+                log.error("Falta asociacion", ex);
+            }
 
             params.remove("reporte");
             try {
@@ -119,32 +124,11 @@ public class ColportorController extends BaseController {
                 log.error("No se pudo enviar el reporte por correo", e);
             }
         }
-//        if (StringUtils.isNotBlank(tipo)) {
-//            params.put(Constantes.CONTAINSKEY_REPORTE, true);
-//            params = colportorDao.lista(params);
-//            try {
-//                generaReporte(tipo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), response, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
-//                return null;
-//            } catch (ReporteException e) {
-//                log.error("No se pudo generar el reporte", e);
-//                params.remove(Constantes.CONTAINSKEY_REPORTE);
-//                //errors.reject("error.generar.reporte");
-//            }
-//        }
-//        if (StringUtils.isNotBlank(correo)) {
-//            params.put(Constantes.CONTAINSKEY_REPORTE, true);
-//            params = colportorDao.lista(params);
-//            params.remove(Constantes.CONTAINSKEY_REPORTE);
-//            try {
-//                enviaCorreo(correo, (List<Colportor>) params.get(Constantes.CONTAINSKEY_COLPORTORES), request, Constantes.CONTAINSKEY_COLPORTORES, Constantes.ASO, null);
-//                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE, "lista.enviada.message");
-//                modelo.addAttribute(Constantes.CONTAINSKEY_MESSAGE_ATTRS, new String[]{messageSource.getMessage("colportor.lista.label", null, request.getLocale()), ambiente.obtieneUsuario().getUsername()});
-//            } catch (ReporteException e) {
-//                log.error("No se pudo enviar el reporte por correo", e);
-//            }
-//        }
-
-        params = colportorDao.lista(params);
+        try {
+            params = colportorDao.lista(params);
+        } catch (FaltaAsociacionException ex) {
+            log.error("Falta asociacion", ex);
+        }
         modelo.addAttribute(Constantes.CONTAINSKEY_COLPORTORES, params.get(Constantes.CONTAINSKEY_COLPORTORES));
         this.pagina(params, modelo, Constantes.CONTAINSKEY_COLPORTORES, pagina);
 
@@ -154,9 +138,9 @@ public class ColportorController extends BaseController {
     @RequestMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
         log.debug("Mostrando colportor {}", id);
-        Colportor colportores = colportorDao.obtiene(id);
+        Colportor colportor = colportorDao.obtiene(id);
 
-        modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportores);
+        modelo.addAttribute(Constantes.ADDATTRIBUTE_COLPORTOR, colportor);
 
         return Constantes.PATH_COLPORTOR_VER;
     }
@@ -190,23 +174,6 @@ public class ColportorController extends BaseController {
         }
         if (bindingResult.hasErrors()) {
             log.debug("Hubo algun error en la forma, regresando " + bindingResult.getFieldErrors());
-            return Constantes.PATH_COLPORTOR_NUEVO;
-        }
-        try {
-            switch (colportores.getTipoDeColportor()) {
-                case "0":
-                    colportores.setTipoDeColportor(Constantes.TIEMPO_COMPLETO);
-                    break;
-                case "1":
-                    colportores.setTipoDeColportor(Constantes.TIEMPO_PARCIAL);
-                    break;
-                case "2":
-                    colportores.setTipoDeColportor(Constantes.ESTUDIANTE);
-                    break;
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
             return Constantes.PATH_COLPORTOR_NUEVO;
         }
         try {
@@ -257,18 +224,6 @@ public class ColportorController extends BaseController {
         if (bindingResult.hasErrors()) {
             log.error("Hubo algun error en la forma, regresando");
             return Constantes.PATH_COLPORTOR_EDITA;
-        }
-        switch (colportores.getTipoDeColportor()) {
-            case "0":
-                colportores.setTipoDeColportor(Constantes.TIEMPO_COMPLETO);
-                break;
-            case "1":
-                colportores.setTipoDeColportor(Constantes.TIEMPO_PARCIAL);
-                break;
-            case "2":
-                colportores.setTipoDeColportor(Constantes.ESTUDIANTE);
-                break;
-
         }
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(Constantes.DATE_SHORT_HUMAN_PATTERN);

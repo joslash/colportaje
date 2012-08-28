@@ -63,6 +63,20 @@ public class TemporadaController {
     @Autowired
     private Ambiente ambiente;
 
+    /**
+     * Regresa lista de temporadas por asociacion<br>
+     * Si la asociacion no esta presente en session 
+     * @param request
+     * @param response
+     * @param filtro
+     * @param pagina
+     * @param tipo
+     * @param correo
+     * @param order
+     * @param sort
+     * @param modelo
+     * @return 
+     */
     @RequestMapping
     public String lista(HttpServletRequest request, HttpServletResponse response,
             @RequestParam(required = false) String filtro,
@@ -76,8 +90,7 @@ public class TemporadaController {
         //filtrar temporadas por asociacion
 
         Map<String, Object> params = new HashMap<>();
-        Long asociacionId = ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)).getId();
-        params.put(Constantes.ADDATTRIBUTE_ASOCIACION, asociacionId);
+        params.put(Constantes.SESSION_ASOCIACION, ((Asociacion) request.getSession().getAttribute(Constantes.SESSION_ASOCIACION)));
 
 
         if (StringUtils.isNotBlank(filtro)) {

@@ -133,7 +133,7 @@ public class ColportorControllerTest {
 
     @Test
     public void debieraCrearColportor() throws Exception {
-        log.debug("Debiera crear colportor");
+        log.debug("Union Mexicana del Norte");
         Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
@@ -141,7 +141,8 @@ public class ColportorControllerTest {
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
-        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(rol);
+        Asociacion asociacion = new Asociacion("Asocacion del Noreste", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
         
         this.mockMvc.perform(post(Constantes.PATH_COLPORTOR_CREA)
@@ -184,19 +185,17 @@ public class ColportorControllerTest {
     @Test
     public void debieraActualizarColportor() throws Exception {
         log.debug("Debiera actualizar colportor");
-       Union union = new Union("test");
+        Union union = new Union("test");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
         Colportor colportor = new Colportor("test@test.com", "test", "test", "test", "test", "test", Constantes.STATUS_ACTIVO,
                 "8262652626", "test", "test", "10706", "test", "test001", new Date());
-          colportor.setAsociacion(asociacion);
+        colportor.setAsociacion(asociacion);
         currentSession().save(colportor);
         assertNotNull(colportor);
-// apellidoM, apellidoP, asociacion_id,  nombre,  password, username, version,
-//        calle, clave, colonia, fecha_nac, matricula, municipio, status, telefono,
-//        tipoDeColportor, entity_type
+
           this.mockMvc.perform(post(Constantes.PATH_COLPORTOR_ACTUALIZA)
                 .param("id", colportor.getId().toString()))
                 //.andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE))

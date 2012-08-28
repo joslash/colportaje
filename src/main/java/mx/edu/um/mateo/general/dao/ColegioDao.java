@@ -5,6 +5,7 @@
 package mx.edu.um.mateo.general.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
 import mx.edu.um.mateo.general.model.Colegio;
@@ -89,6 +90,7 @@ private static final Logger log = LoggerFactory.getLogger(ColegioDao.class);
             criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
         params.put(Constantes.CONTAINSKEY_COLEGIOS, criteria.list());
+//        log.debug("colegios***"+((List)params.get(Constantes.CONTAINSKEY_COLEGIOS)).size());
 
         countCriteria.setProjection(Projections.rowCount());
         params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
