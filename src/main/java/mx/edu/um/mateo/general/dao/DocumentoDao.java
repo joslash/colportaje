@@ -45,7 +45,7 @@ public class DocumentoDao {
         if (params == null) {
             params = new HashMap<>();
         }
-
+        log.debug("paginado {}", params.containsKey(Constantes.CONTAINSKEY_MAX));
         if (!params.containsKey(Constantes.CONTAINSKEY_MAX)) {
             params.put(Constantes.CONTAINSKEY_MAX, 10);
         } else {

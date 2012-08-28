@@ -9,7 +9,7 @@
 <%@ include file="conexionreal.jsp" %>
 <% PreparedStatement pstmt2 = null;
     String COMANDO = "SELECT * FROM temporada_colportor tc, app_user p where p.id = tc.colportor_id ";
-    PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
+    PreparedStatement pstmt = conexion_origen.prepareStatement(COMANDO);
     ResultSet rset = pstmt.executeQuery();
     
     while (rset.next()) {
@@ -18,7 +18,7 @@
         COMANDO += "(id, version, status, fecha, objetivo, observaciones, asociacion_id, asociado_id, colegio_id, colportor_id, temporada_id, union_id ) ";
         COMANDO += "VALUES ";
         COMANDO += "(?, ?, ?, ?, ?, '.', 1, ?, ?, ?, ?, 1) ";
-        pstmt2 = conexion.prepareStatement(COMANDO);
+        pstmt2 = conexion_destino.prepareStatement(COMANDO);
         pstmt2.setInt(1, rset.getInt("id"));
         pstmt2.setInt(2, rset.getInt("version"));
         pstmt2.setString(3, rset.getString("status").toUpperCase());
@@ -35,8 +35,8 @@
     
     rset.close();
     pstmt.close();
-    conexion.close();
-    conexion_real.close();
+    conexion_origen.close();
+    conexion_destino.close();
 %>
 <html>
     <head>

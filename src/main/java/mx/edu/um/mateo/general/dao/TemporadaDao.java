@@ -5,8 +5,10 @@
 package mx.edu.um.mateo.general.dao;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import mx.edu.um.mateo.Constantes;
+import mx.edu.um.mateo.general.model.Asociacion;
 import mx.edu.um.mateo.general.model.Temporada;
 import mx.edu.um.mateo.general.utils.UltimoException;
 import org.hibernate.Criteria;
@@ -45,7 +47,13 @@ public class TemporadaDao {
     }
     
     
-    
+    /**
+     * Regresa lista de temporadas por asociacion<br>
+     * En params va la asociacion como objeto<br>
+     * Si la asociacion no esta presente en params regresa 
+     * @param params
+     * @return 
+     */
     public Map<String, Object> lista(Map<String, Object> params) {
         log.debug("Buscando lista de Temporada con params {}", params);
         if (params == null) {
@@ -72,8 +80,9 @@ public class TemporadaDao {
         Criteria countCriteria = currentSession().createCriteria(Temporada.class);
         
         if (params.containsKey(Constantes.ADDATTRIBUTE_ASOCIACION)) {
-            criteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
-            countCriteria.createCriteria(Constantes.ADDATTRIBUTE_ASOCIACION).add(Restrictions.idEq(params.get(Constantes.ADDATTRIBUTE_ASOCIACION)));
+//            criteria.createCriteria("asociacion").add(Restrictions.eq("id",((Asociacion)params.get(Constantes.ADDATTRIBUTE_ASOCIACION)).getId()));
+            criteria.add(Restrictions.eq("asociacion",((Asociacion)params.get(Constantes.ADDATTRIBUTE_ASOCIACION))));
+            countCriteria.add(Restrictions.eq("id",((Asociacion)params.get(Constantes.ADDATTRIBUTE_ASOCIACION)).getId()));
         }
         
         if (params.containsKey(Constantes.CONTAINSKEY_FILTRO)) {
@@ -101,6 +110,7 @@ public class TemporadaDao {
             criteria.setMaxResults((Integer) params.get(Constantes.CONTAINSKEY_MAX));
         }
         params.put(Constantes.CONTAINSKEY_TEMPORADAS, criteria.list());
+//        log.debug("Temporadas***"+((List)params.get(Constantes.CONTAINSKEY_TEMPORADAS)).size());
         countCriteria.setProjection(Projections.rowCount());
         params.put(Constantes.CONTAINSKEY_CANTIDAD, (Long) countCriteria.list().get(0));
         

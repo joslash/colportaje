@@ -79,6 +79,10 @@ public class TemporadaControllerTest extends BaseTest {
     public void tearDown() {
     }
 
+    /**
+     * 
+     * @throws Exception 
+     */
     @Test
     public void debieraMostrarListaDeTemporada() throws Exception {
         log.debug("Debiera monstrar lista TEmporada");

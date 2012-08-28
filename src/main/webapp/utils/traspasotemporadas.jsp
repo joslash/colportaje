@@ -10,7 +10,7 @@
 <% PreparedStatement pstmt2 = null;
     String COMANDO = "SELECT * FROM temporada ";
     COMANDO += "ORDER BY ID";
-    PreparedStatement pstmt = conexion_real.prepareStatement(COMANDO);
+    PreparedStatement pstmt = conexion_origen.prepareStatement(COMANDO);
     ResultSet rset = pstmt.executeQuery();
     
     while (rset.next()) {
@@ -18,8 +18,8 @@
         COMANDO = "INSERT INTO temporadas ";
         COMANDO += "(id, fecha_final, fecha_inicio, nombre, version, asociacion_id) ";
         COMANDO += "VALUES ";
-        COMANDO += "(?, ?, ?, ?, ?, 1) ";
-        pstmt2 = conexion.prepareStatement(COMANDO);
+        COMANDO += "(?, ?, ?, ?, ?, 1625) ";
+        pstmt2 = conexion_destino.prepareStatement(COMANDO);
         pstmt2.setInt(1, rset.getInt("id"));
         pstmt2.setDate(2, rset.getDate("fecha_final"));
         pstmt2.setDate(3, rset.getDate("fecha_inicial"));
@@ -31,8 +31,8 @@
     
     rset.close();
     pstmt.close();
-    conexion.close();
-    conexion_real.close();
+    conexion_origen.close();
+    conexion_destino.close();
 %>
 <html>
     <head>

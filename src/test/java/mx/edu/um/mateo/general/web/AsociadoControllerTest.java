@@ -88,13 +88,15 @@ public class AsociadoControllerTest extends BaseTest {
         roles.add(rol);
         Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        Asociado asociado = new Asociado("test@test.com", "test", "test", "test", "test",
+        Asociado asociado=null;
+        for(int i=0; i<20; i++){
+               asociado = new Asociado("test"+i+"@test.com", "test", "test", "test", "test",
                 Constantes.STATUS_ACTIVO, Constantes.CLAVE, Constantes.TELEFONO, Constantes.CALLE, Constantes.COLONIA,
                 Constantes.MUNICIPIO);
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         assertNotNull(asociado.getId());
-
+        }
 
         this.mockMvc.perform(get(Constantes.PATH_ASOCIADO)
                 .sessionAttr(Constantes.SESSION_ASOCIACION, asociacion))
@@ -127,22 +129,40 @@ public class AsociadoControllerTest extends BaseTest {
         assertNotNull(asociado.getId());
 
 
-        this.mockMvc.perform(get(Constantes.PATH_ASOCIADO_VER + "/" + asociado.getId())).andExpect(status().isOk()).andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIADO_VER + ".jsp")).andExpect(model().attributeExists(Constantes.ADDATTRIBUTE_ASOCIADO));
+        this.mockMvc.perform(get(Constantes.PATH_ASOCIADO_VER + "/" + asociado.getId()))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/WEB-INF/jsp/" + Constantes.PATH_ASOCIADO_VER + ".jsp"))
+                .andExpect(model().attributeExists(Constantes.ADDATTRIBUTE_ASOCIADO));
     }
 
     @Test
     public void debieraCrearAsociado() throws Exception {
         log.debug("Debiera crear asociado");
-        Union union = new Union("test");
+        Union union = new Union("Union Mexicana del Norte");
         union.setStatus(Constantes.STATUS_ACTIVO);
         currentSession().save(union);
         Rol rol = new Rol(Constantes.ROLE_ASO);
         currentSession().save(rol);
         Set<Rol> roles = new HashSet<>();
         roles.add(rol);
-        Asociacion asociacion = new Asociacion("TEST01", Constantes.STATUS_ACTIVO, union);
+        currentSession().save(rol);
+        Asociacion asociacion = new Asociacion("Seccion del Noreste", Constantes.STATUS_ACTIVO, union);
         currentSession().save(asociacion);
-        this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_CREA).sessionAttr("asociacionId", asociacion).param(Constantes.ROLES, Constantes.ROLE_ASO).param("username", "test@test.com").param("password", "test").param("nombre", "test").param("apellidoP", "test").param("apellidoM", "test").param("status", Constantes.STATUS_ACTIVO).param("clave", Constantes.CLAVE).param("telefono", Constantes.TELEFONO).param("calle", Constantes.CALLE).param("colonia", Constantes.COLONIA).param("municipio", Constantes.MUNICIPIO)).andExpect(status().isOk());
+        this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_CREA)
+                .sessionAttr("asociacionId", asociacion)
+                .param(Constantes.ROLES, Constantes.ROLE_ASO)
+                .param("username", "jalvaradol52@gmail.com")
+//                .param("password", "test")
+                .param("nombre", "Jesus")
+                .param("apellidoP", "Alvarado")
+                .param("apellidoM", "Lopez")
+                .param("status", Constantes.STATUS_ACTIVO)
+                .param("clave", Constantes.CLAVE)
+                .param("telefono", Constantes.TELEFONO)
+                .param("calle", Constantes.CALLE)
+                .param("colonia", Constantes.COLONIA)
+                .param("municipio", Constantes.MUNICIPIO))
+                .andExpect(status().isOk());
         //.andExpect(model().attributeExists(Constantes.ADDATTRIBUTE_ASOCIADO));
     }
 
@@ -166,7 +186,9 @@ public class AsociadoControllerTest extends BaseTest {
         currentSession().save(asociado);
         assertNotNull(asociado.getId());
 
-        this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_ACTUALIZA).param("id", asociado.getId().toString())).andExpect(status().isOk());
+        this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_ACTUALIZA)
+                .param("id", asociado.getId().toString()))
+                .andExpect(status().isOk());
 
 
     }
@@ -190,6 +212,10 @@ public class AsociadoControllerTest extends BaseTest {
         asociado.setAsociacion(asociacion);
         currentSession().save(asociado);
         assertNotNull(asociado.getId());
-        this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_ELIMINA).param("id", asociado.getId().toString())).andExpect(status().isOk()).andExpect(flash().attributeExists(Constantes.CONTAINSKEY_MESSAGE)).andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociado.eliminado.message"));
+        this.mockMvc.perform(post(Constantes.PATH_ASOCIADO_ELIMINA)
+                .param("id", asociado.getId().toString()))
+                .andExpect(status().isOk()).andExpect(flash()
+                .attributeExists(Constantes.CONTAINSKEY_MESSAGE))
+                .andExpect(flash().attribute(Constantes.CONTAINSKEY_MESSAGE, "asociado.eliminado.message"));
     }
 }
